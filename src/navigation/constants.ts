@@ -14,10 +14,10 @@ export const TAB_CONFIGS: TabConfig[] = [
     iconNameOutline: "trending-up-outline",
   },
   {
-    name: "component-showcase",
+    name: "components",
     title: "Components",
-    iconName: "grid",
-    iconNameOutline: "grid-outline",
+    iconName: "document-text",
+    iconNameOutline: "document-text-outline",
   },
   {
     name: "settings",

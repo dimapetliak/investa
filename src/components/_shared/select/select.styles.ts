@@ -10,7 +10,7 @@ export const styles = StyleSheet.create({
   selectButton: {
     borderWidth: 1,
     borderColor: Colors.neutral200,
-    borderRadius: 8,
+    borderRadius: 14,
     paddingHorizontal: Spacing.md,
     paddingVertical: Spacing.md,
     fontSize: 16,
@@ -44,32 +44,6 @@ export const styles = StyleSheet.create({
   iconContainer: {
     marginLeft: Spacing.sm,
   },
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    justifyContent: 'flex-end',
-  },
-  modalContent: {
-    backgroundColor: Colors.white,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    maxHeight: '80%',
-    paddingTop: Spacing.md,
-  },
-  modalHeader: {
-    paddingHorizontal: Spacing.md,
-    paddingBottom: Spacing.md,
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.neutral200,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  modalTitle: {
-    fontSize: 18,
-    fontFamily: Fonts.semiBold,
-    color: Colors.black,
-  },
   optionItem: {
     paddingHorizontal: Spacing.md,
     paddingVertical: Spacing.md,
@@ -92,6 +66,27 @@ export const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: Fonts.regular,
     color: Colors.neutral500,
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'flex-end',
+  },
+  modalContent: {
+    backgroundColor: Colors.white,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    maxHeight: '80%',
+    paddingTop: Spacing.md,
+  },
+  modalHeader: {
+    paddingHorizontal: Spacing.md,
+    paddingBottom: Spacing.md,
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.neutral200,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
 });
 

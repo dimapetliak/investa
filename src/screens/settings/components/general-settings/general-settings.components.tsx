@@ -1,26 +1,39 @@
 import { Card, Container, Select, Text } from "@/components/_shared";
-import { useState } from "react";
+import { AVAILABLE_CURRENCIES } from "@/constants/currency";
 
-const currencyOptions = [
-	{ label: 'USD', value: 'USD' },
-	{ label: 'EUR', value: 'EUR' },
+const autoRefreshPricesOptions = [
+	{ label: '10 minutes', value: '10' },
+	{ label: '15 minutes', value: '15' },
+	{ label: '30 minutes', value: '30' },
 ];
 
-export const GeneralSettings = () => {
-	const [currency, setCurrency] = useState('USD');
+type GeneralSettingsProps = {
+	currency: string;
+	autoRefreshPrices: string;
+	onCurrencyChange: (value: string | number) => void;
+	onAutoRefreshPricesChange: (value: string | number) => void;
+}
+
+export const GeneralSettings = ({ currency, autoRefreshPrices, onCurrencyChange, onAutoRefreshPricesChange }: GeneralSettingsProps) => {
 
 	return (
-		<Card>
+		<Card shadow>
 			<Container gap='md'>
 				<Text variant='h3'>General</Text>
 				<Select
 					label='Base Currency'
 					placeholder='Select a currency'
-					options={currencyOptions}
+					options={AVAILABLE_CURRENCIES}
 					value={currency}
-					onChangeValue={(value) => setCurrency(value as string)}
+					onChangeValue={onCurrencyChange}
 				/>
-
+				<Select
+					label='Auto-Refresh Prices'
+					placeholder='Select an Auto-Refresh timeout'
+					options={autoRefreshPricesOptions}
+					value={autoRefreshPrices}
+					onChangeValue={onAutoRefreshPricesChange}
+				/>
 			</Container>
 		</Card>
 	);

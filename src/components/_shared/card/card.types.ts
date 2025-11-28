@@ -8,4 +8,5 @@ export type CardProps = ViewProps & {
   padding?: keyof typeof Spacing;
   backgroundVariant?: CardBackgroundVariant;
   shadow?: boolean;
+  onPress?: () => void;
 };

@@ -10,6 +10,7 @@
       "@/constants/*": ["./src/constants/*"],
       "@/hooks/*": ["./src/hooks/*"],
       "@/theme/*": ["./src/theme/*"],
+      "@/types/*": ["./src/types/*"],
     }
   },
   "include": [

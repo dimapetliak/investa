@@ -4,12 +4,32 @@ export const StackNavigator = () => {
 	return (
 		<Stack>
 			<Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-			<Stack.Screen name="component-showcase" options={{ title: 'Component Showcase' }} />
 			<Stack.Screen
 				name="add-asset"
 				options={{
 					presentation: 'modal',
 					title: 'Add Asset',
+				}}
+			/>
+			<Stack.Screen
+				name="edit-asset"
+				options={{
+					presentation: 'modal',
+					title: 'Edit Asset',
+				}}
+			/>
+			<Stack.Screen
+				name="add-trade"
+				options={{
+					title: 'Add Trade',
+					headerBackTitle: 'Back',
+				}}
+			/>
+			<Stack.Screen
+				name="edit-trade"
+				options={{
+					title: 'Edit Trade',
+					headerBackTitle: 'Back',
 				}}
 			/>
 		</Stack>

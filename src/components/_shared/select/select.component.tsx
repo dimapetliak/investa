@@ -113,20 +113,18 @@ export const Select = ({
         onRequestClose={handleClose}
       >
         <Pressable style={styles.modalOverlay} onPress={handleClose}>
-          <Pressable
-            style={styles.modalContent}
-            onPress={(e) => e.stopPropagation()}
-          >
+          <Pressable style={styles.modalContent} onPress={(e) => e.stopPropagation()}>
             <View style={styles.modalHeader}>
-              <Text variant="h3">
-                {label || 'Select an option'}
-              </Text>
+              <Text variant="h3">{label || 'Select an option'}</Text>
               <Pressable onPress={handleClose}>
                 <Ionicons name="close" size={24} color={Colors.neutral500} />
               </Pressable>
             </View>
-
-            <ScrollView>
+            <ScrollView
+              style={{ flex: 1 }}
+              contentContainerStyle={{ paddingBottom: Spacing.md }}
+              showsVerticalScrollIndicator={false}
+            >
               {options.map((option) => {
                 const isSelected = option.value === value;
                 return (
@@ -139,21 +137,22 @@ export const Select = ({
                       pressed && { opacity: 0.7 },
                     ]}
                   >
-                    <Text
-                      variant="body"
-                      color={isSelected ? 'primary' : 'default'}
-                      style={isSelected ? { fontFamily: Fonts.semiBold } : undefined}
-                    >
-                      {option.label}
-                    </Text>
-                    {isSelected && (
-                      <Ionicons
-                        name="checkmark"
-                        size={20}
-                        color={Colors.primary}
-                        style={{ position: 'absolute', right: Spacing.md, top: Spacing.md }}
-                      />
-                    )}
+                    <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                      <Text
+                        variant="body"
+                        color={isSelected ? 'primary' : 'default'}
+                        style={isSelected ? { fontFamily: Fonts.semiBold } : undefined}
+                      >
+                        {option.label}
+                      </Text>
+                      {isSelected && (
+                        <Ionicons
+                          name="checkmark"
+                          size={20}
+                          color={Colors.primary}
+                        />
+                      )}
+                    </View>
                   </Pressable>
                 );
               })}

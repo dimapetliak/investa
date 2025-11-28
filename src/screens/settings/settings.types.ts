@@ -1,15 +1,16 @@
 export interface SettingsState {
   notificationsEnabled: boolean;
-  darkModeEnabled: boolean;
+  themeModeSelected: string;
   currency: string;
   language: string;
+  autoRefreshPrices: string;
 }
 
 export interface SettingsActions {
   toggleNotifications: () => void;
-  toggleDarkMode: () => void;
-  setCurrency: (currency: string) => void;
-  setLanguage: (language: string) => void;
+  onSelectThemeMode: (value: string) => void;
+  onCurrencyChange: (value: string | number) => void;
+  onAutoRefreshPricesChange: (value: string | number) => void;
   resetSettings: () => void;
 }
 
