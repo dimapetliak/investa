@@ -1,45 +1,35 @@
-import { Button } from '@/components/shared/button/button.component';
+import { Button, ScreenLayout, Text } from '@/components/_shared';
+import { Spacing } from '@/theme/spacing';
 import { router } from 'expo-router';
-import { ScrollView, Text, View } from 'react-native';
+import { View } from 'react-native';
 
 export default function HomeScreen() {
   return (
-    <ScrollView style={{
-      padding: 16
-    }}>
-      <View style={{ gap: 16 }}>
-        <Text style={{ fontSize: 24, fontWeight: 'bold', marginBottom: 8 }}>Hello!</Text>
-        <Button size={'md'} variant="primary">Add Trade</Button>
-        <Button variant="secondary">
-          New asset
+    <ScreenLayout containerProps={{ padding: 'md' }}>
+      <Text variant="h2">Hello!</Text>
+      <Button variant="primary" size="md">Add Trade</Button>
+      <Button variant="secondary">New asset</Button>
+      <Button variant="outline" loading>Save</Button>
+      <Button variant="text" loading>Save</Button>
+      <Button fullWidth size="lg">Continue</Button>
+      <View style={{ marginTop: Spacing.xl, paddingTop: Spacing.md, borderTopWidth: 1, borderTopColor: '#E5E7EB' }}>
+        <Text variant="h3" style={{ marginBottom: Spacing.sm }}>Development</Text>
+        <Button 
+          variant="outline" 
+          onPress={() => router.push('/component-showcase')}
+          fullWidth
+        >
+          Component Showcase
         </Button>
-        <Button variant="outline" isLoading>
-          Save
+        <Button 
+          variant="outline" 
+          onPress={() => router.push('/add-asset')}
+          fullWidth
+        >
+          Add Asset
         </Button>
-        <Button variant="text" isLoading>
-          Save
-        </Button>
-        <Button fullWidth size="lg">Continue</Button>
-        <View style={{ marginTop: 32, paddingTop: 16, borderTopWidth: 1, borderTopColor: '#E5E7EB' }}>
-          <Text style={{ fontSize: 16, fontWeight: '600', marginBottom: 8 }}>Development</Text>
-          <Button 
-            variant="outline" 
-            onPress={() => router.push('/component-showcase')}
-            fullWidth
-          >
-            Component Showcase
-          </Button>
-
-          <Button 
-            variant="outline" 
-            onPress={() => router.push('/onboarding')}
-            fullWidth
-          >
-            Go to Onboarding
-          </Button>
-        </View>
       </View>
-    </ScrollView>
+    </ScreenLayout>
   );
 }
 

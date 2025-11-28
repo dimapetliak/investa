@@ -1,14 +1,24 @@
-import { ScrollView, Text, View } from "react-native";
+import { SettingsScreen } from '@/screens/settings';
 
-export default function SettingsScreen() {
-  return (
-    <ScrollView style={{
-      marginVertical: 100,
-      padding: 16
-    }}>
-      <View style={{ gap: 16 }}>
-        <Text style={{ fontSize: 24, fontWeight: 'bold', marginBottom: 8 }}>Settings Screen!</Text>
-      </View>
-    </ScrollView>
-  )
+function useSettings(): { state: any; actions: any; isLoading: any; } {
+  return {
+    state: {
+      notificationsEnabled: true,
+      darkModeEnabled: false,
+      currency: 'USD',
+      language: 'en',
+    },
+    actions: {
+      toggleNotifications: () => {},
+    },
+    isLoading: false,
+  }
 }
+
+export default function SettingsRoute() {
+  const { state, actions, isLoading } = useSettings();
+
+  return <SettingsScreen state={state} actions={actions} isLoading={isLoading} />;
+}
+
+

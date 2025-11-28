@@ -1,15 +1,19 @@
-import type { InputProps } from "../Input/input.types";
-
 export interface SelectOption {
   label: string;
   value: string | number;
 }
 
-export interface SelectProps extends Omit<InputProps, "value" | "onChangeText"> {
+export type SelectProps = {
+  label?: string;
+  error?: string;
+  hint?: string;
+  placeholder?: string;
   options: SelectOption[];
   value?: string | number;
-  onChangeValue?: (value: string | number | undefined) => void;
-  placeholder?: string;
-}
-
+  onChangeValue?: (value: string | number) => void;
+  disabled?: boolean;
+  leftIcon?: React.ReactNode;
+  rightIcon?: React.ReactNode;
+  style?: any;
+};
 

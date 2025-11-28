@@ -1,79 +1,167 @@
-import React, { useCallback, useState } from "react";
-import { Modal, Pressable, ScrollView, View } from "react-native";
-import { Input } from "../Input/input.component";
-import { Text } from "../text/text.component";
-import { selectStyles } from "./select.styles";
-import type { SelectProps } from "./select.types";
+import { Colors } from '@/theme/colors';
+import { Fonts } from '@/theme/fonts';
+import { Spacing } from '@/theme/spacing';
+import { Ionicons } from '@expo/vector-icons';
+import React, { useState } from 'react';
+import { Modal, Pressable, ScrollView, View } from 'react-native';
+import { Text } from '../text/text.component';
+import { styles } from './select.styles';
+import { SelectProps } from './select.types';
 
-export const Select: React.FC<SelectProps> = ({
+export const Select = ({
+  label,
+  error,
+  hint,
+  placeholder = 'Select an option',
   options,
   value,
   onChangeValue,
-  placeholder = "Select an option",
-  ...rest
-}) => {
+  disabled = false,
+  leftIcon,
+  rightIcon,
+  style,
+}: SelectProps) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
 
   const selectedOption = options.find((opt) => opt.value === value);
+  const displayText = selectedOption?.label || placeholder;
+  const isPlaceholder = !selectedOption;
 
-  const handleSelect = useCallback(
-    (optionValue: string | number) => {
-      onChangeValue?.(optionValue);
-      setIsOpen(false);
-    },
-    [onChangeValue]
-  );
+  const handleOpen = () => {
+    if (!disabled) {
+      setIsOpen(true);
+      setIsFocused(true);
+    }
+  };
+
+  const handleClose = () => {
+    setIsOpen(false);
+    setIsFocused(false);
+  };
+
+  const handleSelect = (optionValue: string | number) => {
+    onChangeValue?.(optionValue);
+    handleClose();
+  };
 
   return (
-    <>
-      <Pressable onPress={() => setIsOpen(true)}>
-        <Input
-          {...rest}
-          value={selectedOption?.label || ""}
-          placeholder={placeholder}
-          editable={false}
-          rightIcon={
-            // You can add a chevron-down icon here using @expo/vector-icons
-            null
-          }
-        />
+    <View style={styles.container}>
+      {label && (
+        <Text
+          variant="caption"
+          color="muted"
+          style={{ marginBottom: Spacing.xs }}
+        >
+          {label}
+        </Text>
+      )}
+
+      <Pressable
+        onPress={handleOpen}
+        disabled={disabled}
+        style={({ pressed }) => [
+          styles.selectButton,
+          isFocused && styles.selectButtonFocused,
+          error && styles.selectButtonError,
+          disabled && styles.selectButtonDisabled,
+          pressed && !disabled && { opacity: 0.8 },
+          style,
+        ]}
+      >
+        {leftIcon && <View style={{ marginRight: Spacing.sm }}>{leftIcon}</View>}
+        
+        <Text
+          variant="body"
+          color={isPlaceholder ? 'muted' : 'default'}
+          style={styles.selectButtonText}
+        >
+          {displayText}
+        </Text>
+
+        <View style={styles.iconContainer}>
+          {rightIcon || (
+            <Ionicons
+              name="chevron-down"
+              size={20}
+              color={disabled ? Colors.neutral400 : Colors.neutral500}
+            />
+          )}
+        </View>
       </Pressable>
 
-      <Modal visible={isOpen} transparent animationType="slide">
-        <Pressable
-          style={selectStyles.modalOverlay}
-          onPress={() => setIsOpen(false)}
+      {hint && !error && (
+        <Text variant="caption" color="muted" style={{ marginTop: Spacing.xs }}>
+          {hint}
+        </Text>
+      )}
+
+      {error && (
+        <Text
+          variant="caption"
+          color="error"
+          style={{ marginTop: Spacing.xs }}
         >
-          <View style={selectStyles.modalContent}>
+          {error}
+        </Text>
+      )}
+
+      <Modal
+        visible={isOpen}
+        transparent
+        animationType="slide"
+        onRequestClose={handleClose}
+      >
+        <Pressable style={styles.modalOverlay} onPress={handleClose}>
+          <Pressable
+            style={styles.modalContent}
+            onPress={(e) => e.stopPropagation()}
+          >
+            <View style={styles.modalHeader}>
+              <Text variant="h3">
+                {label || 'Select an option'}
+              </Text>
+              <Pressable onPress={handleClose}>
+                <Ionicons name="close" size={24} color={Colors.neutral500} />
+              </Pressable>
+            </View>
+
             <ScrollView>
-              {options.map((option) => (
-                <Pressable
-                  key={String(option.value)}
-                  onPress={() => handleSelect(option.value)}
-                  style={({ pressed }) => [
-                    selectStyles.option,
-                    pressed && selectStyles.optionPressed,
-                    value === option.value && selectStyles.optionSelected,
-                  ]}
-                >
-                  <Text
-                    variant="body"
-                    style={
-                      value === option.value
-                        ? selectStyles.optionTextSelected
-                        : selectStyles.optionText
-                    }
+              {options.map((option) => {
+                const isSelected = option.value === value;
+                return (
+                  <Pressable
+                    key={String(option.value)}
+                    onPress={() => handleSelect(option.value)}
+                    style={({ pressed }) => [
+                      styles.optionItem,
+                      isSelected && styles.optionItemSelected,
+                      pressed && { opacity: 0.7 },
+                    ]}
                   >
-                    {option.label}
-                  </Text>
-                </Pressable>
-              ))}
+                    <Text
+                      variant="body"
+                      color={isSelected ? 'primary' : 'default'}
+                      style={isSelected ? { fontFamily: Fonts.semiBold } : undefined}
+                    >
+                      {option.label}
+                    </Text>
+                    {isSelected && (
+                      <Ionicons
+                        name="checkmark"
+                        size={20}
+                        color={Colors.primary}
+                        style={{ position: 'absolute', right: Spacing.md, top: Spacing.md }}
+                      />
+                    )}
+                  </Pressable>
+                );
+              })}
             </ScrollView>
-          </View>
+          </Pressable>
         </Pressable>
       </Modal>
-    </>
+    </View>
   );
 };
-
 

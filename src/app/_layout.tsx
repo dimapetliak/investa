@@ -1,5 +1,6 @@
+import { useAppInit } from '@/hooks/use-app-init';
+import { StackNavigator } from '@/navigation/stack-navigator/stack-navigator';
 import { DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 
 export const unstable_settings = {
@@ -7,15 +8,13 @@ export const unstable_settings = {
 };
 
 export default function RootLayout() {
+  useAppInit();
 
   return (
     <ThemeProvider value={DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="component-showcase" options={{ title: 'Component Showcase' }} />
-        <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
-      </Stack>
+      <StackNavigator />
       <StatusBar style="auto" />
     </ThemeProvider>
   );
 }
+ 

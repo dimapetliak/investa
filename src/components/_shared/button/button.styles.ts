@@ -1,32 +1,15 @@
-import { Colors } from "@/src/theme/colors";
-import { StyleSheet, TextStyle, ViewStyle } from "react-native";
+import { Colors } from "@/theme/colors";
+import { Spacing } from "@/theme/spacing";
+import { StyleSheet } from "react-native";
+import { ButtonSize, ButtonVariant } from "./button.types";
 
-export const baseStyles = StyleSheet.create({
-  container: {
-    flexDirection: "row",
+export const buttonStyles = StyleSheet.create({
+  base: {
     borderRadius: 16,
     alignItems: "center",
     justifyContent: "center",
-    width: 'auto',
-  } as ViewStyle,
-
-  content: {
     flexDirection: "row",
-    alignItems: "center",
-    gap: 8,
-  } as ViewStyle,
-
-  icon: {
-    justifyContent: "center",
-    alignItems: "center",
-  } as ViewStyle,
-
-  label: {
-    fontWeight: "600",
-  } as TextStyle,
-});
-
-export const variantStyles = StyleSheet.create({
+  },
   primary: {
     backgroundColor: Colors.primary,
   },
@@ -36,82 +19,40 @@ export const variantStyles = StyleSheet.create({
   outline: {
     backgroundColor: "transparent",
     borderWidth: 1,
-    borderColor: Colors.primary,
+    borderColor: Colors.neutral300,
   },
   text: {
     backgroundColor: "transparent",
   },
-});
-
-export const variantDisabledStyles = StyleSheet.create({
-  primary: {
-    backgroundColor: Colors.neutral300,
+  sm: {
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.sm,
+    minHeight: 32,
   },
-  secondary: {
-    backgroundColor: Colors.neutral200,
+  md: {
+    paddingHorizontal: Spacing.lg,
+    paddingVertical: Spacing.md,
+    minHeight: 44,
   },
-  outline: {
-    borderColor: Colors.neutral300,
+  lg: {
+    paddingHorizontal: Spacing.xl,
+    paddingVertical: Spacing.lg,
+    minHeight: 52,
   },
-  text: {
+  disabled: {
     opacity: 0.5,
   },
 });
 
-export const labelStyles = StyleSheet.create({
-  primary: {
-    color: Colors.white,
-  },
-  secondary: {
-    color: Colors.neutral700,
-  },
-  outline: {
-    color: Colors.primary,
-  },
-  text: {
-    color: Colors.primary,
-  },
-});
+export const textColors: Record<ButtonVariant, string> = {
+  primary: Colors.white,
+  secondary: Colors.black,
+  outline: Colors.black,
+  text: Colors.primary,
+};
 
-export const labelDisabledStyles = StyleSheet.create({
-    primary: { color: Colors.white },
-    secondary: { color: Colors.neutral500 },
-    outline: { color: Colors.neutral400 },
-    text: { color: Colors.neutral400 },
-  });
-
-export const sizeStyles = StyleSheet.create({
-    sm: {
-      paddingVertical: 6,
-      paddingHorizontal: 12,
-    },
-    md: {
-      paddingVertical: 10,
-      paddingHorizontal: 16,
-    },
-    lg: {
-      paddingVertical: 14,
-      paddingHorizontal: 20,
-    },
-  });
-
-export const sizeLabelStyles = StyleSheet.create({
-    sm: { fontSize: 14 },
-    md: { fontSize: 16 },
-    lg: { fontSize: 18 },
-});
-
-export const pressedStyles = StyleSheet.create({
-    primary: {
-      opacity: 0.85,
-    },
-    secondary: {
-      opacity: 0.7,
-    },
-    outline: {
-      opacity: 0.7,
-    },
-    text: {
-      opacity: 0.6,
-    },
-  });
+export const textSizes: Record<ButtonSize, number> = {
+  sm: 14,
+  md: 16,
+  lg: 18,
+};

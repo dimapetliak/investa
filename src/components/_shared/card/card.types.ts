@@ -1,10 +1,11 @@
-import type { StyleProp, ViewProps, ViewStyle } from "react-native";
+import { Spacing } from "@/theme/spacing";
+import { ViewProps } from "react-native";
 
-export interface CardProps extends ViewProps {
-  children?: React.ReactNode;
-  style?: StyleProp<ViewStyle>;
-  variant?: "default" | "elevated" | "outlined";
-  padding?: "none" | "sm" | "md" | "lg";
-}
+export type CardBackgroundVariant = 'info' | 'danger' | 'warning' | 'success' | 'subtle';
 
-
+export type CardProps = ViewProps & {
+  children: React.ReactNode;
+  padding?: keyof typeof Spacing;
+  backgroundVariant?: CardBackgroundVariant;
+  shadow?: boolean;
+};

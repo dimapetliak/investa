@@ -1,25 +1,10 @@
-import type {
-    TextProps as RNTextProps,
-    StyleProp,
-    TextStyle,
-} from "react-native";
-  
-  export type TextVariant =
-    | "h1"
-    | "h2"
-    | "h3"
-    | "subtitle"
-    | "body"
-    | "bodySmall"
-    | "caption";
-  
-  export type TextTone = "default" | "muted" | "inverse" | "success";
-  
-  export interface TextProps extends RNTextProps {
+import { TextProps as RNTextProps } from 'react-native';
+
+type TextVariant = 'h1' | 'h2' | 'h3' | 'body' | 'caption';
+type TextColor = 'default' | 'muted' | 'primary' | 'error';
+
+
+export type TextProps = RNTextProps & {
     variant?: TextVariant;
-    tone?: TextTone;
-    align?: "left" | "center" | "right";
-    children?: React.ReactNode;
-    style?: StyleProp<TextStyle>;
+    color?: TextColor;
   }
-  

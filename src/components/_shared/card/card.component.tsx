@@ -1,23 +1,30 @@
-import React from "react";
-import { View } from "react-native";
-import { cardStyles, paddingStyles } from "./card.styles";
-import type { CardProps } from "./card.types";
+import { Spacing } from '@/theme/spacing';
+import React from 'react';
+import { View } from 'react-native';
+import { styles } from './card.styles';
+import { CardProps } from './card.types';
 
-export const Card: React.FC<CardProps> = ({
+export const Card = ({
   children,
+  padding = 'md',
   style,
-  variant = "default",
-  padding = "md",
-  ...rest
-}) => {
+  backgroundVariant = 'subtle',
+  shadow = false,
+  ...props
+}: CardProps) => {
   return (
     <View
-      {...rest}
-      style={[cardStyles.base, cardStyles[variant], paddingStyles[padding], style]}
+      style={[
+        styles.card,
+        { padding: Spacing[padding] },
+        styles[backgroundVariant],
+        shadow && styles.shadow,
+        style,
+      ]}
+      {...props}
     >
       {children}
     </View>
   );
 };
-
 

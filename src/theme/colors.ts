@@ -18,6 +18,7 @@ export const Colors = {
     primaryGradientEnd: "#9810FA",
   
     success: "#7BF1A8",
+    info: "#FEFCE8",
     error: "#EF4444",
     danger: "#DC2626",
     warning: "#F59E0B",
