@@ -4,8 +4,13 @@
     "strict": true,
     "paths": {
       "@/*": [
-        "./*"
-      ]
+        "./src/*"
+      ],
+      "@/components/*": ["./src/components/*"],
+      "@/components/financial/*": ["./src/components/financial/*"],
+      "@/constants/*": ["./src/constants/*"],
+      "@/hooks/*": ["./src/hooks/*"],
+      "@/theme/*": ["./src/theme/*"],
     }
   },
   "include": [
