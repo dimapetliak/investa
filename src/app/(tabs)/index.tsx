@@ -1,110 +1,84 @@
 import { PortfolioScreen } from '@/screens/portfolio';
+import { usePortfolioStore, useTradesStore } from '@/store';
 import { router } from 'expo-router';
-import React from 'react';
+import React, { useMemo } from 'react';
 
 export default function HomeScreen() {
-  // Placeholder data - replace with actual data from your state management
-  const portfolioSummary = {
-    totalValue: '$10,500.00',
-    totalPnL: 500.00,
-    totalPnLPercent: 5.0,
-    totalCost: 10000.00,
-  };
+  const positions = usePortfolioStore((state) => state.positions);
+  const summary = usePortfolioStore((state) => state.summary);
+  const allTrades = useTradesStore((state) => state.trades);
 
-  const recentPositions = [
-    {
-      ticker: 'AAPL',
-      assetType: 'stock' as const,
-      quantity: 10,
-      avgPrice: 150.00,
-      currentPrice: 155.50,
-      currentValue: '$1,555.00',
-      pnl: 55.00,
-      pnlPercent: 3.67,
-    },
-    {
-      ticker: 'BTC',
-      assetType: 'crypto' as const,
-      quantity: 0.5,
-      avgPrice: 45000.00,
-      currentPrice: 46000.00,
-      currentValue: '$23,000.00',
-      pnl: 500.00,
-      pnlPercent: 2.22,
-    },
-  ];
+  // Format portfolio summary for screen
+  const portfolioSummary = useMemo(() => ({
+    totalValue: `$${summary.totalValue.toFixed(2)}`,
+    totalPnL: summary.totalPnL,
+    totalPnLPercent: summary.totalPnLPercent,
+    totalCost: summary.totalCost,
+  }), [summary]);
 
-  const recentTrades = [
-    {
-      id: '1',
-      type: 'buy' as const,
-      assetType: 'stock' as const,
-      ticker: 'AAPL',
-      price: 150.00,
-      quantity: 10,
-      date: '2024-01-15',
-      notes: 'Initial purchase',
-    },
-    {
-      id: '2',
-      type: 'buy' as const,
-      assetType: 'crypto' as const,
-      ticker: 'BTC',
-      price: 45000.00,
-      quantity: 0.5,
-      date: '2024-01-20',
-    },
-    {
-      id: '3',
-      type: 'sell' as const,
-      assetType: 'stock' as const,
-      ticker: 'TSLA',
-      price: 250.00,
-      quantity: 5,
-      date: '2024-01-25',
-      notes: 'Profit taking',
-    },
-    {
-      id: '4',
-      type: 'buy' as const,
-      assetType: 'stock' as const,
-      ticker: 'MSFT',
-      price: 380.00,
-      quantity: 3,
-      date: '2024-02-01',
-    },
-  ];
+  // Map positions to screen format (top 3)
+  const recentPositions = useMemo(() => {
+    return positions
+      .slice(0, 3)
+      .map((position) => ({
+        ticker: position.asset.ticker,
+        assetType: position.asset.type,
+        quantity: position.quantity,
+        avgPrice: position.avgBuyPrice,
+        currentPrice: position.avgBuyPrice, // TODO: Replace with real price
+        currentValue: `$${position.currentValue.toFixed(2)}`,
+        pnl: position.pnl,
+        pnlPercent: position.pnlPercent,
+      }));
+  }, [positions]);
+
+  // Get recent trades (last 5, sorted by date)
+  const recentTrades = useMemo(() => {
+    return [...allTrades]
+      .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
+      .slice(0, 5)
+      .map((trade) => {
+        const position = positions.find((p) => p.asset.id === trade.assetId);
+        return {
+          id: trade.id,
+          type: trade.type,
+          assetType: position?.asset.type || 'stock',
+          ticker: position?.asset.ticker || '',
+          price: trade.price,
+          quantity: trade.quantity,
+          date: new Date(trade.timestamp).toISOString().split('T')[0],
+          notes: trade.comment,
+        };
+      });
+  }, [allTrades, positions]);
 
   const handleAddAsset = () => {
     router.push('/add-asset');
   };
 
   const handleAddTrade = () => {
-    router.push('/add-trade');
+    // If there are no assets, prompt to add asset first
+    if (positions.length === 0) {
+      router.push('/add-asset');
+    } else {
+      // Navigate to first asset's add trade
+      router.push(`/add-trade?assetId=${positions[0].asset.id}`);
+    }
   };
 
   const handleViewAsset = (ticker: string) => {
-    // Navigate to asset detail or edit screen
-    router.push(`/edit-asset?ticker=${ticker}`);
+    const position = positions.find((p) => p.asset.ticker === ticker);
+    if (position) {
+      router.push(`/asset-details?id=${position.asset.id}`);
+    }
   };
 
   const handleViewTrade = (tradeId: string) => {
-    // Navigate to trade edit screen
     router.push(`/edit-trade?id=${tradeId}`);
   };
 
   const handleViewAllAssets = () => {
     router.push('/assets');
-  };
-
-  const handleSearch = (query: string) => {
-    // TODO: Implement search logic
-    console.log('Search:', query);
-  };
-
-  const handleFilterToggle = (filter: string | number) => {
-    // TODO: Implement filter logic
-    console.log('Filter:', filter);
   };
 
   return (
@@ -117,9 +91,6 @@ export default function HomeScreen() {
       onViewAsset={handleViewAsset}
       onViewTrade={handleViewTrade}
       onViewAllAssets={handleViewAllAssets}
-      onSearch={handleSearch}
-      onFilterToggle={handleFilterToggle}
     />
   );
 }
-

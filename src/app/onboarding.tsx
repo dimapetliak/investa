@@ -1,4 +1,5 @@
 import { Button, Text } from '@/components/_shared';
+import { useOnboarding } from '@/hooks';
 import { Colors } from '@/theme/colors';
 import { Spacing } from '@/theme/spacing';
 import { Ionicons } from '@expo/vector-icons';
@@ -49,6 +50,7 @@ const onboardingSlides: OnboardingSlide[] = [
 export default function OnboardingScreen() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const flatListRef = useRef<FlatList>(null);
+  const { completeOnboarding } = useOnboarding();
 
   const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     const scrollPosition = event.nativeEvent.contentOffset.x;
@@ -73,6 +75,7 @@ export default function OnboardingScreen() {
   };
 
   const handleFinish = () => {
+    completeOnboarding();
     router.replace('/(tabs)');
   };
 

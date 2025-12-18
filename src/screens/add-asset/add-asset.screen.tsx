@@ -1,20 +1,18 @@
 import {
     Button,
-    DateTimePicker,
     IconButton,
     Input,
     Label,
-    NumberInput,
     ScreenLayout,
     Select,
     Text,
 } from '@/components/_shared';
-import { AssetType } from '@/components/_shared/asset-tag/asset-tag.types';
+import type { AssetType, CurrencyCode } from '@/types';
 import { Spacing } from '@/theme/spacing';
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import { ScrollView, View } from 'react-native';
-import { AddAssetScreenProps } from './add-asset.types';
+import type { AddAssetScreenProps } from './add-asset.types';
 
 export const AddAssetScreen = ({
   formData,
@@ -45,9 +43,9 @@ export const AddAssetScreen = ({
               { label: 'Stock', value: 'stock' },
               { label: 'Crypto', value: 'crypto' },
             ]}
-            value={formData.assetType}
-            onChangeValue={(value: string | number) => onFieldChange('assetType', value as AssetType)}
-            error={errors.assetType}
+            value={formData.type}
+            onChangeValue={(value: string | number) => onFieldChange('type', value as AssetType)}
+            error={errors.type}
           />
         </View>
 
@@ -63,43 +61,26 @@ export const AddAssetScreen = ({
         </View>
 
         <View style={{ marginBottom: Spacing.md }}>
-          <Label text="Quantity" required />
-          <NumberInput
-            value={formData.quantity}
-            onChangeValue={(value: string) => onFieldChange('quantity', value)}
-            placeholder="0.00"
-            error={errors.quantity}
-          />
-        </View>
-        <View style={{ marginBottom: Spacing.md }}>
-          <Label text="Purchase Price" required />
-          <NumberInput
-            value={formData.purchasePrice}
-            onChangeValue={(value: string) => onFieldChange('purchasePrice', value)}
-            placeholder="0.00"
-            error={errors.purchasePrice}
-          />
-        </View>
-
-        <View style={{ marginBottom: Spacing.md }}>
-          <Label text="Purchase Date" required />
-          <DateTimePicker
-            value={formData.purchaseDate}
-            onChangeValue={(date: Date) => onFieldChange('purchaseDate', date)}
-            mode="date"
-            error={errors.purchaseDate}
+          <Label text="Name" required />
+          <Input
+            value={formData.name}
+            onChangeText={(text) => onFieldChange('name', text)}
+            placeholder="e.g., Apple Inc., Bitcoin"
+            error={errors.name}
+            hint="Full name of the asset"
           />
         </View>
 
         <View style={{ marginBottom: Spacing.lg }}>
-          <Label text="Notes" />
-          <Input
-            value={formData.notes}
-            onChangeText={(text) => onFieldChange('notes', text)}
-            placeholder="Optional notes about this asset"
-            multiline
-            numberOfLines={3}
-            error={errors.notes}
+          <Label text="Currency" required />
+          <Select
+            options={[
+              { label: 'USD', value: 'USD' },
+              { label: 'EUR', value: 'EUR' },
+            ]}
+            value={formData.currency}
+            onChangeValue={(value: string | number) => onFieldChange('currency', value as CurrencyCode)}
+            error={errors.currency}
           />
         </View>
 

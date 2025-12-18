@@ -1,9 +1,9 @@
-import { Colors } from '@/theme/colors';
-import { Ionicons } from '@expo/vector-icons';
-import { BottomTabNavigationOptions } from '@react-navigation/bottom-tabs';
-import { Tabs } from 'expo-router';
-import React from 'react';
-import { TAB_CONFIGS } from '../constants';
+import { Colors } from "@/theme/colors";
+import { Ionicons } from "@expo/vector-icons";
+import { BottomTabNavigationOptions } from "@react-navigation/bottom-tabs";
+import { Tabs } from "expo-router";
+import React from "react";
+import { TAB_CONFIGS } from "../constants";
 
 const TAB_BAR_OPTIONS: BottomTabNavigationOptions = {
   headerShown: false,
@@ -18,15 +18,23 @@ const TAB_BAR_OPTIONS: BottomTabNavigationOptions = {
   },
   tabBarLabelStyle: {
     fontSize: 12,
-    fontWeight: '500',
+    fontWeight: "500",
   },
-}
+};
 
 const createTabIcon = (
   iconName: keyof typeof Ionicons.glyphMap,
-  iconNameOutline: keyof typeof Ionicons.glyphMap,
+  iconNameOutline: keyof typeof Ionicons.glyphMap
 ) => {
-  return ({ focused, color, size }: { focused: boolean; color: string; size?: number }) => (
+  return ({
+    focused,
+    color,
+    size,
+  }: {
+    focused: boolean;
+    color: string;
+    size?: number;
+  }) => (
     <Ionicons
       name={focused ? iconName : iconNameOutline}
       size={size || 24}
@@ -37,8 +45,7 @@ const createTabIcon = (
 
 export const TabNavigator = () => {
   return (
-    <Tabs
-      screenOptions={TAB_BAR_OPTIONS}>
+    <Tabs screenOptions={TAB_BAR_OPTIONS}>
       {TAB_CONFIGS.map((tab) => (
         <Tabs.Screen
           key={tab.name}
@@ -52,4 +59,6 @@ export const TabNavigator = () => {
       ))}
     </Tabs>
   );
-}
+};
+
+TabNavigator.displayName = "TabNavigator";

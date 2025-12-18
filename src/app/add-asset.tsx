@@ -1,15 +1,16 @@
 import { AddAssetScreen } from '@/screens/add-asset';
+import { useAssetsStore } from '@/store';
 import { router } from 'expo-router';
 import React, { useState } from 'react';
 
 export default function AddAssetRoute() {
+  const addAsset = useAssetsStore((state) => state.addAsset);
+
   const [formData, setFormData] = useState({
-    assetType: 'stock' as const,
+    type: 'stock' as const,
     ticker: '',
-    quantity: '',
-    purchasePrice: '',
-    purchaseDate: undefined as Date | undefined,
-    notes: '',
+    name: '',
+    currency: 'USD' as const,
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -19,52 +20,56 @@ export default function AddAssetRoute() {
     setFormData((prev) => ({ ...prev, [field]: value }));
     // Clear error when field changes
     if (errors[field]) {
-      setErrors((prev) => ({ ...prev, [field]: undefined }));
+      setErrors((prev) => {
+        const newErrors = { ...prev };
+        delete newErrors[field];
+        return newErrors;
+      });
     }
   };
 
   const validateForm = (): boolean => {
     const newErrors: Record<string, string> = {};
 
-    if (!formData.assetType) {
-      newErrors.assetType = 'Asset type is required';
+    if (!formData.type) {
+      newErrors.type = 'Asset type is required';
     }
 
     if (!formData.ticker.trim()) {
       newErrors.ticker = 'Ticker symbol is required';
     }
 
-    if (!formData.quantity || parseFloat(formData.quantity) <= 0) {
-      newErrors.quantity = 'Quantity must be greater than 0';
+    if (!formData.name.trim()) {
+      newErrors.name = 'Asset name is required';
     }
 
-    if (!formData.purchasePrice || parseFloat(formData.purchasePrice) <= 0) {
-      newErrors.purchasePrice = 'Purchase price must be greater than 0';
-    }
-
-    if (!formData.purchaseDate) {
-      newErrors.purchaseDate = 'Purchase date is required';
+    if (!formData.currency) {
+      newErrors.currency = 'Currency is required';
     }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSave = async () => {
+  const handleSave = () => {
     if (!validateForm()) {
       return;
     }
 
     setIsLoading(true);
-    
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    
-    // TODO: Save asset to backend/storage
-    console.log('Asset data:', formData);
-    
-    setIsLoading(false);
-    router.back();
+
+    try {
+      // Add asset to store
+      const asset = addAsset(formData);
+
+      // Navigate to asset details to add first trade
+      router.replace(`/asset-details?id=${asset.id}`);
+    } catch (error) {
+      console.error('Error adding asset:', error);
+      setErrors({ ticker: 'Failed to add asset' });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleCancel = () => {

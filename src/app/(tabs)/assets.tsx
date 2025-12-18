@@ -1,37 +1,42 @@
 import { AssetsScreen } from '@/screens/assets';
+import { usePortfolioStore } from '@/store';
 import { router } from 'expo-router';
-import React from 'react';
+import React, { useMemo } from 'react';
 
 export default function AssetsRoute() {
-  // Placeholder data - replace with actual data from your state management
-  const positions: any[] = []; // Replace with actual positions
+  const positions = usePortfolioStore((state) => state.positions);
+
+  // Map Position to screen Position type
+  const screenPositions = useMemo(() => {
+    return positions.map((position) => ({
+      ticker: position.asset.ticker,
+      assetType: position.asset.type,
+      quantity: position.quantity,
+      avgPrice: position.avgBuyPrice,
+      currentPrice: position.avgBuyPrice, // TODO: Replace with real price when available
+      currentValue: position.currentValue,
+      pnl: position.pnl,
+      pnlPercent: position.pnlPercent,
+    }));
+  }, [positions]);
 
   const handleAddAsset = () => {
     router.push('/add-asset');
   };
 
   const handleViewAsset = (ticker: string) => {
-    // Navigate to asset detail or edit screen
-    router.push(`/edit-asset?ticker=${ticker}`);
-  };
-
-  const handleSearch = (query: string) => {
-    // TODO: Implement search logic
-    console.log('Search:', query);
-  };
-
-  const handleFilterToggle = (filter: string | number) => {
-    // TODO: Implement filter logic
-    console.log('Filter:', filter);
+    // Find asset by ticker
+    const position = positions.find((p) => p.asset.ticker === ticker);
+    if (position) {
+      router.push(`/asset-details?id=${position.asset.id}`);
+    }
   };
 
   return (
     <AssetsScreen
-      positions={positions}
+      positions={screenPositions}
       onAddAsset={handleAddAsset}
       onViewAsset={handleViewAsset}
-      onSearch={handleSearch}
-      onFilterToggle={handleFilterToggle}
     />
   );
 }

@@ -1,29 +1,11 @@
-export interface SettingsState {
-  notificationsEnabled: boolean;
-  themeModeSelected: string;
-  currency: string;
-  language: string;
-  autoRefreshPrices: string;
+export interface SettingsScreenProps {
+  baseCurrency: string;
+  onCurrencyChange: (currency: string) => void;
+  onExportData: () => void;
+  onImportData: () => void;
+  onClearAllData: () => void;
+  stats: {
+    assetsCount: number;
+    tradesCount: number;
+  };
 }
-
-export interface SettingsActions {
-  toggleNotifications: () => void;
-  onSelectThemeMode: (value: string) => void;
-  onCurrencyChange: (value: string | number) => void;
-  onAutoRefreshPricesChange: (value: string | number) => void;
-  resetSettings: () => void;
-}
-
-export interface UseSettingsReturn {
-  state: SettingsState;
-  actions: SettingsActions;
-  isLoading: boolean;
-}
-
-export type SettingsScreenProps = {
-  state: SettingsState;
-  actions: SettingsActions;
-  isLoading: boolean;
-}
-
-

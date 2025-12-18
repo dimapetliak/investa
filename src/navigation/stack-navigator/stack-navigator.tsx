@@ -3,6 +3,7 @@ import { Stack } from "expo-router"
 export const StackNavigator = () => {
 	return (
 		<Stack>
+			<Stack.Screen name="onboarding" options={{ headerShown: false }} />
 			<Stack.Screen name="(tabs)" options={{ headerShown: false }} />
 			<Stack.Screen
 				name="add-asset"

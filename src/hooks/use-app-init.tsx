@@ -1,5 +1,6 @@
 import { SplashScreen } from "expo-router";
 import { useLoadFont } from "./use-load-font";
+import { usePortfolioInit } from "./use-portfolio-init";
 
 
 export const useAppInit = () => {
@@ -7,4 +8,5 @@ export const useAppInit = () => {
 	SplashScreen.preventAutoHideAsync();
 
 	useLoadFont();
+	usePortfolioInit();
 }

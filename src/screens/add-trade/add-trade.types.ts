@@ -1,32 +1,31 @@
-import { AssetType } from '@/components/_shared/asset-tag/asset-tag.types';
-import { TradeType } from '@/components/_shared/trade-row/trade-row.types';
+import type { TradeType } from '@/types';
 
 export type AddTradeFormData = {
+  assetId: string;
   type: TradeType;
-  assetType: AssetType;
-  ticker: string;
-  price: string;
   quantity: string;
-  date?: Date;
-  notes?: string;
+  price: string;
+  fee: string;
+  timestamp: Date;
+  comment: string;
 };
 
 export type AddTradeFormErrors = {
+  assetId?: string;
   type?: string;
-  assetType?: string;
-  ticker?: string;
-  price?: string;
   quantity?: string;
-  date?: string;
-  notes?: string;
+  price?: string;
+  fee?: string;
+  timestamp?: string;
+  comment?: string;
 };
 
 export type AddTradeScreenProps = {
   formData: AddTradeFormData;
   errors: AddTradeFormErrors;
+  assetTicker?: string;
   onFieldChange: (field: keyof AddTradeFormData, value: any) => void;
   onSave: () => void;
   onCancel: () => void;
   isLoading?: boolean;
 };
-

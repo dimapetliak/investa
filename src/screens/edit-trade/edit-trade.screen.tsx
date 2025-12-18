@@ -5,18 +5,18 @@ import {
   Label,
   NumberInput,
   ScreenLayout,
-  Select
+  Select,
 } from '@/components/_shared';
-import { AssetType } from '@/components/_shared/asset-tag/asset-tag.types';
-import { TradeType } from '@/components/_shared/trade-row/trade-row.types';
+import type { TradeType } from '@/types';
 import { Spacing } from '@/theme/spacing';
 import React from 'react';
 import { ScrollView, View } from 'react-native';
-import { EditTradeScreenProps } from './edit-trade.types';
+import type { EditTradeScreenProps } from './edit-trade.types';
 
 export const EditTradeScreen = ({
   formData,
   errors,
+  assetTicker,
   onFieldChange,
   onSave,
   onCancel,
@@ -24,7 +24,11 @@ export const EditTradeScreen = ({
   isLoading,
 }: EditTradeScreenProps) => {
   return (
-    <ScreenLayout containerProps={{ padding: 'md' }}>
+    <ScreenLayout
+      title={`Edit Trade${assetTicker ? ` - ${assetTicker}` : ''}`}
+      showBackButton
+      onBackPress={onCancel}
+    >
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={{ marginBottom: Spacing.md }}>
           <Label text="Trade Type" required />
@@ -40,68 +44,57 @@ export const EditTradeScreen = ({
         </View>
 
         <View style={{ marginBottom: Spacing.md }}>
-          <Label text="Asset Type" required />
-          <Select
-            options={[
-              { label: 'Stock', value: 'stock' },
-              { label: 'Crypto', value: 'crypto' },
-            ]}
-            value={formData.assetType}
-            onChangeValue={(value: string | number) => onFieldChange('assetType', value as AssetType)}
-            error={errors.assetType}
-          />
-        </View>
-
-        <View style={{ marginBottom: Spacing.md }}>
-          <Label text="Ticker Symbol" required />
-          <Input
-            value={formData.ticker}
-            onChangeText={(text: string) => onFieldChange('ticker', text.toUpperCase())}
-            placeholder="e.g., AAPL, BTC"
-            error={errors.ticker}
-            hint="Enter the stock ticker or crypto symbol"
-          />
-        </View>
-
-        <View style={{ marginBottom: Spacing.md }}>
-          <Label text="Price" required />
-          <NumberInput
-            value={formData.price}
-            onChangeValue={(value: string) => onFieldChange('price', value)}
-            placeholder="0.00"
-            error={errors.price}
-          />
-        </View>
-
-        <View style={{ marginBottom: Spacing.md }}>
           <Label text="Quantity" required />
           <NumberInput
             value={formData.quantity}
             onChangeValue={(value: string) => onFieldChange('quantity', value)}
             placeholder="0.00"
             error={errors.quantity}
+            hint="Number of shares or units"
           />
         </View>
 
         <View style={{ marginBottom: Spacing.md }}>
-          <Label text="Trade Date" required />
+          <Label text="Price per Unit" required />
+          <NumberInput
+            value={formData.price}
+            onChangeValue={(value: string) => onFieldChange('price', value)}
+            placeholder="0.00"
+            error={errors.price}
+            hint="Price per share or unit"
+          />
+        </View>
+
+        <View style={{ marginBottom: Spacing.md }}>
+          <Label text="Fee (Optional)" />
+          <NumberInput
+            value={formData.fee}
+            onChangeValue={(value: string) => onFieldChange('fee', value)}
+            placeholder="0.00"
+            error={errors.fee}
+            hint="Transaction fee or commission"
+          />
+        </View>
+
+        <View style={{ marginBottom: Spacing.md }}>
+          <Label text="Trade Date & Time" required />
           <DateTimePicker
-            value={formData.date}
-            onChangeValue={(date: Date) => onFieldChange('date', date)}
-            mode="date"
-            error={errors.date}
+            value={formData.timestamp}
+            onChangeValue={(date: Date) => onFieldChange('timestamp', date)}
+            mode="datetime"
+            error={errors.timestamp}
           />
         </View>
 
         <View style={{ marginBottom: Spacing.lg }}>
-          <Label text="Notes" />
+          <Label text="Comment (Optional)" />
           <Input
-            value={formData.notes}
-            onChangeText={(text: string) => onFieldChange('notes', text)}
-            placeholder="Optional notes about this trade"
+            value={formData.comment}
+            onChangeText={(text: string) => onFieldChange('comment', text)}
+            placeholder="Add notes about this trade"
             multiline
             numberOfLines={3}
-            error={errors.notes}
+            error={errors.comment}
           />
         </View>
 
@@ -139,4 +132,3 @@ export const EditTradeScreen = ({
     </ScreenLayout>
   );
 };
-

@@ -18,6 +18,7 @@ export const TAB_CONFIGS: TabConfig[] = [
     title: "Components",
     iconName: "document-text",
     iconNameOutline: "document-text-outline",
+    hidden: true, // Hide components showcase in production
   },
   {
     name: "settings",

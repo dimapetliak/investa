@@ -1,21 +1,17 @@
-import { AssetType } from '@/components/_shared/asset-tag/asset-tag.types';
+import type { AssetType, CurrencyCode } from '@/types';
 
 export type AddAssetFormData = {
-  assetType: AssetType;
+  type: AssetType;
   ticker: string;
-  quantity: string;
-  purchasePrice: string;
-  purchaseDate?: Date;
-  notes?: string;
+  name: string;
+  currency: CurrencyCode;
 };
 
 export type AddAssetFormErrors = {
-  assetType?: string;
+  type?: string;
   ticker?: string;
-  quantity?: string;
-  purchasePrice?: string;
-  purchaseDate?: string;
-  notes?: string;
+  name?: string;
+  currency?: string;
 };
 
 export type AddAssetScreenProps = {

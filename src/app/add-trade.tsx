@@ -1,25 +1,44 @@
 import { AddTradeScreen } from '@/screens/add-trade';
-import { router } from 'expo-router';
+import { useAssetsStore, useTradesStore } from '@/store';
+import { router, useLocalSearchParams } from 'expo-router';
 import React, { useState } from 'react';
 
 export default function AddTradeRoute() {
+  const params = useLocalSearchParams();
+  const assetId = params.assetId as string;
+
+  const getAssetById = useAssetsStore((state) => state.getAssetById);
+  const addTrade = useTradesStore((state) => state.addTrade);
+
+  const asset = getAssetById(assetId);
+
   const [formData, setFormData] = useState({
+    assetId: assetId || '',
     type: 'buy' as const,
-    assetType: 'stock' as const,
-    ticker: '',
-    price: '',
     quantity: '',
-    date: undefined as Date | undefined,
-    notes: '',
+    price: '',
+    fee: '',
+    timestamp: new Date(),
+    comment: '',
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(false);
 
+  // If no asset, go back
+  if (!asset) {
+    router.back();
+    return null;
+  }
+
   const handleFieldChange = (field: string, value: any) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
     if (errors[field]) {
-      setErrors((prev) => ({ ...prev, [field]: undefined }));
+      setErrors((prev) => {
+        const newErrors = { ...prev };
+        delete newErrors[field];
+        return newErrors;
+      });
     }
   };
 
@@ -30,45 +49,51 @@ export default function AddTradeRoute() {
       newErrors.type = 'Trade type is required';
     }
 
-    if (!formData.assetType) {
-      newErrors.assetType = 'Asset type is required';
-    }
-
-    if (!formData.ticker.trim()) {
-      newErrors.ticker = 'Ticker symbol is required';
+    if (!formData.quantity || parseFloat(formData.quantity) <= 0) {
+      newErrors.quantity = 'Quantity must be greater than 0';
     }
 
     if (!formData.price || parseFloat(formData.price) <= 0) {
       newErrors.price = 'Price must be greater than 0';
     }
 
-    if (!formData.quantity || parseFloat(formData.quantity) <= 0) {
-      newErrors.quantity = 'Quantity must be greater than 0';
+    if (formData.fee && parseFloat(formData.fee) < 0) {
+      newErrors.fee = 'Fee cannot be negative';
     }
 
-    if (!formData.date) {
-      newErrors.date = 'Trade date is required';
+    if (!formData.timestamp) {
+      newErrors.timestamp = 'Trade date is required';
     }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSave = async () => {
+  const handleSave = () => {
     if (!validateForm()) {
       return;
     }
 
     setIsLoading(true);
-    
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    
-    // TODO: Save trade to backend/storage
-    console.log('Trade data:', formData);
-    
-    setIsLoading(false);
-    router.back();
+
+    try {
+      addTrade({
+        assetId: formData.assetId,
+        type: formData.type,
+        quantity: parseFloat(formData.quantity),
+        price: parseFloat(formData.price),
+        fee: formData.fee ? parseFloat(formData.fee) : undefined,
+        timestamp: formData.timestamp.toISOString(),
+        comment: formData.comment || undefined,
+      });
+
+      router.back();
+    } catch (error) {
+      console.error('Error adding trade:', error);
+      setErrors({ type: 'Failed to add trade' });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleCancel = () => {
@@ -79,6 +104,7 @@ export default function AddTradeRoute() {
     <AddTradeScreen
       formData={formData}
       errors={errors}
+      assetTicker={asset.ticker}
       onFieldChange={handleFieldChange}
       onSave={handleSave}
       onCancel={handleCancel}
@@ -86,4 +112,3 @@ export default function AddTradeRoute() {
     />
   );
 }
-
