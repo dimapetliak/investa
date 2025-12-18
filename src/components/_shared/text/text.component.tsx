@@ -1,21 +1,28 @@
-import { Colors } from '@/theme/colors';
+import { useTheme } from '@/contexts/theme-context';
 import React from 'react';
 import { Text as RNText, StyleSheet } from 'react-native';
+import { LightColors } from '@/theme';
 import { styles } from './text.styles';
 import { TextProps } from './text.types';
 
-const colorStyles = StyleSheet.create({
+const getColorStyles = (colors: typeof LightColors) => StyleSheet.create({
   default: {
-    color: Colors.black,
+    color: colors.foreground,
   },
   muted: {
-    color: Colors.neutral500,
+    color: colors.foregroundMuted,
   },
   primary: {
-    color: Colors.primary,
+    color: colors.primary,
   },
   error: {
-    color: Colors.error,
+    color: colors.error,
+  },
+  success: {
+    color: colors.success,
+  },
+  warning: {
+    color: colors.warning,
   },
 });
 
@@ -26,6 +33,9 @@ export const Text = ({
   children,
   ...props
 }: TextProps) => {
+  const { colors } = useTheme();
+  const colorStyles = getColorStyles(colors);
+
   return (
     <RNText
       style={[styles[variant], colorStyles[color], style]}
@@ -35,4 +45,3 @@ export const Text = ({
     </RNText>
   );
 };
-

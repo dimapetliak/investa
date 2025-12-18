@@ -1,12 +1,11 @@
-import { Spacing } from "@/theme/spacing";
+import { Spacing } from "@/theme";
 import { ViewProps } from "react-native";
 
-export type CardBackgroundVariant = 'info' | 'danger' | 'warning' | 'success' | 'subtle';
+export type CardVariant = 'default' | 'secondary' | 'info' | 'error' | 'warning' | 'success';
 
 export type CardProps = ViewProps & {
   children: React.ReactNode;
   padding?: keyof typeof Spacing;
-  backgroundVariant?: CardBackgroundVariant;
-  shadow?: boolean;
+  variant?: CardVariant;
   onPress?: () => void;
 };

@@ -17,7 +17,7 @@ export const PortfolioSummaryCard = ({
   style,
 }: PortfolioSummaryCardProps) => {
   return (
-    <Card style={[styles.card, style]} shadow onPress={onPress}>
+    <Card style={[styles.card, style]} onPress={onPress}>
       <Text variant="h3" style={{ marginBottom: Spacing.md }}>
         Portfolio Summary
       </Text>

@@ -1,28 +1,25 @@
-import { Colors } from "@/theme/colors";
-import { Fonts } from "@/theme/fonts";
-import { Spacing } from "@/theme/spacing";
+import { LightColors, Spacing, Radius, ControlHeight, Typography, BorderWidth } from "@/theme";
 import { StyleSheet } from "react-native";
 
-export const styles = StyleSheet.create({
+export const getInputStyles = (colors: typeof LightColors) => StyleSheet.create({
   container: {
-    marginBottom: Spacing.md,
+    marginBottom: Spacing.lg,
   },
   inputWrapper: {
     flexDirection: 'row',
     alignItems: 'center',
-    borderRadius: 14,
-    backgroundColor: Colors.neutral100,
-    minHeight: 48,
-    borderWidth: 1,
-    borderColor: Colors.neutral200,
+    borderRadius: Radius.md,
+    backgroundColor: colors.background,
+    height: ControlHeight.md,
+    borderWidth: BorderWidth.thin,
+    borderColor: colors.border,
   },
   input: {
     flex: 1,
-    paddingHorizontal: Spacing.sm,
-    paddingVertical: Spacing.sm,
-    fontSize: 16,
-    fontFamily: Fonts.regular,
-    color: Colors.black,
+    paddingHorizontal: Spacing.md,
+    fontSize: Typography.fontSize.base,
+    fontFamily: Typography.fontWeight.regular,
+    color: colors.foreground,
     backgroundColor: 'transparent',
   },
   inputWithLeftIcon: {
@@ -32,7 +29,7 @@ export const styles = StyleSheet.create({
     paddingRight: Spacing.sm,
   },
   leftIconContainer: {
-    paddingLeft: Spacing.sm,
+    paddingLeft: Spacing.md,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -42,14 +39,15 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
   },
   inputFocused: {
-    borderColor: Colors.primary,
+    borderColor: colors.primary,
+    borderWidth: BorderWidth.medium,
   },
   inputError: {
-    borderColor: Colors.error,
+    borderColor: colors.error,
   },
   hint: {
-    fontSize: 12,
-    fontFamily: Fonts.regular,
-    color: Colors.neutral500,
+    fontSize: Typography.fontSize.xs,
+    fontFamily: Typography.fontWeight.regular,
+    color: colors.foregroundMuted,
   },
 });

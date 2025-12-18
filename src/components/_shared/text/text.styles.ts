@@ -1,30 +1,35 @@
-import { Fonts } from "@/theme/fonts";
+import { Typography } from "@/theme";
 import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
     h1: {
-      fontSize: 32,
-      fontFamily: Fonts.bold,
-      lineHeight: 40,
+      fontSize: Typography.fontSize['4xl'],
+      fontFamily: Typography.fontWeight.bold,
+      lineHeight: Typography.lineHeight['4xl'],
     },
     h2: {
-      fontSize: 24,
-      fontFamily: Fonts.semiBold,
-      lineHeight: 32,
+      fontSize: Typography.fontSize['2xl'],
+      fontFamily: Typography.fontWeight.semiBold,
+      lineHeight: Typography.lineHeight['2xl'],
     },
     h3: {
-      fontSize: 20,
-      fontFamily: Fonts.semiBold,
-      lineHeight: 28,
+      fontSize: Typography.fontSize.xl,
+      fontFamily: Typography.fontWeight.semiBold,
+      lineHeight: Typography.lineHeight.xl,
     },
     body: {
-      fontSize: 16,
-      fontFamily: Fonts.regular,
-      lineHeight: 24,
+      fontSize: Typography.fontSize.base,
+      fontFamily: Typography.fontWeight.regular,
+      lineHeight: Typography.lineHeight.base,
     },
     caption: {
-      fontSize: 14,
-      fontFamily: Fonts.regular,
-      lineHeight: 20,
+      fontSize: Typography.fontSize.sm,
+      fontFamily: Typography.fontWeight.regular,
+      lineHeight: Typography.lineHeight.sm,
+    },
+    small: {
+      fontSize: Typography.fontSize.xs,
+      fontFamily: Typography.fontWeight.regular,
+      lineHeight: Typography.lineHeight.xs,
     },
   });

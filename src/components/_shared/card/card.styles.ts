@@ -1,40 +1,33 @@
-import { Colors } from "@/theme/colors";
-import { Platform, StyleSheet } from "react-native";
+import { LightColors, Radius, BorderWidth } from "@/theme";
+import { StyleSheet } from "react-native";
 
-export const styles = StyleSheet.create({
+export const getCardStyles = (colors: typeof LightColors) => StyleSheet.create({
     card: {
-      borderRadius: 16,
+      borderRadius: Radius.lg,
+      borderWidth: BorderWidth.thin,
     },
-    subtle: {
-      backgroundColor: Colors.white,
+    default: {
+      backgroundColor: colors.background,
+      borderColor: colors.border,
+    },
+    secondary: {
+      backgroundColor: colors.backgroundSecondary,
+      borderColor: colors.border,
     },
     info: {
-      backgroundColor: Colors.info,
+      backgroundColor: colors.infoLight,
+      borderColor: colors.info,
     },
-    danger: {
-      backgroundColor: Colors.danger,
+    error: {
+      backgroundColor: colors.errorLight,
+      borderColor: colors.error,
     },
     warning: {
-      backgroundColor: Colors.warning,
+      backgroundColor: colors.warningLight,
+      borderColor: colors.warning,
     },
     success: {
-      backgroundColor: Colors.success,
-    },
-    shadow: {
-      // iOS shadow
-      ...Platform.select({
-        ios: {
-          shadowColor: 'rgba(0, 0, 0, 0.1)',
-          shadowOffset: {
-            width: 0,
-            height: 1,
-          },
-          shadowOpacity: 1,
-          shadowRadius: 3,
-        },
-        android: {
-          elevation: 2,
-        },
-      }),
+      backgroundColor: colors.successLight,
+      borderColor: colors.success,
     },
   });

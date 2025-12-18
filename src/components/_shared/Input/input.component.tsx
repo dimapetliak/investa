@@ -1,9 +1,9 @@
-import { Colors } from '@/theme/colors';
-import { Spacing } from '@/theme/spacing';
+import { useTheme } from '@/contexts/theme-context';
+import { Spacing } from '@/theme';
 import React, { useState } from 'react';
 import { TextInput, View } from 'react-native';
 import { Text } from '../text/text.component';
-import { styles } from './input.styles';
+import { getInputStyles } from './input.styles';
 import { InputProps } from './input.types';
 
 export const Input = ({
@@ -18,6 +18,8 @@ export const Input = ({
   ...props
 }: InputProps) => {
   const [isFocused, setIsFocused] = useState(false);
+  const { colors } = useTheme();
+  const styles = getInputStyles(colors);
 
   const handleFocus = (e: any) => {
     setIsFocused(true);
@@ -50,7 +52,7 @@ export const Input = ({
           {...props}
           onFocus={handleFocus}
           onBlur={handleBlur}
-          placeholderTextColor={Colors.neutral400}
+          placeholderTextColor={colors.foregroundMuted}
           style={[
             styles.input,
             leftIcon ? styles.inputWithLeftIcon : undefined,

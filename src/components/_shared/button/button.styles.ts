@@ -1,58 +1,58 @@
-import { Colors } from "@/theme/colors";
-import { Spacing } from "@/theme/spacing";
+import { LightColors, Spacing, Radius, ControlHeight, Typography, BorderWidth, Opacity } from "@/theme";
 import { StyleSheet } from "react-native";
 import { ButtonSize, ButtonVariant } from "./button.types";
 
-export const buttonStyles = StyleSheet.create({
+export const getButtonStyles = (colors: typeof LightColors) => StyleSheet.create({
   base: {
-    borderRadius: 16,
+    borderRadius: Radius.md,
     alignItems: "center",
     justifyContent: "center",
     flexDirection: "row",
   },
   primary: {
-    backgroundColor: Colors.primary,
+    backgroundColor: colors.primary,
   },
   secondary: {
-    backgroundColor: Colors.neutral100,
+    backgroundColor: colors.neutral100,
   },
   outline: {
     backgroundColor: "transparent",
-    borderWidth: 1,
-    borderColor: Colors.neutral300,
+    borderWidth: BorderWidth.thin,
+    borderColor: colors.border,
   },
-  text: {
+  ghost: {
     backgroundColor: "transparent",
   },
+  destructive: {
+    backgroundColor: colors.error,
+  },
   sm: {
-    paddingHorizontal: Spacing.md,
-    paddingVertical: Spacing.sm,
-    minHeight: 32,
+    paddingHorizontal: Spacing.lg,
+    height: ControlHeight.sm,
   },
   md: {
-    paddingHorizontal: Spacing.lg,
-    paddingVertical: Spacing.md,
-    minHeight: 44,
+    paddingHorizontal: Spacing.xl,
+    height: ControlHeight.md,
   },
   lg: {
-    paddingHorizontal: Spacing.xl,
-    paddingVertical: Spacing.lg,
-    minHeight: 52,
+    paddingHorizontal: Spacing['2xl'],
+    height: ControlHeight.lg,
   },
   disabled: {
-    opacity: 0.5,
+    opacity: Opacity.disabled,
   },
 });
 
-export const textColors: Record<ButtonVariant, string> = {
-  primary: Colors.white,
-  secondary: Colors.black,
-  outline: Colors.black,
-  text: Colors.primary,
-};
+export const getTextColors = (colors: typeof LightColors): Record<ButtonVariant, string> => ({
+  primary: colors.primaryForeground,
+  secondary: colors.foreground,
+  outline: colors.foreground,
+  ghost: colors.foreground,
+  destructive: colors.white,
+});
 
 export const textSizes: Record<ButtonSize, number> = {
-  sm: 14,
-  md: 16,
-  lg: 18,
+  sm: Typography.fontSize.sm,
+  md: Typography.fontSize.base,
+  lg: Typography.fontSize.lg,
 };

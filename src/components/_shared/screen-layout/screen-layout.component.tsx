@@ -1,6 +1,7 @@
-import { Colors } from '@/theme/colors';
+import { useTheme } from '@/contexts/theme-context';
 import React from 'react';
 import { KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Container } from '../container/container.component';
 import { styles } from './screen-layout.styles';
 import { ScreenLayoutProps } from './screen-layout.types';
@@ -9,7 +10,7 @@ export const ScreenLayout: React.FC<ScreenLayoutProps> = ({
   children,
   keyboardAvoidingView = false,
   scrollViewStyle,
-  backgroundColor = Colors.white,
+  backgroundColor,
   contentContainerStyle,
   showsVerticalScrollIndicator = false,
   showsHorizontalScrollIndicator = false,
@@ -17,12 +18,16 @@ export const ScreenLayout: React.FC<ScreenLayoutProps> = ({
   containerProps,
   ...scrollViewProps
 }) => {
+  const { top: insetsTop } = useSafeAreaInsets();
+  const { colors } = useTheme();
+  const bgColor = backgroundColor || colors.background;
 
   const scrollViewContent = (
     <ScrollView
-      style={[styles.scrollView, { backgroundColor }, scrollViewStyle]}
+      style={[styles.scrollView, { backgroundColor: bgColor }, scrollViewStyle]}
       contentContainerStyle={[
         styles.contentContainer,
+        { paddingTop: insetsTop },
         contentContainerStyle,
       ]}
       showsVerticalScrollIndicator={showsVerticalScrollIndicator}

@@ -1,23 +1,25 @@
-import { Spacing } from '@/theme/spacing';
+import { useTheme } from '@/contexts/theme-context';
+import { Spacing, Opacity } from '@/theme';
 import React from 'react';
 import { Pressable, View } from 'react-native';
-import { styles } from './card.styles';
+import { getCardStyles } from './card.styles';
 import { CardProps } from './card.types';
 
 export const Card = ({
   children,
-  padding = 'md',
+  padding = 'lg',
   style,
-  backgroundVariant = 'subtle',
-  shadow = false,
+  variant = 'default',
   onPress,
   ...props
 }: CardProps) => {
+  const { colors } = useTheme();
+  const styles = getCardStyles(colors);
+
   const cardStyle = [
     styles.card,
     { padding: Spacing[padding] },
-    styles[backgroundVariant],
-    shadow && styles.shadow,
+    styles[variant],
     style,
   ];
 
@@ -27,7 +29,7 @@ export const Card = ({
         onPress={onPress}
         style={({ pressed }) => [
           ...cardStyle,
-          pressed && { opacity: 0.8 },
+          pressed && { opacity: Opacity.hover },
         ]}
         {...props}
       >
@@ -42,4 +44,3 @@ export const Card = ({
     </View>
   );
 };
-

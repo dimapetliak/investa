@@ -1,8 +1,9 @@
+import { useTheme } from '@/contexts/theme-context';
 import { Fonts } from '@/theme/fonts';
 import React from 'react';
 import { ActivityIndicator, Pressable } from 'react-native';
 import { Text } from '../text/text.component';
-import { buttonStyles, textColors, textSizes } from './button.styles';
+import { getButtonStyles, getTextColors, textSizes } from './button.styles';
 import { ButtonProps } from './button.types';
 
 export const Button = ({
@@ -17,6 +18,9 @@ export const Button = ({
   textStyle,
 }: ButtonProps) => {
   const isDisabled = disabled || loading;
+  const { colors } = useTheme();
+  const buttonStyles = getButtonStyles(colors);
+  const textColors = getTextColors(colors);
 
   return (
     <Pressable
