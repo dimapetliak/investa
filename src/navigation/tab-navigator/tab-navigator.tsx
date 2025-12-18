@@ -1,32 +1,15 @@
-import { Colors } from "@/theme/colors";
+import { useTheme } from "@/contexts/theme-context";
+import { BorderWidth, Typography } from "@/theme";
 import { Ionicons } from "@expo/vector-icons";
-import { BottomTabNavigationOptions } from "@react-navigation/bottom-tabs";
 import { Tabs } from "expo-router";
 import React from "react";
 import { TAB_CONFIGS } from "../constants";
-
-const TAB_BAR_OPTIONS: BottomTabNavigationOptions = {
-  headerShown: false,
-  tabBarActiveTintColor: Colors.primary,
-  tabBarInactiveTintColor: Colors.neutral500,
-  tabBarStyle: {
-    borderTopWidth: 1,
-    borderTopColor: Colors.neutral200,
-    paddingTop: 4,
-    paddingBottom: 4,
-    height: 80,
-  },
-  tabBarLabelStyle: {
-    fontSize: 12,
-    fontWeight: "500",
-  },
-};
 
 const createTabIcon = (
   iconName: keyof typeof Ionicons.glyphMap,
   iconNameOutline: keyof typeof Ionicons.glyphMap
 ) => {
-  return ({
+  const TabIcon = ({
     focused,
     color,
     size,
@@ -41,11 +24,35 @@ const createTabIcon = (
       color={color}
     />
   );
+
+  TabIcon.displayName = 'TabIcon';
+
+  return TabIcon;
 };
 
 export const TabNavigator = () => {
+  const { colors } = useTheme();
+
   return (
-    <Tabs screenOptions={TAB_BAR_OPTIONS}>
+    <Tabs
+      screenOptions={{
+        headerShown: false,
+        tabBarActiveTintColor: colors.primary,
+        tabBarInactiveTintColor: colors.foregroundMuted,
+        tabBarStyle: {
+          backgroundColor: colors.background,
+          borderTopWidth: BorderWidth.thin,
+          borderTopColor: colors.border,
+          paddingTop: 4,
+          paddingBottom: 4,
+          height: 80,
+        },
+        tabBarLabelStyle: {
+          fontSize: Typography.fontSize.xs,
+          fontWeight: "500",
+        },
+      }}
+    >
       {TAB_CONFIGS.map((tab) => (
         <Tabs.Screen
           key={tab.name}

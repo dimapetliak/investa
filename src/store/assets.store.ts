@@ -1,12 +1,10 @@
-import { create } from 'zustand';
-import type { Asset, CreateAssetInput, UpdateAssetInput } from '@/types';
 import { persist } from '@/lib/persistence';
 import { STORAGE_KEYS } from '@/lib/storage';
+import type { Asset, CreateAssetInput, UpdateAssetInput } from '@/types';
+import { create } from 'zustand';
 
 interface AssetsState {
   assets: Asset[];
-
-  // Actions
   addAsset: (input: CreateAssetInput) => Asset;
   updateAsset: (id: string, input: UpdateAssetInput) => void;
   deleteAsset: (id: string) => void;

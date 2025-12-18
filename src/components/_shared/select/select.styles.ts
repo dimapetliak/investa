@@ -1,71 +1,49 @@
-import { Colors } from '@/theme/colors';
-import { Fonts } from '@/theme/fonts';
-import { Spacing } from '@/theme/spacing';
+import { LightColors, Spacing, Radius, ControlHeight, Typography, BorderWidth, Opacity } from '@/theme';
 import { StyleSheet } from 'react-native';
 
-export const styles = StyleSheet.create({
+export const getSelectStyles = (colors: typeof LightColors) => StyleSheet.create({
   container: {
-    marginBottom: Spacing.md,
+    marginBottom: Spacing.lg,
   },
   selectButton: {
-    borderWidth: 1,
-    borderColor: Colors.neutral200,
-    borderRadius: 14,
+    borderWidth: BorderWidth.thin,
+    borderColor: colors.border,
+    borderRadius: Radius.md,
     paddingHorizontal: Spacing.md,
-    paddingVertical: Spacing.md,
-    fontSize: 16,
-    fontFamily: Fonts.regular,
-    color: Colors.black,
-    backgroundColor: Colors.white,
+    backgroundColor: colors.background,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    minHeight: 48,
+    height: ControlHeight.md,
   },
   selectButtonFocused: {
-    borderColor: Colors.primary,
+    borderColor: colors.primary,
+    borderWidth: BorderWidth.medium,
   },
   selectButtonError: {
-    borderColor: Colors.error,
+    borderColor: colors.error,
   },
   selectButtonDisabled: {
-    backgroundColor: Colors.neutral100,
-    opacity: 0.7,
+    backgroundColor: colors.backgroundSecondary,
+    opacity: Opacity.disabled,
   },
   selectButtonText: {
     flex: 1,
-    fontSize: 16,
-    fontFamily: Fonts.regular,
-    color: Colors.black,
-  },
-  selectButtonTextPlaceholder: {
-    color: Colors.neutral400,
+    fontSize: Typography.fontSize.base,
+    fontFamily: Typography.fontWeight.regular,
+    color: colors.foreground,
   },
   iconContainer: {
     marginLeft: Spacing.sm,
   },
   optionItem: {
-    paddingHorizontal: Spacing.md,
+    paddingHorizontal: Spacing.lg,
     paddingVertical: Spacing.md,
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.neutral100,
+    borderBottomWidth: BorderWidth.thin,
+    borderBottomColor: colors.border,
   },
   optionItemSelected: {
-    backgroundColor: Colors.primaryExtraLight,
-  },
-  optionItemText: {
-    fontSize: 16,
-    fontFamily: Fonts.regular,
-    color: Colors.black,
-  },
-  optionItemTextSelected: {
-    fontFamily: Fonts.semiBold,
-    color: Colors.primary,
-  },
-  hint: {
-    fontSize: 12,
-    fontFamily: Fonts.regular,
-    color: Colors.neutral500,
+    backgroundColor: colors.primaryLight,
   },
   modalOverlay: {
     flex: 1,
@@ -73,17 +51,17 @@ export const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   modalContent: {
-    backgroundColor: Colors.white,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
+    backgroundColor: colors.background,
+    borderTopLeftRadius: Radius.xl,
+    borderTopRightRadius: Radius.xl,
     maxHeight: '80%',
-    paddingTop: Spacing.md,
+    paddingTop: Spacing.lg,
   },
   modalHeader: {
-    paddingHorizontal: Spacing.md,
+    paddingHorizontal: Spacing.lg,
     paddingBottom: Spacing.md,
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.neutral200,
+    borderBottomWidth: BorderWidth.thin,
+    borderBottomColor: colors.border,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',

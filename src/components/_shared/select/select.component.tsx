@@ -1,11 +1,10 @@
-import { Colors } from '@/theme/colors';
-import { Fonts } from '@/theme/fonts';
-import { Spacing } from '@/theme/spacing';
+import { useTheme } from '@/contexts/theme-context';
+import { Spacing, Typography, Opacity } from '@/theme';
 import { Ionicons } from '@expo/vector-icons';
 import React, { useState } from 'react';
 import { Modal, Pressable, ScrollView, View } from 'react-native';
 import { Text } from '../text/text.component';
-import { styles } from './select.styles';
+import { getSelectStyles } from './select.styles';
 import { SelectProps } from './select.types';
 
 export const Select = ({
@@ -23,6 +22,8 @@ export const Select = ({
 }: SelectProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
+  const { colors } = useTheme();
+  const styles = getSelectStyles(colors);
 
   const selectedOption = options.find((opt) => opt.value === value);
   const displayText = selectedOption?.label || placeholder;
@@ -65,12 +66,12 @@ export const Select = ({
           isFocused && styles.selectButtonFocused,
           error && styles.selectButtonError,
           disabled && styles.selectButtonDisabled,
-          pressed && !disabled && { opacity: 0.8 },
+          pressed && !disabled && { opacity: Opacity.hover },
           style,
         ]}
       >
         {leftIcon && <View style={{ marginRight: Spacing.sm }}>{leftIcon}</View>}
-        
+
         <Text
           variant="body"
           color={isPlaceholder ? 'muted' : 'default'}
@@ -84,7 +85,7 @@ export const Select = ({
             <Ionicons
               name="chevron-down"
               size={20}
-              color={disabled ? Colors.neutral400 : Colors.neutral500}
+              color={disabled ? colors.foregroundMuted : colors.foreground}
             />
           )}
         </View>
@@ -117,7 +118,7 @@ export const Select = ({
             <View style={styles.modalHeader}>
               <Text variant="h3">{label || 'Select an option'}</Text>
               <Pressable onPress={handleClose}>
-                <Ionicons name="close" size={24} color={Colors.neutral500} />
+                <Ionicons name="close" size={24} color={colors.foregroundMuted} />
               </Pressable>
             </View>
             <ScrollView
@@ -134,14 +135,14 @@ export const Select = ({
                     style={({ pressed }) => [
                       styles.optionItem,
                       isSelected && styles.optionItemSelected,
-                      pressed && { opacity: 0.7 },
+                      pressed && { opacity: Opacity.muted },
                     ]}
                   >
                     <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
                       <Text
                         variant="body"
                         color={isSelected ? 'primary' : 'default'}
-                        style={isSelected ? { fontFamily: Fonts.semiBold } : undefined}
+                        style={isSelected ? { fontFamily: Typography.fontWeight.semiBold } : undefined}
                       >
                         {option.label}
                       </Text>
@@ -149,7 +150,7 @@ export const Select = ({
                         <Ionicons
                           name="checkmark"
                           size={20}
-                          color={Colors.primary}
+                          color={colors.primary}
                         />
                       )}
                     </View>
