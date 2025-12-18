@@ -1,8 +1,6 @@
-import { Button, Text } from '@/components/_shared';
-import { useTheme } from '@/contexts/theme-context';
+import { Button, Text } from '@/components/ui';
 import { useOnboarding } from '@/hooks';
 import { STORAGE_KEYS, storageHelpers } from '@/lib/storage';
-import { Spacing } from '@/theme';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
@@ -30,7 +28,6 @@ const CURRENCY_OPTIONS: CurrencyOption[] = [
 export default function OnboardingScreen() {
   const [currency, setCurrency] = useState<string>('USD');
   const { completeOnboarding } = useOnboarding();
-  const { colors } = useTheme();
 
   const handleFinish = () => {
     const preferences = {
@@ -55,31 +52,25 @@ export default function OnboardingScreen() {
       >
         {/* App Icon */}
         <View style={styles.iconContainer}>
-          <View style={[styles.iconCircle, { backgroundColor: colors.white }]}>
+          <View style={styles.iconCircle}>
             <Ionicons name="trending-up" size={56} color="#4776E6" />
           </View>
         </View>
 
         {/* Title and Description */}
         <View style={styles.headerContainer}>
-          <Text variant="h1" style={[styles.title, { color: colors.white }]}>
+          <Text variant="h1" className="text-white text-center mb-3 text-[28px] font-bold leading-9">
             Personal Investment Tracker
           </Text>
-          <Text
-            variant="body"
-            style={[styles.description, { color: colors.white }]}
-          >
+          <Text variant="body" className="text-white text-center opacity-95 px-4 text-base leading-6">
             Track your stocks and crypto investments with real-time updates and
             detailed analytics
           </Text>
         </View>
 
         {/* Currency Selection Card */}
-        <View style={[styles.card, { backgroundColor: colors.white }]}>
-          <Text
-            variant="h3"
-            style={[styles.cardTitle, { color: colors.foreground }]}
-          >
+        <View style={styles.card}>
+          <Text variant="h3" className="text-foreground text-center mb-8 text-xl font-semibold">
             Select Base Currency
           </Text>
 
@@ -93,10 +84,8 @@ export default function OnboardingScreen() {
                   style={({ pressed }) => [
                     styles.currencyOption,
                     {
-                      backgroundColor: isSelected
-                        ? colors.primaryLight
-                        : colors.backgroundSecondary,
-                      borderColor: isSelected ? colors.primary : colors.border,
+                      backgroundColor: isSelected ? '#EFF6FF' : '#FFFFFF',
+                      borderColor: isSelected ? '#155DFC' : '#E4E4E7',
                       borderWidth: isSelected ? 2 : 1,
                       transform: pressed ? [{ scale: 0.98 }] : [{ scale: 1 }],
                     },
@@ -107,57 +96,29 @@ export default function OnboardingScreen() {
                       style={[
                         styles.currencyIcon,
                         {
-                          backgroundColor: isSelected
-                            ? colors.primary
-                            : colors.neutral200,
+                          backgroundColor: isSelected ? '#155DFC' : '#EFF6FF',
                         },
                       ]}
                     >
                       <Text
                         variant="h2"
-                        style={{
-                          color: isSelected ? colors.white : colors.foreground,
-                          fontSize: 28,
-                          fontWeight: '700',
-                        }}
+                        className={isSelected ? 'text-white text-[28px] font-bold' : 'text-foreground text-[28px] font-bold'}
                       >
                         {option.icon}
                       </Text>
                     </View>
                     <View style={styles.currencyInfo}>
-                      <Text
-                        variant="body"
-                        style={{
-                          color: colors.foreground,
-                          fontWeight: '600',
-                          fontSize: 17,
-                        }}
-                      >
+                      <Text variant="body" className="text-foreground font-semibold text-[17px]">
                         {option.label}
                       </Text>
-                      <Text
-                        variant="caption"
-                        style={{
-                          color: colors.foregroundMuted,
-                          fontSize: 14,
-                        }}
-                      >
+                      <Text variant="caption" className="text-muted-foreground text-sm">
                         {option.symbol}
                       </Text>
                     </View>
                   </View>
                   {isSelected && (
-                    <View
-                      style={[
-                        styles.checkmark,
-                        { backgroundColor: colors.primary },
-                      ]}
-                    >
-                      <Ionicons
-                        name="checkmark"
-                        size={20}
-                        color={colors.white}
-                      />
+                    <View style={styles.checkmark}>
+                      <Ionicons name="checkmark" size={20} color="#FFFFFF" />
                     </View>
                   )}
                 </Pressable>
@@ -165,12 +126,7 @@ export default function OnboardingScreen() {
             })}
           </View>
 
-          <Button
-            variant="primary"
-            onPress={handleFinish}
-            size="lg"
-            style={styles.button}
-          >
+          <Button variant="primary" onPress={handleFinish} size="lg" className="mt-3 h-14">
             Get Started
           </Button>
         </View>
@@ -185,14 +141,14 @@ const styles = StyleSheet.create({
   },
   container: {
     flexGrow: 1,
-    paddingHorizontal: Spacing['2xl'],
-    paddingTop: Spacing['5xl'],
-    paddingBottom: Spacing['3xl'],
+    paddingHorizontal: 32,
+    paddingTop: 64,
+    paddingBottom: 48,
     justifyContent: 'center',
   },
   iconContainer: {
     alignItems: 'center',
-    marginBottom: Spacing['2xl'],
+    marginBottom: 32,
   },
   iconCircle: {
     width: 100,
@@ -200,6 +156,7 @@ const styles = StyleSheet.create({
     borderRadius: 28,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: '#FFFFFF',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 0.2,
@@ -208,47 +165,28 @@ const styles = StyleSheet.create({
   },
   headerContainer: {
     alignItems: 'center',
-    marginBottom: Spacing['3xl'],
-  },
-  title: {
-    textAlign: 'center',
-    marginBottom: Spacing.md,
-    fontSize: 28,
-    fontWeight: '700',
-    lineHeight: 36,
-  },
-  description: {
-    textAlign: 'center',
-    opacity: 0.95,
-    paddingHorizontal: Spacing.lg,
-    fontSize: 16,
-    lineHeight: 24,
+    marginBottom: 48,
   },
   card: {
     borderRadius: 24,
-    padding: Spacing['2xl'],
+    padding: 32,
+    backgroundColor: '#FFFFFF',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 12 },
     shadowOpacity: 0.2,
     shadowRadius: 32,
     elevation: 16,
   },
-  cardTitle: {
-    textAlign: 'center',
-    marginBottom: Spacing['2xl'],
-    fontSize: 20,
-    fontWeight: '600',
-  },
   currencyList: {
-    gap: Spacing.md,
-    marginBottom: Spacing['2xl'],
+    gap: 16,
+    marginBottom: 32,
   },
   currencyOption: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     borderRadius: 16,
-    padding: Spacing.lg,
+    padding: 16,
     minHeight: 84,
   },
   currencyContent: {
@@ -262,7 +200,7 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: Spacing.lg,
+    marginRight: 16,
   },
   currencyInfo: {
     flex: 1,
@@ -273,10 +211,7 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     justifyContent: 'center',
     alignItems: 'center',
-    marginLeft: Spacing.md,
-  },
-  button: {
-    marginTop: Spacing.md,
-    height: 56,
+    marginLeft: 16,
+    backgroundColor: '#155DFC',
   },
 });
