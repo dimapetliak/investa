@@ -1,10 +1,6 @@
 // Layout / Structure
-export { Badge } from './badge';
-export type { BadgeProps, BadgeSize, BadgeVariant } from './badge';
 export { Card } from './card';
 export type { CardVariant, CardProps } from './card';
-export { Separator } from './separator';
-export type { SeparatorProps } from './separator';
 export { Container } from './container';
 export type { ContainerAlignment, ContainerPadding, ContainerProps } from './container';
 export { Divider } from './divider';
