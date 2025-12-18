@@ -33,6 +33,8 @@ export { SegmentedControl } from './segmented-control';
 export type { SegmentedControlOption, SegmentedControlProps } from './segmented-control';
 
 // Inputs / Forms
+export { SearchFilterWidget } from '../widgets/search-filter-widget';
+export type { FilterOption, SearchFilterWidgetProps } from '../widgets/search-filter-widget';
 export { DateTimePicker } from './date-time-picker';
 export type { DateTimePickerMode, DateTimePickerProps } from './date-time-picker';
 export { FormError } from './form-error';
@@ -43,8 +45,6 @@ export { Input } from './input';
 export type { InputProps } from './input';
 export { NumberInput } from './number-input';
 export type { NumberInputProps } from './number-input';
-export { SearchFilterWidget } from './search-filter-widget';
-export type { FilterOption, SearchFilterWidgetProps } from './search-filter-widget';
 export { SearchInput } from './search-input';
 export type { SearchInputProps } from './search-input';
 export { Select } from './select';

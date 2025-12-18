@@ -8,17 +8,6 @@ export type PortfolioSummary = {
   totalCost: number;
 };
 
-export type Position = {
-  ticker: string;
-  assetType: AssetType;
-  quantity: number;
-  avgPrice: number;
-  currentPrice: number;
-  currentValue: string | number;
-  pnl: number;
-  pnlPercent: number;
-};
-
 export type Trade = {
   id: string;
   type: TradeType;
@@ -32,11 +21,8 @@ export type Trade = {
 
 export type PortfolioScreenProps = {
   portfolioSummary?: PortfolioSummary;
-  recentPositions?: Position[];
   recentTrades?: Trade[];
-  onAddAsset: () => void;
   onAddTrade: () => void;
-  onViewAsset: (ticker: string) => void;
   onViewTrade: (tradeId: string) => void;
   onViewAllAssets: () => void;
   onSearch?: (query: string) => void;

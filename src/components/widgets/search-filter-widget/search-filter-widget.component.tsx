@@ -27,15 +27,17 @@ export const SearchFilterWidget = ({
         <View style={styles.filtersContainer}>
           {filters.map((filter) => {
             const isSelected = selectedFilters.includes(filter.value);
+            const quantity = filter.quantity;
             return (
               <Button
                 key={filter.value}
-                variant={isSelected ? 'primary' : 'outline'}
+                variant={isSelected ? 'primary' : 'secondary'}
                 size="sm"
                 onPress={() => onFilterToggle?.(filter.value)}
                 style={styles.filterButton}
+                textStyle={styles.filterButtonFont}
               >
-                {filter.label}
+                {filter.label} {quantity ? `(${quantity})` : ''}
               </Button>
             );
           })}

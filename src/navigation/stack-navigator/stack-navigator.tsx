@@ -21,6 +21,7 @@ export const StackNavigator = () => {
 			<Stack.Screen
 				name="add-trade"
 				options={{
+					presentation: 'modal',
 					title: 'Add Trade',
 					headerBackTitle: 'Back',
 				}}

@@ -3,8 +3,8 @@ import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
   button: {
+    bottom: -24,
     position: 'absolute',
-    bottom: 24,
     right: 24,
     backgroundColor: Colors.primary,
     borderRadius: 28,

@@ -40,18 +40,41 @@ export const Input = ({
           {label}
         </Text>
       )}
-      <TextInput
-        {...props}
-        onFocus={handleFocus}
-        onBlur={handleBlur}
-        placeholderTextColor={Colors.neutral400}
-        style={[
-          styles.input,
-          isFocused && styles.inputFocused,
-          error && styles.inputError,
-          style,
-        ]}
-      />
+      <View style={styles.inputWrapper}>
+        {leftIcon && (
+          <View style={styles.leftIconContainer}>
+            {leftIcon}
+          </View>
+        )}
+        <TextInput
+          {...props}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
+          placeholderTextColor={Colors.neutral400}
+          style={[
+            styles.input,
+            leftIcon ? styles.inputWithLeftIcon : undefined,
+            rightIcon ? styles.inputWithRightIcon : undefined,
+            isFocused ? styles.inputFocused : undefined,
+            error ? styles.inputError : undefined,
+            style,
+          ]}
+        />
+        {rightIcon && (
+          <View style={styles.rightIconContainer}>
+            {rightIcon}
+          </View>
+        )}
+      </View>
+      {hint && !error && (
+        <Text
+          variant="caption"
+          color="muted"
+          style={{ marginTop: Spacing.xs }}
+        >
+          {hint}
+        </Text>
+      )}
       {error && (
         <Text
           variant="caption"

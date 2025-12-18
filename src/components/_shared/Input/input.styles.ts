@@ -7,16 +7,39 @@ export const styles = StyleSheet.create({
   container: {
     marginBottom: Spacing.md,
   },
-  input: {
+  inputWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderRadius: 14,
+    backgroundColor: Colors.neutral100,
+    minHeight: 48,
     borderWidth: 1,
     borderColor: Colors.neutral200,
-    borderRadius: 8,
-    paddingHorizontal: Spacing.md,
-    paddingVertical: Spacing.md,
+  },
+  input: {
+    flex: 1,
+    paddingHorizontal: Spacing.sm,
+    paddingVertical: Spacing.sm,
     fontSize: 16,
     fontFamily: Fonts.regular,
     color: Colors.black,
-    backgroundColor: Colors.white,
+    backgroundColor: 'transparent',
+  },
+  inputWithLeftIcon: {
+    paddingLeft: Spacing.sm,
+  },
+  inputWithRightIcon: {
+    paddingRight: Spacing.sm,
+  },
+  leftIconContainer: {
+    paddingLeft: Spacing.sm,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  rightIconContainer: {
+    paddingRight: Spacing.md,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   inputFocused: {
     borderColor: Colors.primary,

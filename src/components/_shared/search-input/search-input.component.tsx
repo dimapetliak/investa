@@ -5,6 +5,7 @@ import { Pressable } from 'react-native';
 import { Input } from '../input/input.component';
 import { SearchInputProps } from './search-input.types';
 
+
 export const SearchInput = ({
   onClear,
   ...props

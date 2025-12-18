@@ -10,6 +10,7 @@ export const FloatingActionButton = ({
   icon = 'add',
   size = 'md',
   disabled = false,
+  position,
   style,
 }: FloatingActionButtonProps) => {
   const iconSize = size === 'sm' ? 24 : size === 'lg' ? 32 : 28;
@@ -23,6 +24,7 @@ export const FloatingActionButton = ({
         styles[size],
         disabled && styles.disabled,
         pressed && !disabled && { opacity: 0.8 },
+        position,
         style,
       ]}
     >

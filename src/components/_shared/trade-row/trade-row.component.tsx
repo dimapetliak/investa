@@ -27,7 +27,6 @@ export const TradeRow = ({
     <Pressable
       onPress={onPress}
       style={({ pressed }) => [
-        styles.container,
         pressed && { opacity: 0.7 },
         style,
       ]}

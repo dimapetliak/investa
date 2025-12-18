@@ -18,7 +18,10 @@ export const EmptyState = ({
 }: EmptyStateProps) => {
   return (
     <View style={[styles.container, style]}>
-      <Ionicons name={icon} size={64} color={Colors.neutral300} />
+      <View style={styles.iconContainer}>
+        <Ionicons name={icon} size={32} color={Colors.neutral400} />
+      </View>
+ 
       {title && (
         <Text variant="h3" style={{ marginTop: Spacing.md, marginBottom: Spacing.sm }}>
           {title}
