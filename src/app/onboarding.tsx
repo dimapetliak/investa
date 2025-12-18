@@ -1,6 +1,7 @@
-import { Button, Text } from '@/components/ui';
+import { Button, Card, Spacer, Text } from '@/components';
 import { useOnboarding } from '@/hooks';
 import { STORAGE_KEYS, storageHelpers } from '@/lib/storage';
+import { Spacing } from '@/theme';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
@@ -57,22 +58,29 @@ export default function OnboardingScreen() {
           </View>
         </View>
 
+        <Spacer size="2xl" />
+
         {/* Title and Description */}
-        <View style={styles.headerContainer}>
-          <Text variant="h1" className="text-white text-center mb-3 text-[28px] font-bold leading-9">
-            Personal Investment Tracker
-          </Text>
-          <Text variant="body" className="text-white text-center opacity-95 px-4 text-base leading-6">
-            Track your stocks and crypto investments with real-time updates and
-            detailed analytics
-          </Text>
-        </View>
+        <Text variant="h1" style={styles.title}>
+          Personal Investment Tracker
+        </Text>
+
+        <Spacer size="md" />
+
+        <Text variant="body" style={styles.description}>
+          Track your stocks and crypto investments with real-time updates and
+          detailed analytics
+        </Text>
+
+        <Spacer size="2xl" />
 
         {/* Currency Selection Card */}
-        <View style={styles.card}>
-          <Text variant="h3" className="text-foreground text-center mb-8 text-xl font-semibold">
+        <Card padding="2xl" style={styles.card}>
+          <Text variant="h3" style={styles.cardTitle}>
             Select Base Currency
           </Text>
+
+          <Spacer size="2xl" />
 
           <View style={styles.currencyList}>
             {CURRENCY_OPTIONS.map((option) => {
@@ -102,16 +110,20 @@ export default function OnboardingScreen() {
                     >
                       <Text
                         variant="h2"
-                        className={isSelected ? 'text-white text-[28px] font-bold' : 'text-foreground text-[28px] font-bold'}
+                        style={{
+                          color: isSelected ? '#FFFFFF' : '#09090B',
+                          fontSize: 28,
+                          fontWeight: '700',
+                        }}
                       >
                         {option.icon}
                       </Text>
                     </View>
                     <View style={styles.currencyInfo}>
-                      <Text variant="body" className="text-foreground font-semibold text-[17px]">
+                      <Text variant="body" weight="semibold">
                         {option.label}
                       </Text>
-                      <Text variant="caption" className="text-muted-foreground text-sm">
+                      <Text variant="caption" color="muted">
                         {option.symbol}
                       </Text>
                     </View>
@@ -126,10 +138,12 @@ export default function OnboardingScreen() {
             })}
           </View>
 
-          <Button variant="primary" onPress={handleFinish} size="lg" className="mt-3 h-14">
+          <Spacer size="lg" />
+
+          <Button variant="primary" size="lg" onPress={handleFinish} fullWidth>
             Get Started
           </Button>
-        </View>
+        </Card>
       </ScrollView>
     </LinearGradient>
   );
@@ -141,14 +155,13 @@ const styles = StyleSheet.create({
   },
   container: {
     flexGrow: 1,
-    paddingHorizontal: 32,
+    paddingHorizontal: Spacing['2xl'],
     paddingTop: 64,
-    paddingBottom: 48,
+    paddingBottom: Spacing['2xl'],
     justifyContent: 'center',
   },
   iconContainer: {
     alignItems: 'center',
-    marginBottom: 32,
   },
   iconCircle: {
     width: 100,
@@ -163,13 +176,16 @@ const styles = StyleSheet.create({
     shadowRadius: 16,
     elevation: 12,
   },
-  headerContainer: {
-    alignItems: 'center',
-    marginBottom: 48,
+  title: {
+    textAlign: 'center',
+    color: '#FFFFFF',
+  },
+  description: {
+    textAlign: 'center',
+    color: '#FFFFFF',
+    opacity: 0.95,
   },
   card: {
-    borderRadius: 24,
-    padding: 32,
     backgroundColor: '#FFFFFF',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 12 },
@@ -177,16 +193,19 @@ const styles = StyleSheet.create({
     shadowRadius: 32,
     elevation: 16,
   },
+  cardTitle: {
+    textAlign: 'center',
+    color: '#09090B',
+  },
   currencyList: {
-    gap: 16,
-    marginBottom: 32,
+    gap: Spacing.md,
   },
   currencyOption: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     borderRadius: 16,
-    padding: 16,
+    padding: Spacing.lg,
     minHeight: 84,
   },
   currencyContent: {
@@ -200,7 +219,7 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: 16,
+    marginRight: Spacing.lg,
   },
   currencyInfo: {
     flex: 1,
@@ -211,7 +230,7 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     justifyContent: 'center',
     alignItems: 'center',
-    marginLeft: 16,
+    marginLeft: Spacing.md,
     backgroundColor: '#155DFC',
   },
 });
