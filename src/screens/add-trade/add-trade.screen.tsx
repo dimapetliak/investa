@@ -7,7 +7,7 @@ import {
   ScreenLayout,
   Select,
   Text,
-} from '@/components/_shared';
+} from '@/components';
 import type { TradeType } from '@/types';
 import { Spacing } from '@/theme/spacing';
 import React from 'react';

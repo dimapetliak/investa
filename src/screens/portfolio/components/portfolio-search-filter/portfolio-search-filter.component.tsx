@@ -1,4 +1,4 @@
-import { SearchFilterWidget } from '@/components/_shared';
+import { SearchFilterWidget } from '@/components';
 import React from 'react';
 import { View } from 'react-native';
 import { PortfolioSearchFilterProps } from './portfolio-search-filter.types';

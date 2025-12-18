@@ -1,4 +1,4 @@
-import { Card, EmptyState, TradeRow } from '@/components/_shared';
+import { Card, EmptyState, TradeRow } from '@/components';
 import React, { memo, useCallback } from 'react';
 import { ListRenderItem, View } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';

@@ -17,7 +17,12 @@
       "Bash(npx expo install:*)",
       "Bash(npx expo prebuild:*)",
       "Bash(npx expo run:android)",
-      "Bash(npm install:*)"
+      "Bash(npm install:*)",
+      "Bash(find:*)",
+      "Bash(/Users/dmitrypetliak/Library/Android/sdk/emulator/emulator:*)",
+      "Bash(adb:*)",
+      "Bash(watchman watch-del-all:*)",
+      "Bash(npx expo run:android:*)"
     ]
   }
 }

@@ -28,7 +28,7 @@ import {
   TickerBadge,
   TradeRow,
   ValueWithChange
-} from '@/components/_shared';
+} from '@/components';
 import { Spacing } from '@/theme/spacing';
 import { Ionicons } from '@expo/vector-icons';
 import React, { useState } from 'react';

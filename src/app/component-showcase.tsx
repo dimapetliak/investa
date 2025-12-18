@@ -1,4 +1,4 @@
-import { Button, Card, Input, Text } from '@/components/_shared';
+import { Button, Card, Input, Text } from '@/components';
 import { Spacing } from '@/theme/spacing';
 import React, { useState } from 'react';
 import { ScrollView, View } from 'react-native';

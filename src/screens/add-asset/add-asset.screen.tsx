@@ -6,7 +6,7 @@ import {
     ScreenLayout,
     Select,
     Text,
-} from '@/components/_shared';
+} from '@/components';
 import type { AssetType, CurrencyCode } from '@/types';
 import { Spacing } from '@/theme/spacing';
 import { Ionicons } from '@expo/vector-icons';

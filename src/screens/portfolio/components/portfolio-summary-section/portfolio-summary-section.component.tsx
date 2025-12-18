@@ -1,4 +1,4 @@
-import { Container, LinearBackground, PortfolioSummaryCard } from '@/components/_shared';
+import { Container, LinearBackground, PortfolioSummaryCard } from '@/components';
 import React from 'react';
 import { PortfolioSummarySectionProps } from './index';
 

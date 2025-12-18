@@ -1,4 +1,4 @@
-import { FloatingActionButton, ScreenLayout } from '@/components/_shared';
+import { FloatingActionButton, ScreenLayout } from '@/components';
 import { Spacing } from '@/theme/spacing';
 import React from 'react';
 import { ScrollView } from 'react-native';

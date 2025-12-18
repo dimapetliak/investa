@@ -9,7 +9,7 @@ import {
   Text,
   TradeRow,
   ValueWithChange,
-} from '@/components/_shared';
+} from '@/components';
 import { Colors } from '@/theme/colors';
 import { Spacing } from '@/theme/spacing';
 import { Ionicons } from '@expo/vector-icons';

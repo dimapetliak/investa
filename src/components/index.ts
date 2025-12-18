@@ -1,5 +1,5 @@
 // Atomic Design Component Library
-// Export everything from atoms and molecules for easy imports
+// Export everything from atoms, molecules, and organisms for easy imports
 
 // Atoms
 export * from './atoms';
@@ -7,5 +7,5 @@ export * from './atoms';
 // Molecules
 export * from './molecules';
 
-// Organisms (to be added later)
-// export * from './organisms';
+// Organisms
+export * from './organisms';

@@ -3,7 +3,7 @@ import { ControlHeight, Opacity, Radius, Typography } from '@/theme/tokens';
 import React from 'react';
 import { ActivityIndicator, Pressable, PressableProps, StyleSheet, Text, ViewStyle } from 'react-native';
 
-type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost';
+type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost' | 'destructive';
 type ButtonSize = 'sm' | 'md' | 'lg';
 
 export interface ButtonProps extends Omit<PressableProps, 'children'> {
@@ -58,6 +58,9 @@ export const Button: React.FC<ButtonProps> = ({
     ghost: {
       backgroundColor: 'transparent',
     },
+    destructive: {
+      backgroundColor: colors.error,
+    },
   };
 
   const textColorMap: Record<ButtonVariant, string> = {
@@ -65,6 +68,7 @@ export const Button: React.FC<ButtonProps> = ({
     secondary: colors.foreground,
     outline: colors.foreground,
     ghost: colors.foreground,
+    destructive: '#FFFFFF',
   };
 
   return (

@@ -4,7 +4,7 @@ import {
   PositionCard,
   ScreenLayout,
   SearchFilterWidget,
-} from '@/components/_shared';
+} from '@/components';
 import { Spacing } from '@/theme/spacing';
 import React, { useState } from 'react';
 import { ScrollView, View } from 'react-native';

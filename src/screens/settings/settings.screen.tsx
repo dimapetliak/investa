@@ -6,7 +6,7 @@ import {
   SectionHeader,
   Text,
   Select,
-} from "@/components/_shared";
+} from "@/components";
 import { useTheme } from "@/contexts/theme-context";
 import { Spacing } from "@/theme/spacing";
 import { Ionicons } from "@expo/vector-icons";
@@ -162,7 +162,7 @@ export const SettingsScreen = ({
         {/* About */}
         <View style={{ marginBottom: Spacing["3xl"] }}>
           <SectionHeader title="About" />
-          <Card variant="info">
+          <Card>
             <View style={{ alignItems: "center", padding: Spacing.lg }}>
               <Text variant="h3">Investment Tracker</Text>
               <Text variant="caption" color="muted" style={{ marginTop: 4 }}>
