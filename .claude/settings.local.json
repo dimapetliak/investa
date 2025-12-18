@@ -16,7 +16,8 @@
       "Bash(npm uninstall:*)",
       "Bash(npx expo install:*)",
       "Bash(npx expo prebuild:*)",
-      "Bash(npx expo run:android)"
+      "Bash(npx expo run:android)",
+      "Bash(npm install:*)"
     ]
   }
 }
