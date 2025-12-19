@@ -2,9 +2,8 @@ import { useTheme } from '@/contexts/theme-context';
 import { Typography } from '@/theme';
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
-import { View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { Text } from '../../atoms/text';
-import { styles } from './value-with-change.styles';
 import type { ValueWithChangeProps, ValueWithChangeSize } from './value-with-change.types';
 
 export const ValueWithChange: React.FC<ValueWithChangeProps> = ({
@@ -19,12 +18,15 @@ export const ValueWithChange: React.FC<ValueWithChangeProps> = ({
   const { colors } = useTheme();
   const hasChange = change !== undefined && change !== null;
   const isPositive = hasChange ? change >= 0 : false;
-  const changeColor = isPositive ? colors.success : colors.error;
+  const isNegative = hasChange ? change < 0 : false;
+  
+  // Use theme colors for P&L
+  const changeColor = isPositive ? colors.success : isNegative ? colors.error : colors.foregroundMuted;
 
-  // Normalize 'large' to 'lg'
-  const normalizedSize = size === 'large' ? 'lg' : size;
+  // Normalize 'large' to 'lg' for backwards compatibility
+  const normalizedSize: ValueWithChangeSize = size === 'large' ? 'lg' : size;
 
-  const valueSizes: Record<Exclude<ValueWithChangeSize, 'large'>, { fontSize: number; lineHeight: number }> = {
+  const valueSizes: Record<ValueWithChangeSize, { fontSize: number; lineHeight: number }> = {
     sm: { fontSize: Typography.fontSize.xl, lineHeight: Typography.lineHeight.xl },
     md: { fontSize: Typography.fontSize['2xl'], lineHeight: Typography.lineHeight['2xl'] },
     lg: { fontSize: Typography.fontSize['4xl'], lineHeight: Typography.lineHeight['4xl'] },
@@ -53,7 +55,7 @@ export const ValueWithChange: React.FC<ValueWithChangeProps> = ({
       {hasChange && (
         <View style={[styles.changeContainer, { backgroundColor: `${changeColor}15` }]}>
           <Ionicons
-            name={isPositive ? 'trending-up' : 'trending-down'}
+            name={isPositive ? 'trending-up' : isNegative ? 'trending-down' : 'remove'}
             size={16}
             color={changeColor}
           />
@@ -70,5 +72,21 @@ export const ValueWithChange: React.FC<ValueWithChangeProps> = ({
   );
 };
 
-export type { ValueWithChangeData, ValueWithChangeProps, ValueWithChangeSize } from './value-with-change.types';
+const styles = StyleSheet.create({
+  container: {},
+  label: {
+    marginBottom: 4,
+  },
+  value: {},
+  changeContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 8,
+    marginTop: 8,
+    alignSelf: 'flex-start',
+  },
+});
 
+export type { ValueWithChangeData, ValueWithChangeProps, ValueWithChangeSize } from './value-with-change.types';

@@ -17,6 +17,7 @@ export const Card: React.FC<CardProps> = ({
   padding = 'md',
   elevated = false,
   shadow = false,
+  bordered = false,
   backgroundVariant = 'default',
   onPress,
   children,
@@ -44,10 +45,13 @@ export const Card: React.FC<CardProps> = ({
     styles.card,
     {
       backgroundColor: getBackgroundColor(backgroundVariant),
-      borderColor: colors.border,
       padding: paddingMap[padding],
     },
-    (elevated || shadow) && Shadow.md,
+    bordered && {
+      borderWidth: 1,
+      borderColor: colors.border,
+    },
+    (elevated || shadow) && Shadow.sm,
     style,
   ];
 
@@ -74,4 +78,5 @@ export const Card: React.FC<CardProps> = ({
 };
 
 export type { CardPadding, CardProps } from './card.types';
+
 

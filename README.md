@@ -1,10 +1,10 @@
 # Investa - Personal Investment Tracker
 
-A beautiful, offline-first mobile investment tracking application built with React Native and Expo. Track your stock and cryptocurrency portfolios with real-time calculations, cost basis tracking, and a modern shadcn/ui-inspired design system.
+A beautiful, offline-first mobile investment tracking application built with React Native and Expo. Track your stock and cryptocurrency portfolios with real-time price fetching, cost basis tracking, and a modern shadcn/ui-inspired design system.
 
-![React Native](https://img.shields.io/badge/React_Native-0.76.5-blue)
+![React Native](https://img.shields.io/badge/React_Native-0.81.5-blue)
 ![Expo](https://img.shields.io/badge/Expo-54.0.0-black)
-![TypeScript](https://img.shields.io/badge/TypeScript-5.3.3-blue)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.9.2-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
 ## 📱 Features
@@ -12,12 +12,20 @@ A beautiful, offline-first mobile investment tracking application built with Rea
 ### Core Functionality
 - **Portfolio Management**: Track unlimited stocks and cryptocurrency holdings
 - **Trade Tracking**: Record buy/sell transactions with automatic cost basis calculation
-- **Real-time Calculations**: Automatic P&L computation based on average buy price
+- **Real-time Price Fetching**: Live prices from Yahoo Finance (stocks) and CoinGecko (crypto)
 - **Offline-First**: All data stored locally with MMKV for instant access
 - **Multi-Asset Support**: Stocks and cryptocurrency with extensible asset types
 
+### Price Integration
+- **Yahoo Finance**: Free stock quotes with real-time data
+- **CoinGecko**: Cryptocurrency prices for 25+ major coins
+- **Auto-Refresh**: Configurable intervals (1min, 5min, 15min, 1hour, or manual)
+- **Offline Cache**: Prices cached locally for offline viewing
+- **React Query**: Efficient data fetching with stale-while-revalidate
+
 ### Design & UX
 - **Modern UI**: shadcn/ui-inspired design system with consistent tokens
+- **Gradient Cards**: Beautiful gradient summary cards for Net Worth, Investments, and Savings
 - **Dark Mode**: Full theme support (Light, Dark, System)
 - **Responsive**: Optimized for all screen sizes and safe areas
 - **Smooth Animations**: Native gestures and transitions
@@ -27,7 +35,7 @@ A beautiful, offline-first mobile investment tracking application built with Rea
 - **Cost Basis Tracking**: Automatic average price calculation
 - **Trade History**: Complete audit trail of all transactions
 - **Portfolio Analytics**: Total value, cost, P&L, and percentage calculations
-- **Data Export**: Export portfolio data (CSV/JSON planned)
+- **Data Export/Import**: Export portfolio data as JSON, import IBKR CSV or JSON backups
 - **Data Persistence**: MMKV for blazing-fast local storage
 
 ## 🏗️ Architecture
@@ -35,13 +43,15 @@ A beautiful, offline-first mobile investment tracking application built with Rea
 ### Technology Stack
 
 ```
-Frontend Framework:  React Native 0.76.5
+Frontend Framework:  React Native 0.81.5
 Routing:            Expo Router 6.0.15 (File-based)
 State Management:   Zustand 5.0.8
+Data Fetching:      TanStack React Query 5.90.11
 Local Storage:      react-native-mmkv 4.1.0
-Type System:        TypeScript 5.3.3
+Type System:        TypeScript 5.9.2
 UI Components:      Custom shadcn/ui-inspired design system
 Navigation:         React Navigation with native stack
+Gradients:          expo-linear-gradient 15.0.7
 ```
 
 ### Project Structure
@@ -51,8 +61,9 @@ investa/
 ├── src/
 │   ├── app/                    # Expo Router pages (file-based routing)
 │   │   ├── (tabs)/            # Tab navigator screens
-│   │   │   ├── index.tsx      # Portfolio screen (home)
-│   │   │   ├── assets.tsx     # Assets list screen
+│   │   │   ├── index.tsx      # Home screen (Net Worth overview)
+│   │   │   ├── assets.tsx     # Investments list screen
+│   │   │   ├── savings.tsx    # Savings & Goals screen
 │   │   │   └── settings.tsx   # Settings screen
 │   │   ├── _layout.tsx        # Root layout with providers
 │   │   ├── onboarding.tsx     # First-time user onboarding
@@ -63,59 +74,80 @@ investa/
 │   │   └── edit-trade.tsx     # Edit trade form
 │   │
 │   ├── components/            # Reusable UI components
-│   │   ├── _shared/          # Design system primitives
-│   │   │   ├── badge/        # Badge component
-│   │   │   ├── button/       # Button with variants
-│   │   │   ├── card/         # Card container
-│   │   │   ├── input/        # Form input
-│   │   │   ├── separator/    # Divider line
-│   │   │   ├── text/         # Typography component
-│   │   │   └── ...           # Other UI primitives
-│   │   └── widgets/          # Complex composite components
+│   │   ├── atoms/             # Design system primitives
+│   │   │   ├── badge/         # Badge component
+│   │   │   ├── button/        # Button with variants
+│   │   │   ├── icon-badge/    # Icon with colored background
+│   │   │   ├── change-badge/  # P&L change indicator
+│   │   │   ├── text/          # Typography component
+│   │   │   └── ...            # Other UI primitives
+│   │   ├── molecules/         # Composite components
+│   │   │   ├── card/          # Card container
+│   │   │   ├── gradient-card/ # Gradient background card
+│   │   │   ├── screen-header/ # Screen header with actions
+│   │   │   ├── position-card/ # Portfolio position display
+│   │   │   └── ...            # Other molecules
+│   │   └── organisms/         # Complex widgets
+│   │       ├── ScreenLayout.tsx
+│   │       └── SearchFilterWidget.tsx
 │   │
-│   ├── contexts/             # React Context providers
-│   │   └── theme-context.tsx # Theme management (light/dark/system)
+│   ├── contexts/              # React Context providers
+│   │   └── theme-context.tsx  # Theme management (light/dark/system)
 │   │
-│   ├── hooks/                # Custom React hooks
+│   ├── hooks/                 # Custom React hooks
 │   │   ├── use-app-init.ts           # App initialization
 │   │   ├── use-onboarding.ts         # Onboarding flow
 │   │   ├── use-portfolio-init.ts     # Portfolio calculations
+│   │   ├── use-prices.ts             # Price fetching hooks
+│   │   ├── use-price-sync.ts         # Price store sync
 │   │   └── use-theme-colors.ts       # Theme color access
 │   │
-│   ├── lib/                  # Utility libraries
-│   │   ├── storage.ts        # MMKV storage helpers
-│   │   └── persistence.ts    # Zustand persistence middleware
+│   ├── lib/                   # Utility libraries
+│   │   ├── storage.ts         # MMKV storage helpers
+│   │   ├── persistence.ts     # Zustand persistence middleware
+│   │   ├── utils.ts           # Formatting utilities
+│   │   └── id.ts              # ID generation
 │   │
-│   ├── navigation/           # Navigation configuration
-│   │   ├── stack-navigator/  # Stack navigator setup
-│   │   └── tab-navigator/    # Bottom tab navigator
+│   ├── providers/             # App-level providers
+│   │   └── query-provider.tsx # React Query provider
 │   │
-│   ├── screens/              # Screen components (presentation)
-│   │   ├── portfolio/        # Portfolio screen logic
-│   │   ├── assets/           # Assets screen logic
-│   │   └── settings/         # Settings screen logic
+│   ├── services/              # External API services
+│   │   └── api/
+│   │       ├── stock-api.ts   # Yahoo Finance integration
+│   │       ├── crypto-api.ts  # CoinGecko integration
+│   │       └── types.ts       # API type definitions
 │   │
-│   ├── store/                # Zustand state management
-│   │   ├── assets.store.ts   # Assets state + actions
-│   │   ├── trades.store.ts   # Trades state + actions
-│   │   └── portfolio.store.ts # Computed portfolio state
+│   ├── screens/               # Screen components (presentation)
+│   │   ├── home/              # Home screen with Net Worth
+│   │   ├── assets/            # Investments screen
+│   │   ├── savings/           # Savings & Goals screen
+│   │   ├── settings/          # Settings screen
+│   │   └── ...                # Other screens
 │   │
-│   ├── theme/                # Design system tokens
-│   │   ├── colors.ts         # Color palette (light/dark)
-│   │   ├── spacing.ts        # Spacing scale
-│   │   ├── fonts.ts          # Font families (Inter)
-│   │   ├── tokens.ts         # Design tokens (radius, heights, etc.)
-│   │   └── index.ts          # Theme exports
+│   ├── store/                 # Zustand state management
+│   │   ├── assets.store.ts    # Assets state + actions
+│   │   ├── trades.store.ts    # Trades state + actions
+│   │   ├── portfolio.store.ts # Computed portfolio state
+│   │   ├── prices.store.ts    # Price cache store
+│   │   ├── settings.store.ts  # User settings
+│   │   └── user.store.ts      # User profile
 │   │
-│   └── types/                # TypeScript type definitions
-│       ├── asset.types.ts    # Asset domain types
-│       ├── trade.types.ts    # Trade domain types
+│   ├── theme/                 # Design system tokens
+│   │   ├── colors.ts          # Color palette + gradients (light/dark)
+│   │   ├── spacing.ts         # Spacing scale
+│   │   ├── fonts.ts           # Font families (Inter)
+│   │   ├── tokens.ts          # Design tokens (radius, heights, etc.)
+│   │   └── index.ts           # Theme exports
+│   │
+│   └── types/                 # TypeScript type definitions
+│       ├── asset.types.ts     # Asset domain types
+│       ├── trade.types.ts     # Trade domain types
 │       └── portfolio.types.ts # Portfolio computation types
 │
-├── android/                  # Native Android code
-├── ios/                      # Native iOS code (generated)
-├── assets/                   # Static assets (images, fonts)
-└── app.json                  # Expo configuration
+├── android/                   # Native Android code
+├── ios/                       # Native iOS code (generated)
+├── assets/                    # Static assets (images, fonts)
+└── app.json                   # Expo configuration
 ```
 
 ## 🎨 Design System
@@ -128,20 +160,36 @@ The app uses a token-based design system inspired by shadcn/ui, with full dark m
 
 **Light Theme:**
 ```typescript
-background: "#FFFFFF"
-foreground: "#09090B"
-primary: "#155DFC"
-border: "#E4E4E7"
+background: "#f8f9fa"
+foreground: "#1f2937"
+primary: "#3b82f6"
+border: "#e5e7eb"
 // + semantic colors for success, error, warning
 ```
 
 **Dark Theme:**
 ```typescript
-background: "#09090B"
-foreground: "#FAFAFA"
-primary: "#3B82F6"
-border: "#27272A"
+background: "#111827"
+foreground: "#f9fafb"
+primary: "#3b82f6"
+border: "#374151"
 // + adjusted semantic colors
+```
+
+#### Gradient Colors
+
+```typescript
+// Net Worth Card
+light: ['#4f46e5', '#7c3aed']  // Deep indigo → purple
+dark:  ['#3730a3', '#5b21b6']  // Darker variants
+
+// Investments Card
+light: ['#7c3aed', '#a855f7']  // Purple gradient
+dark:  ['#6d28d9', '#7c3aed']
+
+// Savings Card
+light: ['#16a34a', '#22c55e']  // Green gradient
+dark:  ['#15803d', '#16a34a']
 ```
 
 #### Design Tokens
@@ -178,10 +226,62 @@ Typography: {
 - `secondary` - Light gray background
 - `info`, `error`, `warning`, `success` - Semantic variants
 
+**GradientCard:**
+- Custom gradient backgrounds for summary cards
+- Theme-aware colors for light/dark mode
+
 **Text:**
 - `h1`, `h2`, `h3` - Headings
 - `body` - Body text
 - `caption`, `small` - Smaller text variants
+- Supports `white` color for gradient backgrounds
+
+## 📡 Price API Integration
+
+### Supported APIs
+
+**Yahoo Finance (Stocks):**
+- Free API, no key required
+- Real-time quotes with change data
+- Includes market cap, volume, high/low
+
+**CoinGecko (Crypto):**
+- Free tier, no API key required
+- 25+ major cryptocurrencies mapped
+- Includes 24h change, market cap, volume
+
+### Supported Cryptocurrencies
+
+```
+BTC, ETH, USDT, BNB, XRP, USDC, SOL, ADA, DOGE, TRX,
+TON, DOT, MATIC, LTC, SHIB, AVAX, LINK, XLM, ATOM, UNI,
+XMR, ETC, BCH, APT, FIL, NEAR, ARB, OP, PEPE
+```
+
+### Price Hooks
+
+```typescript
+// Fetch all portfolio asset prices
+const { prices, isLoading, refetch } = useAssetPrices();
+
+// Get single asset price
+const { price, change, changePercent } = useAssetPrice('AAPL', 'stock');
+
+// Sync prices to store and recompute portfolio
+const { isFetching, refetch } = usePriceSync();
+
+// Manual refresh trigger
+const refreshPrices = useRefreshPrices();
+```
+
+### Auto-Refresh Settings
+
+Configurable in Settings:
+- `manual` - Refresh only on demand
+- `1min` - Every minute
+- `5min` - Every 5 minutes
+- `15min` - Every 15 minutes
+- `1hour` - Every hour
 
 ## 💾 Data Architecture
 
@@ -191,12 +291,10 @@ Typography: {
 ```typescript
 {
   assets: Asset[]
-  isHydrated: boolean              // Track hydration state
-  addAsset: (input) => Asset       // With validation
-  updateAsset: (id, input) => void // With validation
-  deleteAsset: (id) => void
-  getAssetById: (id) => Asset | undefined
-  getAssetByTicker: (ticker) => Asset | undefined
+  isHydrated: boolean
+  addAsset: (input) => Asset
+  updateAsset: (id, input) => void
+  deleteAsset: (id) => void  // Cascades to delete related trades
 }
 ```
 
@@ -205,86 +303,69 @@ Typography: {
 {
   trades: Trade[]
   isHydrated: boolean
-  addTrade: (input) => Trade          // With validation
-  updateTrade: (id, input) => void    // With validation
+  addTrade: (input) => Trade
+  updateTrade: (id, input) => void
   deleteTrade: (id) => void
   deleteTradesByAssetId: (id) => number  // Cascade delete support
-  getTradesByAssetId: (assetId) => Trade[]
 }
 ```
 
-**User Store:**
+**Prices Store:**
 ```typescript
 {
-  profile: { name: string, avatarUrl?: string }
-  isHydrated: boolean
-  setName: (name) => void
-  setProfile: (updates) => void
-}
-```
-
-**Settings Store:**
-```typescript
-{
-  baseCurrency: CurrencyCode  // USD, EUR, GBP, JPY, CAD, AUD, CHF
-  priceRefreshInterval: PriceRefreshInterval
-  stockPriceSource: StockPriceSource
-  cryptoPriceSource: CryptoPriceSource
-  security: SecuritySettings
+  prices: Record<string, CachedPrice>
+  lastGlobalUpdate: string | null
+  setPrice: (symbol, price) => void
+  setPrices: (prices) => void
+  getPrice: (symbol) => CachedPrice | undefined
 }
 ```
 
 **Portfolio Store (Computed):**
 ```typescript
 {
-  positions: Position[]      // Computed from assets + trades
+  positions: Position[]      // Computed from assets + trades + prices
   summary: PortfolioSummary  // Total value, cost, P&L
+  computePortfolio: () => void  // Re-compute with latest prices
 }
 ```
 
-### Data Validation
-
-All store actions validate input data before persisting:
-
+**Settings Store:**
 ```typescript
-// Assets: ticker uniqueness, required fields
-// Trades: positive quantity, valid asset ID, valid timestamp
-// Throws descriptive errors on validation failure
-```
-
-### Data Persistence
-
-All stores automatically persist to MMKV storage using custom middleware:
-
-```typescript
-// Automatic sync to storage with hydration tracking
-persist(store, {
-  name: 'investa:assets',
-  partialize: (state) => ({ assets: state.assets }),
-  onRehydrateStorage: () => (state) => {
-    state?.setHydrated();
-  },
-})
-```
-
-### Hydration State
-
-Each persisted store tracks hydration status:
-
-```typescript
-// Check if stores are ready before rendering
-const assetsReady = useAssetsHydrated();
-const tradesReady = useTradesHydrated();
-const userReady = useUserHydrated();
+{
+  baseCurrency: string
+  priceRefreshInterval: 'manual' | '1min' | '5min' | '15min' | '1hour'
+  stockPriceSource: 'yahoo' | 'alphavantage'
+  cryptoPriceSource: 'coingecko' | 'binance'
+  security: { useFaceId: boolean, usePin: boolean }
+}
 ```
 
 ### Data Flow
 
 ```
-User Action → Validation → Store Action → State Update → MMKV Sync → UI Re-render
-                  ↓                            ↓
-             Error thrown              Portfolio Re-calculation
-             if invalid
+App Start
+    ↓
+Hydrate Stores (MMKV)
+    ↓
+React Query fetches prices ──→ Price Store ──→ Portfolio Recalculation
+    ↓                              ↓
+UI Renders                    MMKV Cache (offline)
+```
+
+### Price Calculation Flow
+
+```
+1. User adds/edits trades
+2. Portfolio store computes positions using:
+   - Assets (ticker, type)
+   - Trades (quantity, price)
+   - Cached prices (current market price)
+3. For each position:
+   - avgBuyPrice = weighted average from trades
+   - currentPrice = from price store or fallback to avgBuyPrice
+   - currentValue = quantity × currentPrice
+   - pnl = currentValue - totalCost
 ```
 
 ## 🔧 Development
@@ -351,7 +432,7 @@ avgBuyPrice = (currentQty * avgPrice + newQty * newPrice) / totalQty
 
 ### Portfolio Computation
 
-Portfolio values are computed reactively whenever assets or trades change:
+Portfolio values are computed reactively whenever assets, trades, or prices change:
 
 ```typescript
 // Real-time calculations
@@ -376,55 +457,43 @@ Theme is persisted to MMKV and applied globally:
 
 ### ID Generation
 
-All entities use a centralized ID generator (`src/lib/id.ts`):
+All entities use UUID for unique identification:
 
 ```typescript
-import { generateId, isValidId } from '@/lib/id';
+import { generateId } from '@/lib/id';
 
-// Generate unique IDs
-const id = generateId(); // "m1abc-001-xyz789f"
-
-// Validate ID format
-isValidId(id); // true
+const id = generateId(); // UUID v4
 ```
-
-Format: `{timestamp_base36}-{counter}-{random}`
 
 ### Component Structure
 
-All components follow this pattern:
+All components follow atomic design pattern:
+
+```
+atoms/      → Basic UI elements (Button, Text, Badge)
+molecules/  → Composite components (Card, ListItem, ProgressBar)
+organisms/  → Complex widgets (ScreenLayout, SearchFilterWidget)
+```
+
+### Hook Pattern for Screens
 
 ```typescript
-// 1. Types file
-export type ComponentProps = { ... }
+// Separate data logic from presentation
+const { data, isLoading, handlers } = useScreenData();
 
-// 2. Styles file (theme-aware)
-export const getStyles = (colors) => StyleSheet.create({ ... })
-
-// 3. Component file
-export const Component = (props: ComponentProps) => {
-  const { colors } = useTheme()
-  const styles = getStyles(colors)
-  // ...
-}
+return <Screen data={data} {...handlers} />;
 ```
 
 ### Store Pattern
 
 ```typescript
-// Store definition
 export const useStore = create<State>()(
   persist(
     (set, get) => ({
-      // State
       items: [],
-
-      // Actions
       addItem: (item) => set((state) => ({
         items: [...state.items, item]
       })),
-
-      // Selectors
       getItemById: (id) => get().items.find(i => i.id === id)
     }),
     persistOptions
@@ -432,32 +501,18 @@ export const useStore = create<State>()(
 )
 ```
 
-### Navigation Pattern
-
-```typescript
-// In screen component
-const router = useRouter()
-
-// Navigate
-router.push('/asset-details?id=123')
-
-// Go back
-router.back()
-
-// Replace (no history)
-router.replace('/onboarding')
-```
-
 ## 🔐 Data Privacy
 
 - **100% Local**: All data stored on device using MMKV
-- **No Cloud**: No data sent to external servers
+- **No Cloud**: No data sent to external servers (except price APIs)
 - **No Tracking**: No analytics or tracking
 - **User Control**: Full data export and deletion capabilities
+- **Price APIs**: Only ticker symbols sent to Yahoo/CoinGecko (no personal data)
 
 ## 🚀 Performance
 
 - **MMKV Storage**: 30x faster than AsyncStorage
+- **React Query**: Smart caching, deduplication, background updates
 - **Memoized Calculations**: Portfolio recomputes only when needed
 - **Optimized Re-renders**: Zustand selectors prevent unnecessary updates
 - **Native Navigation**: React Navigation with native stack
@@ -471,8 +526,7 @@ router.replace('/onboarding')
   "android": "expo run:android",
   "ios": "expo run:ios",
   "prebuild": "expo prebuild --clean",
-  "build:android": "eas build --platform android",
-  "build:ios": "eas build --platform ios"
+  "lint": "expo lint"
 }
 ```
 
@@ -483,6 +537,15 @@ router.replace('/onboarding')
 **Problem:** `Failed to get NitroModules`
 
 **Solution:** MMKV v4 requires custom development build. Run `npx expo run:android` instead of using Expo Go.
+
+### Price Fetch Failures
+
+**Problem:** Prices not loading
+
+**Solution:**
+- Check network connectivity
+- CoinGecko has rate limits (10-30 calls/min for free tier)
+- Yahoo Finance may block certain regions
 
 ### Android Build Issues
 
@@ -512,7 +575,10 @@ MIT License - feel free to use this project for learning or as a template for yo
 - Design inspiration from [shadcn/ui](https://ui.shadcn.com/)
 - Built with [Expo](https://expo.dev/)
 - State management by [Zustand](https://github.com/pmndrs/zustand)
+- Data fetching by [TanStack Query](https://tanstack.com/query)
 - Storage powered by [react-native-mmkv](https://github.com/mrousavy/react-native-mmkv)
+- Stock data from [Yahoo Finance](https://finance.yahoo.com/)
+- Crypto data from [CoinGecko](https://www.coingecko.com/)
 
 ---
 

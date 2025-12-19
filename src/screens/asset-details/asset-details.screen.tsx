@@ -39,6 +39,8 @@ export const AssetDetailsScreen = ({
           icon={<Ionicons name="arrow-back" size={24} />}
           onPress={onBack}
           variant="ghost"
+          accessibilityLabel="Go back"
+          accessibilityHint="Returns to the previous screen"
         />
         <Text variant="h2" style={styles.headerTitle}>
           Asset Details
@@ -47,6 +49,8 @@ export const AssetDetailsScreen = ({
           icon={<Ionicons name="pencil" size={20} />}
           onPress={onEditAsset}
           variant="ghost"
+          accessibilityLabel="Edit asset"
+          accessibilityHint="Opens form to edit this asset"
         />
       </View>
 
@@ -173,7 +177,7 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.sm,
   },
   valueLabel: {
-    marginBottom: 4,
+    marginBottom: Spacing.xs,
   },
   summaryCard: {
     marginBottom: Spacing.md,

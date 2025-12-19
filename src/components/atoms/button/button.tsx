@@ -62,7 +62,7 @@ export const Button: React.FC<ButtonProps> = ({
     outline: colors.foreground,
     ghost: colors.foreground,
     text: colors.primary,
-    destructive: '#FFFFFF',
+    destructive: colors.white,
   };
 
   const renderContent = () => {

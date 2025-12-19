@@ -9,7 +9,9 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
   current,
   target,
   color,
-  showLabels = true,
+  showLabels,
+  showValueLabels,
+  showPercentage,
   formatValue = (v) => `$${v.toLocaleString()}`,
   style,
   ...props
@@ -18,9 +20,13 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
   const progressColor = color || colors.primary;
   const percentage = Math.min((current / target) * 100, 100);
 
+  // Backward compatibility: showLabels enables both value labels and percentage
+  const shouldShowValueLabels = showValueLabels ?? showLabels ?? false;
+  const shouldShowPercentage = showPercentage ?? showLabels ?? false;
+
   return (
     <View style={[styles.container, style]} {...props}>
-      {showLabels && (
+      {shouldShowValueLabels && (
         <View style={styles.labels}>
           <Text variant="body" weight="semiBold">
             {formatValue(current)}
@@ -43,7 +49,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
         />
       </View>
 
-      {showLabels && (
+      {shouldShowPercentage && (
         <Text variant="caption" color="muted" style={styles.percentage}>
           {percentage.toFixed(0)}% complete
         </Text>

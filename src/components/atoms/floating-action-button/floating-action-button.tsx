@@ -8,6 +8,8 @@ import type { FloatingActionButtonProps } from './floating-action-button.types';
 export const FloatingActionButton: React.FC<FloatingActionButtonProps> = ({
   icon,
   position = { bottom: 20, right: 20 },
+  accessibilityLabel,
+  accessibilityHint,
   ...props
 }) => {
   const { colors } = useTheme();
@@ -22,9 +24,12 @@ export const FloatingActionButton: React.FC<FloatingActionButtonProps> = ({
           ...position,
         },
       ]}
+      accessibilityLabel={accessibilityLabel}
+      accessibilityHint={accessibilityHint}
+      accessibilityRole="button"
       {...props}
     >
-      <Ionicons name={icon} size={28} color="#FFFFFF" />
+      <Ionicons name={icon} size={28} color={colors.primaryForeground} />
     </Pressable>
   );
 };

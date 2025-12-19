@@ -77,7 +77,7 @@ export const SearchFilterWidget: React.FC<SearchFilterWidgetProps> = ({
                   variant="caption"
                   weight="medium"
                   style={{
-                    color: isSelected ? '#FFFFFF' : colors.foreground,
+                    color: isSelected ? colors.primaryForeground : colors.foreground,
                   }}
                 >
                   {filter.label}

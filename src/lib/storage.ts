@@ -10,6 +10,7 @@ export const STORAGE_KEYS = {
   // Core data
   ASSETS: 'investa:assets',
   TRADES: 'investa:trades',
+  PRICES: 'investa:prices',
   
   // User
   USER_PROFILE: 'investa:user-profile',

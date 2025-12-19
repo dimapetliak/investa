@@ -1,12 +1,13 @@
+import { ThemeProvider, useTheme } from '@/contexts/theme-context';
 import { useAppInit } from '@/hooks/use-app-init';
 import { useOnboarding } from '@/hooks/use-onboarding';
 import { StackNavigator } from '@/navigation/stack-navigator/stack-navigator';
+import { QueryProvider } from '@/providers';
 import { DefaultTheme, ThemeProvider as NavigationThemeProvider } from '@react-navigation/native';
 import { router, SplashScreen } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { ThemeProvider, useTheme } from '@/contexts/theme-context';
 
 export const unstable_settings = {
   anchor: '(tabs)',
@@ -43,9 +44,11 @@ function AppContent() {
 
 export default function RootLayout() {
   return (
-    <ThemeProvider>
-      <AppContent />
-    </ThemeProvider>
+    <QueryProvider>
+      <ThemeProvider>
+        <AppContent />
+      </ThemeProvider>
+    </QueryProvider>
   );
 }
  

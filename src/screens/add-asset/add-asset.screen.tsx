@@ -6,21 +6,12 @@ import {
     ScreenLayout,
     Select,
 } from '@/components';
+import { ASSET_TYPE_OPTIONS, CURRENCY_OPTIONS } from '@/constants';
 import { Spacing } from '@/theme/spacing';
 import type { AssetType, CurrencyCode } from '@/types';
 import React from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import type { AddAssetScreenProps } from './add-asset.types';
-
-const ASSET_TYPE_OPTIONS = [
-  { label: 'Stock', value: 'stock' },
-  { label: 'Crypto', value: 'crypto' },
-];
-
-const CURRENCY_OPTIONS = [
-  { label: 'USD', value: 'USD' },
-  { label: 'EUR', value: 'EUR' },
-];
 
 export const AddAssetScreen = ({
   formData,

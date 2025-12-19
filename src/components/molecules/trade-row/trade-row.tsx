@@ -1,9 +1,10 @@
 import { useTheme } from '@/contexts/theme-context';
+import { formatCurrency } from '@/lib/utils';
+import { Spacing } from '@/theme';
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
-import { Pressable, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
 import { Text } from '../../atoms/text';
-import { styles } from './trade-row.styles';
 import type { TradeRowProps } from './trade-row.types';
 
 export const TradeRow: React.FC<TradeRowProps> = ({
@@ -55,8 +56,8 @@ export const TradeRow: React.FC<TradeRowProps> = ({
             </View>
           </View>
           <Text variant="caption" color="muted">
-            {new Date(date).toLocaleDateString()} • {quantity} @ ${price.toFixed(2)}
-            {fee ? ` • Fee: $${fee.toFixed(2)}` : ''}
+            {new Date(date).toLocaleDateString()} • {quantity} @ {formatCurrency(price, { symbol: '$' })}
+            {fee ? ` • Fee: ${formatCurrency(fee, { symbol: '$' })}` : ''}
           </Text>
           {comment && (
             <Text variant="small" color="muted" numberOfLines={1}>
@@ -68,10 +69,16 @@ export const TradeRow: React.FC<TradeRowProps> = ({
 
       <View style={styles.rightSection}>
         <Text variant="body" weight="semiBold">
-          ${totalValue.toFixed(2)}
+          {formatCurrency(totalValue, { symbol: '$' })}
         </Text>
         {onDelete ? (
-          <Pressable onPress={onDelete} hitSlop={8}>
+          <Pressable 
+            onPress={onDelete} 
+            hitSlop={12}
+            accessibilityLabel="Delete trade"
+            accessibilityRole="button"
+            style={styles.deleteButton}
+          >
             <Ionicons name="trash-outline" size={18} color={colors.error} />
           </Pressable>
         ) : (
@@ -82,5 +89,49 @@ export const TradeRow: React.FC<TradeRowProps> = ({
   );
 };
 
-export type { TradeRowAssetType, TradeRowProps, TradeRowType } from './trade-row.types';
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: Spacing.sm,
+    paddingHorizontal: Spacing.md,
+  },
+  leftSection: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+  },
+  iconContainer: {
+    width: 40,
+    height: 40,
+    borderRadius: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: Spacing.sm,
+  },
+  info: {
+    flex: 1,
+  },
+  titleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.xs,
+    marginBottom: 2,
+  },
+  typeBadge: {
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: 4,
+  },
+  rightSection: {
+    alignItems: 'flex-end',
+    gap: Spacing.xs,
+  },
+  deleteButton: {
+    padding: Spacing.xs,
+    marginRight: -Spacing.xs,
+  },
+});
 
+export type { TradeRowAssetType, TradeRowProps, TradeRowType } from './trade-row.types';

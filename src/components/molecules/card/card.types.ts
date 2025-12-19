@@ -6,8 +6,12 @@ export type CardBackgroundVariant = 'default' | 'info' | 'success' | 'warning' |
 
 export type CardProps = ViewProps & {
   padding?: CardPadding;
+  /** Add subtle shadow for elevation */
   elevated?: boolean;
+  /** @deprecated Use elevated instead */
   shadow?: boolean;
+  /** Add border instead of shadow */
+  bordered?: boolean;
   backgroundVariant?: CardBackgroundVariant;
   onPress?: () => void;
   children: React.ReactNode;

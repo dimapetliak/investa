@@ -5,6 +5,7 @@ export interface Position {
   asset: Asset;
   quantity: number;
   avgBuyPrice: number;
+  currentPrice: number;
   totalCost: number;
   currentValue: number;
   pnl: number;

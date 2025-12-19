@@ -1,3 +1,3 @@
 export { AssetsScreen } from './assets.screen';
-export type { AssetsScreenProps, Position } from './assets.types';
+export type { AssetsScreenProps, InvestmentSummary, Position } from './assets.types';
 

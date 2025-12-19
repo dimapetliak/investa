@@ -22,5 +22,7 @@ export interface SavingsScreenProps {
   onViewGoal?: (id: string) => void;
   onAddAccount?: () => void;
   onViewAccount?: (id: string) => void;
+  /** Called when user taps settings/manage button */
+  onManage?: () => void;
 }
 

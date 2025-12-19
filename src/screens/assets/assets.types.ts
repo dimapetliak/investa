@@ -11,11 +11,24 @@ export type Position = {
   pnlPercent: number;
 };
 
+export type InvestmentSummary = {
+  totalValue: number;
+  totalCost: number;
+  totalPnL: number;
+  totalPnLPercent: number;
+  positionsCount: number;
+};
+
 export type AssetsScreenProps = {
   positions?: Position[];
+  summary?: InvestmentSummary;
   onAddAsset: () => void;
   onViewAsset: (ticker: string) => void;
   onSearch?: (query: string) => void;
   onFilterToggle?: (filter: string | number) => void;
+  /** Called when user taps refresh button to sync prices */
+  onRefresh?: () => void;
+  /** Whether refresh is in progress */
+  isRefreshing?: boolean;
 };
 

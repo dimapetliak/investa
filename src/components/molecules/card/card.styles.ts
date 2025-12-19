@@ -4,7 +4,7 @@ import { StyleSheet } from 'react-native';
 export const styles = StyleSheet.create({
   card: {
     borderRadius: Radius.md,
-    borderWidth: 1,
+    // Removed default border - use elevated prop for visual distinction
   },
 });
 

@@ -1,11 +1,13 @@
 import type { PortfolioFilter, PortfolioSummary, Position } from '@/types';
 import { create } from 'zustand';
 import { useAssetsStore } from './assets.store';
+import { usePricesStore } from './prices.store';
 import { useTradesStore } from './trades.store';
 
 interface PortfolioState {
   positions: Position[];
   summary: PortfolioSummary;
+  lastComputedAt: string | null;
   computePortfolio: () => void;
   getPositionByAssetId: (assetId: string) => Position | undefined;
   getFilteredPositions: (filter: PortfolioFilter) => Position[];
@@ -14,7 +16,8 @@ interface PortfolioState {
 const calculatePosition = (
   assetId: string,
   assets: ReturnType<typeof useAssetsStore.getState>['assets'],
-  trades: ReturnType<typeof useTradesStore.getState>['trades']
+  trades: ReturnType<typeof useTradesStore.getState>['trades'],
+  prices: ReturnType<typeof usePricesStore.getState>['prices']
 ): Position | null => {
   const asset = assets.find((a) => a.id === assetId);
   if (!asset) return null;
@@ -49,8 +52,12 @@ const calculatePosition = (
 
   const avgBuyPrice = totalQuantity > 0 ? totalCost / totalQuantity : 0;
 
-  // For now, currentValue = totalCost (no price data yet)
-  const currentValue = totalCost;
+  // Get current price from price store, fallback to avg buy price if not available
+  const cachedPrice = prices[asset.ticker.toUpperCase()];
+  const currentPrice = cachedPrice?.price ?? avgBuyPrice;
+  
+  // Calculate current value and P&L
+  const currentValue = totalQuantity * currentPrice;
   const pnl = currentValue - totalCost;
   const pnlPercent = totalCost > 0 ? (pnl / totalCost) * 100 : 0;
 
@@ -59,6 +66,7 @@ const calculatePosition = (
     quantity: totalQuantity,
     avgBuyPrice,
     totalCost,
+    currentPrice,
     currentValue,
     pnl,
     pnlPercent,
@@ -75,17 +83,19 @@ export const usePortfolioStore = create<PortfolioState>((set, get) => ({
     totalPnLPercent: 0,
     positionsCount: 0,
   },
+  lastComputedAt: null,
 
   computePortfolio: () => {
     const assets = useAssetsStore.getState().assets;
     const trades = useTradesStore.getState().trades;
+    const prices = usePricesStore.getState().prices;
 
     // Get unique asset IDs from trades
     const assetIds = Array.from(new Set(trades.map((t) => t.assetId)));
 
     // Calculate positions for each asset
     const positions: Position[] = assetIds
-      .map((assetId) => calculatePosition(assetId, assets, trades))
+      .map((assetId) => calculatePosition(assetId, assets, trades, prices))
       .filter((p): p is Position => p !== null);
 
     // Calculate summary
@@ -103,6 +113,7 @@ export const usePortfolioStore = create<PortfolioState>((set, get) => ({
         totalPnLPercent,
         positionsCount: positions.length,
       },
+      lastComputedAt: new Date().toISOString(),
     });
   },
 

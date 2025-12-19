@@ -1,5 +1,5 @@
 import { storageHelpers } from '@/lib/storage';
-import { DarkColors, LightColors } from '@/theme/colors';
+import { DarkColors, GradientColorSet, GradientColors, LightColors } from '@/theme/colors';
 import React, { createContext, ReactNode, useContext, useEffect, useState } from 'react';
 import { useColorScheme } from 'react-native';
 
@@ -10,6 +10,7 @@ interface ThemeContextType {
   theme: Theme;
   colorScheme: ColorScheme;
   colors: typeof LightColors;
+  gradients: GradientColorSet;
   setTheme: (theme: Theme) => void;
 }
 
@@ -40,11 +41,12 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   // Determine the active color scheme
   const colorScheme: ColorScheme = theme === 'system' ? systemColorScheme : theme;
 
-  // Select colors based on active scheme
+  // Select colors and gradients based on active scheme
   const colors = colorScheme === 'dark' ? DarkColors : LightColors;
+  const gradients = colorScheme === 'dark' ? GradientColors.dark : GradientColors.light;
 
   return (
-    <ThemeContext.Provider value={{ theme, colorScheme, colors, setTheme }}>
+    <ThemeContext.Provider value={{ theme, colorScheme, colors, gradients, setTheme }}>
       {children}
     </ThemeContext.Provider>
   );

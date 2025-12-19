@@ -7,6 +7,9 @@ export type { BadgeProps, BadgeSize, BadgeVariant } from "./badge";
 export { Button } from "./button";
 export type { ButtonProps, ButtonSize, ButtonVariant } from "./button";
 
+export { ChangeBadge } from "./change-badge";
+export type { ChangeBadgeProps, ChangeBadgeFormat, ChangeBadgeSize } from "./change-badge";
+
 export { Container } from "./container";
 export type { ContainerProps } from "./container";
 

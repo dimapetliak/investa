@@ -14,6 +14,28 @@ export const AssetColors = {
   crypto: '#f59e0b',
 } as const;
 
+// Gradient Colors for cards
+export type GradientPair = readonly [string, string];
+
+export interface GradientColorSet {
+  netWorthMain: GradientPair;
+  investments: GradientPair;
+  savings: GradientPair;
+}
+
+export const GradientColors: { light: GradientColorSet; dark: GradientColorSet } = {
+  light: {
+    netWorthMain: ['#4f46e5', '#7c3aed'],
+    investments: ['#7c3aed', '#a855f7'],
+    savings: ['#16a34a', '#22c55e'],
+  },
+  dark: {
+    netWorthMain: ['#3730a3', '#5b21b6'],
+    investments: ['#6d28d9', '#7c3aed'],
+    savings: ['#15803d', '#16a34a'],
+  },
+};
+
 export const LightColors = {
   // Base colors
   white: '#ffffff',

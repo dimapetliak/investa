@@ -1,20 +1,13 @@
 import { useTheme } from '@/contexts/theme-context';
+import { formatCurrency } from '@/lib/utils';
 import { AssetColors } from '@/theme/colors';
-import { Shadow } from '@/theme';
+import { Shadow, Spacing } from '@/theme';
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
-import { Pressable, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
+import { ChangeBadge } from '../../atoms/change-badge';
 import { Text } from '../../atoms/text';
-import { styles } from './position-card.styles';
 import type { PositionCardProps } from './position-card.types';
-
-// Utility function for formatting currency
-const formatCurrency = (value: number, currency = '$'): string => {
-  return `${currency}${value.toLocaleString('en-US', {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  })}`;
-};
 
 // Format quantity with appropriate decimals
 const formatQuantity = (qty: number): string => {
@@ -55,7 +48,6 @@ export const PositionCard: React.FC<PositionCardProps> = ({
         styles.card,
         {
           backgroundColor: colors.backgroundSecondary,
-          borderColor: colors.border,
           opacity: pressed ? 0.8 : 1,
         },
         Shadow.sm,
@@ -80,22 +72,14 @@ export const PositionCard: React.FC<PositionCardProps> = ({
         </View>
         <View style={styles.valueContainer}>
           <Text variant="h3" weight="semiBold">
-            {formatCurrency(currentValue, currency)}
+            {formatCurrency(currentValue, { symbol: currency })}
           </Text>
-          <View style={[styles.pnlBadge, { backgroundColor: `${pnlColor}15` }]}>
-            <Ionicons
-              name={isProfit ? 'caret-up' : 'caret-down'}
-              size={12}
-              color={pnlColor}
-            />
-            <Text
-              variant="caption"
-              weight="semiBold"
-              style={{ color: pnlColor, marginLeft: 2 }}
-            >
-              {isProfit ? '+' : ''}{pnlPercent.toFixed(2)}%
-            </Text>
-          </View>
+          <ChangeBadge
+            value={pnl}
+            percentValue={pnlPercent}
+            format="percent"
+            size="sm"
+          />
         </View>
       </View>
 
@@ -109,16 +93,16 @@ export const PositionCard: React.FC<PositionCardProps> = ({
         </View>
         <View style={styles.detailRow}>
           <Text variant="caption" color="muted">Avg Price</Text>
-          <Text variant="body" weight="medium">{formatCurrency(avgPrice, currency)}</Text>
+          <Text variant="body" weight="medium">{formatCurrency(avgPrice, { symbol: currency })}</Text>
         </View>
         <View style={styles.detailRow}>
           <Text variant="caption" color="muted">Current Price</Text>
-          <Text variant="body" weight="medium">{formatCurrency(currentPrice, currency)}</Text>
+          <Text variant="body" weight="medium">{formatCurrency(currentPrice, { symbol: currency })}</Text>
         </View>
         <View style={styles.detailRow}>
           <Text variant="caption" color="muted">P&L</Text>
           <Text variant="body" weight="semiBold" style={{ color: pnlColor }}>
-            {isProfit ? '+' : ''}{formatCurrency(pnl, currency)}
+            {isProfit ? '+' : ''}{formatCurrency(pnl, { symbol: currency })}
           </Text>
         </View>
       </View>
@@ -126,5 +110,49 @@ export const PositionCard: React.FC<PositionCardProps> = ({
   );
 };
 
-export type { PositionCardAssetType, PositionCardProps } from './position-card.types';
+const styles = StyleSheet.create({
+  card: {
+    borderRadius: 12,
+    marginBottom: Spacing.md,
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    padding: Spacing.md,
+  },
+  titleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+  },
+  iconContainer: {
+    width: 40,
+    height: 40,
+    borderRadius: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: Spacing.sm,
+  },
+  titleInfo: {
+    flex: 1,
+  },
+  valueContainer: {
+    alignItems: 'flex-end',
+  },
+  divider: {
+    height: 1,
+    marginHorizontal: Spacing.md,
+  },
+  details: {
+    padding: Spacing.md,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+  },
+  detailRow: {
+    width: '50%',
+    marginBottom: Spacing.sm,
+  },
+});
 
+export type { PositionCardAssetType, PositionCardProps } from './position-card.types';

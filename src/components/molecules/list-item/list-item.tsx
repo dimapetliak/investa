@@ -14,7 +14,7 @@ export const ListItem: React.FC<ListItemProps> = ({
   rightIcon,
   showChevron = true,
   onPress,
-  widthBorder = true,
+  withBorder = true,
   ...props
 }) => {
   const { colors } = useTheme();
@@ -27,7 +27,7 @@ export const ListItem: React.FC<ListItemProps> = ({
         {
           backgroundColor: pressed ? colors.backgroundMuted : 'transparent',
           borderBottomColor: colors.border,
-          borderBottomWidth: widthBorder ? BorderWidth.thin : 0,
+          borderBottomWidth: withBorder ? BorderWidth.thin : 0,
         },
       ]}
       {...props}

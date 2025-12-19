@@ -1,7 +1,7 @@
-import { ScreenLayout } from '@/components';
+import { ScreenLayout, Text } from '@/components';
 import { Spacing } from '@/theme/spacing';
 import React from 'react';
-import { View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import {
   AboutSection,
   AppearanceSection,
@@ -42,7 +42,17 @@ export const SettingsScreen = ({
 
   return (
     <ScreenLayout showsVerticalScrollIndicator={false} containerProps={{ noPadding: true }}>
-      <View style={{ paddingHorizontal: Spacing.lg }}>
+      {/* Header */}
+      <View style={styles.header}>
+        <Text variant="caption" color="muted">
+          Preferences
+        </Text>
+        <Text variant="h2" weight="bold">
+          Settings
+        </Text>
+      </View>
+
+      <View style={styles.content}>
         <AppearanceSection
           theme={theme}
           darkModeLabel={darkModeLabel}
@@ -85,3 +95,13 @@ export const SettingsScreen = ({
     </ScreenLayout>
   );
 };
+
+const styles = StyleSheet.create({
+  header: {
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.md,
+  },
+  content: {
+    paddingHorizontal: Spacing.lg,
+  },
+});

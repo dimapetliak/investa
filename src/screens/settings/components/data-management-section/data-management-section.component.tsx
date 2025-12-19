@@ -32,7 +32,7 @@ export const DataManagementSection = ({
           onPress={onLoadSampleData}
         />
         <ListItem
-          widthBorder={false}
+          withBorder={false}
           title="Export Data"
           subtitle={`Export ${stats.assetsCount} assets & ${stats.tradesCount} trades`}
           leftIcon={

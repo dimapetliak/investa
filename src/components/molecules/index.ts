@@ -3,6 +3,9 @@ export { Card } from './card';
 export type { CardPadding, CardProps } from './card';
 
 export { EmptyState } from './empty-state';
+
+export { ExpandableList } from './expandable-list';
+export type { ExpandableListProps } from './expandable-list';
 export type { EmptyStateProps } from './empty-state';
 
 export { ErrorState } from './error-state';

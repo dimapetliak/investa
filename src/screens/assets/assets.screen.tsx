@@ -1,22 +1,30 @@
 import {
   EmptyState,
-  FloatingActionButton,
+  GradientCard,
   PositionCard,
   ScreenLayout,
   SearchFilterWidget,
+  Text,
 } from '@/components';
+import { useTheme } from '@/contexts/theme-context';
+import { formatCurrency, formatPercent } from '@/lib/utils';
 import { Spacing } from '@/theme/spacing';
+import { Ionicons } from '@expo/vector-icons';
 import React, { useState } from 'react';
-import { ScrollView, View } from 'react-native';
+import { ActivityIndicator, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { AssetsScreenProps, Position } from './index';
 
 export const AssetsScreen = ({
   positions,
+  summary,
   onAddAsset,
   onViewAsset,
   onSearch,
   onFilterToggle,
+  onRefresh,
+  isRefreshing = false,
 }: AssetsScreenProps) => {
+  const { colors, gradients } = useTheme();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedFilters, setSelectedFilters] = useState<(string | number)[]>(['all']);
 
@@ -73,9 +81,102 @@ export const AssetsScreen = ({
     });
   };
 
+  const isPositivePnL = (summary?.totalPnL ?? 0) >= 0;
+  const hasPositions = positions && positions.length > 0;
+
   return (
     <ScreenLayout containerProps={{ noPadding: true }}>
-      <View style={{ padding: Spacing.md, paddingBottom: 0 }}>
+      {/* Header */}
+      <View style={styles.header}>
+        <View>
+          <Text variant="caption" color="muted">
+            Your Portfolio
+          </Text>
+          <Text variant="h2" weight="bold">
+            Investments
+          </Text>
+        </View>
+
+        <Pressable
+          onPress={onRefresh}
+          disabled={isRefreshing}
+          accessibilityLabel="Refresh prices"
+          accessibilityHint="Syncs latest market prices for your assets"
+          style={({ pressed }) => [
+            styles.actionButton,
+            { backgroundColor: colors.backgroundSecondary },
+            pressed && styles.pressed,
+          ]}
+        >
+          {isRefreshing ? (
+            <ActivityIndicator size="small" color={colors.primary} />
+          ) : (
+            <Ionicons
+              name="refresh-outline"
+              size={24}
+              color={colors.foreground}
+            />
+          )}
+        </Pressable>
+      </View>
+
+      {/* Investment Summary Card */}
+      {hasPositions && summary && (
+        <View style={styles.summaryContainer}>
+          <GradientCard
+            colors={gradients.investments}
+            padding="lg"
+            style={styles.summaryCard}
+          >
+            <View style={styles.summaryContent}>
+              <View style={styles.summaryMain}>
+                <Text variant="body" style={{ color: colors.white, opacity: 0.8 }}>
+                  Total Portfolio Value
+                </Text>
+                <Text variant="h1" weight="bold" color="white" style={styles.summaryAmount}>
+                  {formatCurrency(summary.totalValue, { symbol: '$', minimumFractionDigits: 2 })}
+                </Text>
+
+                {/* P&L indicator */}
+                <View style={styles.pnlRow}>
+                  <View style={[styles.pnlBadge, { backgroundColor: isPositivePnL ? `${colors.success}30` : `${colors.error}30` }]}>
+                    <Ionicons
+                      name={isPositivePnL ? 'trending-up' : 'trending-down'}
+                      size={14}
+                      color={isPositivePnL ? colors.success : colors.error}
+                    />
+                    <Text
+                      variant="small"
+                      weight="semiBold"
+                      style={{ color: isPositivePnL ? colors.success : colors.error, marginLeft: 4 }}
+                    >
+                      {formatCurrency(Math.abs(summary.totalPnL), { symbol: '$', minimumFractionDigits: 2 })}
+                    </Text>
+                    <Text
+                      variant="small"
+                      style={{ color: isPositivePnL ? colors.success : colors.error, marginLeft: 4 }}
+                    >
+                      ({formatPercent(Math.abs(summary.totalPnLPercent), { decimals: 2 })})
+                    </Text>
+                  </View>
+                </View>
+              </View>
+
+              {/* Position count */}
+              <View style={styles.positionCount}>
+                <Text variant="h3" weight="bold" color="white">
+                  {summary.positionsCount}
+                </Text>
+                <Text variant="small" style={{ color: colors.white, opacity: 0.7 }}>
+                  {summary.positionsCount === 1 ? 'Position' : 'Positions'}
+                </Text>
+              </View>
+            </View>
+          </GradientCard>
+        </View>
+      )}
+
+      <View style={styles.searchContainer}>
         <SearchFilterWidget
           searchValue={searchQuery}
           onSearchChange={handleSearchChange}
@@ -88,7 +189,7 @@ export const AssetsScreen = ({
       </View>
 
       <ScrollView
-        contentContainerStyle={{ padding: Spacing.md, paddingTop: Spacing.sm }}
+        contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
         {filteredPositions && filteredPositions.length > 0 ? (
@@ -116,9 +217,71 @@ export const AssetsScreen = ({
           />
         )}
       </ScrollView>
-
-      <FloatingActionButton onPress={onAddAsset} icon="add" />
     </ScreenLayout>
   );
 };
 
+const styles = StyleSheet.create({
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.md,
+  },
+  actionButton: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  pressed: {
+    opacity: 0.7,
+  },
+  summaryContainer: {
+    paddingHorizontal: Spacing.md,
+    marginBottom: Spacing.sm,
+  },
+  summaryCard: {
+    paddingVertical: Spacing.lg,
+  },
+  summaryContent: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+  },
+  summaryMain: {
+    flex: 1,
+  },
+  summaryAmount: {
+    fontSize: 32,
+    lineHeight: 38,
+    marginTop: Spacing.xs,
+  },
+  pnlRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: Spacing.sm,
+  },
+  pnlBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 12,
+  },
+  positionCount: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingLeft: Spacing.md,
+  },
+  searchContainer: {
+    paddingHorizontal: Spacing.md,
+    paddingBottom: 0,
+  },
+  scrollContent: {
+    padding: Spacing.md,
+    paddingTop: Spacing.sm,
+  },
+});

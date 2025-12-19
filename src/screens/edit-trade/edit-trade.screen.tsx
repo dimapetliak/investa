@@ -7,16 +7,12 @@ import {
   ScreenLayout,
   Select,
 } from '@/components';
+import { TRADE_TYPE_OPTIONS } from '@/constants';
 import { Spacing } from '@/theme/spacing';
 import type { TradeType } from '@/types';
 import React from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import type { EditTradeScreenProps } from './edit-trade.types';
-
-const TRADE_TYPE_OPTIONS = [
-  { label: 'Buy', value: 'buy' },
-  { label: 'Sell', value: 'sell' },
-];
 
 export const EditTradeScreen = ({
   formData,

@@ -1,113 +1,162 @@
 import {
-  Button,
-  Card,
-  EmptyState,
-  FloatingActionButton,
-  IconBadge,
-  ProgressBar,
-  ScreenLayout,
-  SectionHeader,
-  Text,
+    Button,
+    Card,
+    EmptyState,
+    ExpandableList,
+    GradientCard,
+    IconBadge,
+    ProgressBar,
+    ScreenLayout,
+    Text,
 } from '@/components';
-import { formatCurrency } from '@/lib/utils';
+import { useTheme } from '@/contexts/theme-context';
+import { formatCurrency, formatPercent } from '@/lib/utils';
 import { Spacing } from '@/theme/spacing';
 import { Ionicons } from '@expo/vector-icons';
-import React from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import React, { useMemo } from 'react';
+import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import type { SavingsScreenProps } from './savings.types';
 
-// Dummy data for preview
-const DUMMY_GOALS = [
-  {
-    id: '1',
-    name: 'Emergency Fund',
-    targetAmount: 10000,
-    currentAmount: 6500,
-    icon: 'shield-checkmark-outline',
-  },
-  {
-    id: '2',
-    name: 'Vacation',
-    targetAmount: 5000,
-    currentAmount: 2100,
-    deadline: '2025-06-01',
-    icon: 'airplane-outline',
-  },
-  {
-    id: '3',
-    name: 'New Car',
-    targetAmount: 25000,
-    currentAmount: 8750,
-    deadline: '2026-01-01',
-    icon: 'car-outline',
-  },
-];
-
-const DUMMY_ACCOUNTS = [
-  {
-    id: '1',
-    name: 'High-Yield Savings',
-    balance: 15000,
-    currency: 'USD',
-    interestRate: 4.5,
-  },
-  {
-    id: '2',
-    name: 'Emergency Fund',
-    balance: 6500,
-    currency: 'USD',
-    interestRate: 3.8,
-  },
-];
-
 export const SavingsScreen = ({
-  goals = DUMMY_GOALS,
-  accounts = DUMMY_ACCOUNTS,
+  goals = [],
+  accounts = [],
   onAddGoal,
   onViewGoal,
   onAddAccount,
   onViewAccount,
+  onManage,
 }: SavingsScreenProps) => {
-  const totalSavings = accounts.reduce((sum, acc) => sum + acc.balance, 0);
+  const { colors, gradients } = useTheme();
+  
+  // Calculate summary data
+  const { totalSavings, goalsProgressPercent } = useMemo(() => {
+    const savings = accounts.reduce((sum, acc) => sum + acc.balance, 0);
+    const goalTarget = goals.reduce((sum, goal) => sum + goal.targetAmount, 0);
+    const goalProgress = goals.reduce((sum, goal) => sum + goal.currentAmount, 0);
+    const progressPercent = goalTarget > 0 ? (goalProgress / goalTarget) * 100 : 0;
+    
+    return {
+      totalSavings: savings,
+      goalsProgressPercent: progressPercent,
+    };
+  }, [accounts, goals]);
 
   return (
     <ScreenLayout containerProps={{ noPadding: true }}>
+      {/* Header */}
+      <View style={styles.header}>
+        <View>
+          <Text variant="caption" color="muted">
+            Your Progress
+          </Text>
+          <Text variant="h2" weight="bold">
+            Savings & Goals
+          </Text>
+        </View>
+
+        <Pressable
+          onPress={onManage}
+          accessibilityLabel="Manage savings"
+          accessibilityHint="Opens savings management options"
+          style={({ pressed }) => [
+            styles.actionButton,
+            { backgroundColor: colors.backgroundSecondary },
+            pressed && styles.pressed,
+          ]}
+        >
+          <Ionicons
+            name="settings-outline"
+            size={24}
+            color={colors.foreground}
+          />
+        </Pressable>
+      </View>
+
       <ScrollView
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
         {/* Total Savings Summary */}
-        <Card style={styles.summaryCard}>
-          <View style={styles.summaryContent}>
-            <Text variant="caption" color="muted">
-              Total Savings
-            </Text>
-            <Text variant="h1" style={styles.totalAmount}>
-              {formatCurrency(totalSavings, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
-            </Text>
-            <View style={styles.accountsInfo}>
-              <Ionicons name="wallet-outline" size={16} color="#22c55e" />
-              <Text variant="caption" style={styles.accountsText}>
-                {accounts.length} savings accounts
-              </Text>
+        <GradientCard
+            colors={gradients.savings}
+            padding="lg"
+            style={styles.summaryCard}
+          >
+            <View style={styles.summaryGradientContent}>
+              <View style={styles.summaryMain}>
+                <Text variant="body" style={{ color: colors.white, opacity: 0.8 }}>
+                  Total Savings
+                </Text>
+                <Text variant="h1" weight="bold" color="white" style={styles.summaryAmount}>
+                  {formatCurrency(totalSavings, { symbol: '$', minimumFractionDigits: 0, maximumFractionDigits: 0 })}
+                </Text>
+
+                {/* Goals progress indicator */}
+                {goals.length > 0 && (
+                  <View style={styles.progressRow}>
+                    <View style={[styles.progressBadge, { backgroundColor: `${colors.white}20` }]}>
+                      <Ionicons
+                        name="flag"
+                        size={14}
+                        color={colors.white}
+                      />
+                      <Text
+                        variant="small"
+                        weight="semiBold"
+                        style={{ color: colors.white, marginLeft: 4 }}
+                      >
+                        {formatPercent(goalsProgressPercent, { decimals: 0 })} of goals
+                      </Text>
+                    </View>
+                  </View>
+                )}
+              </View>
+
+              {/* Stats */}
+              <View style={styles.statsColumn}>
+                <View style={styles.statItem}>
+                  <Text variant="h3" weight="bold" color="white">
+                    {goals.length}
+                  </Text>
+                  <Text variant="small" style={{ color: colors.white, opacity: 0.7 }}>
+                    Goals
+                  </Text>
+                </View>
+                <View style={[styles.statItem, { marginTop: Spacing.sm }]}>
+                  <Text variant="h3" weight="bold" color="white">
+                    {accounts.length}
+                  </Text>
+                  <Text variant="small" style={{ color: colors.white, opacity: 0.7 }}>
+                    Accounts
+                  </Text>
+                </View>
+              </View>
             </View>
-          </View>
-        </Card>
+          </GradientCard>
 
         {/* Goals Section */}
-        <SectionHeader
+        <ExpandableList
           title="Savings Goals"
-          action={
+          icon="flag-outline"
+          count={goals.length}
+          headerAction={
             onAddGoal && (
               <Button variant="ghost" size="sm" onPress={onAddGoal}>
                 Add Goal
               </Button>
             )
           }
-        />
-
-        {goals.length > 0 ? (
-          goals.map((goal) => {
+          emptyState={
+            <EmptyState
+              icon="flag-outline"
+              title="No goals yet"
+              message="Create your first savings goal to start tracking your progress"
+              actionLabel="Add Goal"
+              onAction={onAddGoal}
+            />
+          }
+        >
+          {goals.map((goal) => {
             const progress = (goal.currentAmount / goal.targetAmount) * 100;
             return (
               <Card
@@ -132,12 +181,12 @@ export const SavingsScreen = ({
                         </Text>
                       )}
                     </View>
-                    <Text variant="body" weight="semiBold">
+                    <Text variant="body" weight="semiBold" color="primary">
                       {Math.round(progress)}%
                     </Text>
                   </View>
 
-                  <ProgressBar current={goal.currentAmount} target={goal.targetAmount} />
+                  <ProgressBar showLabels={false} current={goal.currentAmount} target={goal.targetAmount} />
 
                   <View style={styles.goalFooter}>
                     <Text variant="caption" color="muted">
@@ -150,64 +199,23 @@ export const SavingsScreen = ({
                 </View>
               </Card>
             );
-          })
-        ) : (
-          <EmptyState
-            icon="flag-outline"
-            title="No goals yet"
-            message="Create your first savings goal to start tracking your progress"
-            actionLabel="Add Goal"
-            onAction={onAddGoal}
-          />
-        )}
+          })}
+        </ExpandableList>
 
         {/* Accounts Section */}
-        <View style={styles.accountsSection}>
-          <SectionHeader
-            title="Savings Accounts"
-            action={
-              onAddAccount && (
-                <Button variant="ghost" size="sm" onPress={onAddAccount}>
-                  Add Account
-                </Button>
-              )
-            }
-          />
-
-          {accounts.length > 0 ? (
-            accounts.map((account) => (
-              <Card
-                key={account.id}
-                style={styles.accountCard}
-                onPress={() => onViewAccount?.(account.id)}
-              >
-                <View style={styles.cardContent}>
-                  <View style={styles.accountRow}>
-                    <View style={styles.accountInfo}>
-                      <IconBadge
-                        icon="wallet-outline"
-                        variant="success"
-                        style={styles.accountIcon}
-                      />
-                      <View>
-                        <Text variant="body" weight="medium">
-                          {account.name}
-                        </Text>
-                        {account.interestRate && (
-                          <Text variant="caption" color="muted">
-                            {account.interestRate}% APY
-                          </Text>
-                        )}
-                      </View>
-                    </View>
-                    <Text variant="h3" weight="semiBold">
-                      {formatCurrency(account.balance, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
-                    </Text>
-                  </View>
-                </View>
-              </Card>
-            ))
-          ) : (
+        <ExpandableList
+          title="Savings Accounts"
+          icon="wallet-outline"
+          count={accounts.length}
+          style={styles.accountsSection}
+          headerAction={
+            onAddAccount && (
+              <Button variant="ghost" size="sm" onPress={onAddAccount}>
+                Add Account
+              </Button>
+            )
+          }
+          emptyState={
             <EmptyState
               icon="wallet-outline"
               title="No accounts yet"
@@ -215,48 +223,103 @@ export const SavingsScreen = ({
               actionLabel="Add Account"
               onAction={onAddAccount}
             />
-          )}
-        </View>
-
-        {/* Placeholder notice */}
-        <View style={styles.notice}>
-          <Text variant="caption" color="muted" style={styles.noticeText}>
-            💡 This is a preview with sample data.{'\n'}
-            Full savings functionality coming soon!
-          </Text>
-        </View>
+          }
+        >
+          {accounts.map((account) => (
+            <Card
+              key={account.id}
+              style={styles.accountCard}
+              onPress={() => onViewAccount?.(account.id)}
+            >
+              <View style={styles.cardContent}>
+                <View style={styles.accountRow}>
+                  <View style={styles.accountInfo}>
+                    <IconBadge
+                      icon="wallet-outline"
+                      variant="success"
+                      style={styles.accountIcon}
+                    />
+                    <View>
+                      <Text variant="body" weight="medium">
+                        {account.name}
+                      </Text>
+                      {account.interestRate && (
+                        <Text variant="caption" color="muted">
+                          {account.interestRate}% APY
+                        </Text>
+                      )}
+                    </View>
+                  </View>
+                  <Text variant="h3" weight="semiBold">
+                    {formatCurrency(account.balance, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
+                  </Text>
+                </View>
+              </View>
+            </Card>
+          ))}
+        </ExpandableList>
       </ScrollView>
-
-      <FloatingActionButton
-        onPress={onAddGoal || (() => {})}
-        icon="add"
-      />
     </ScreenLayout>
   );
 };
 
 const styles = StyleSheet.create({
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.md,
+  },
+  actionButton: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  pressed: {
+    opacity: 0.7,
+  },
   scrollContent: {
     padding: Spacing.md,
+    paddingTop: 0,
   },
   summaryCard: {
     marginBottom: Spacing.lg,
+    paddingVertical: Spacing.lg,
   },
-  summaryContent: {
-    padding: Spacing.lg,
-    alignItems: 'center',
+  summaryGradientContent: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
   },
-  totalAmount: {
+  summaryMain: {
+    flex: 1,
+  },
+  summaryAmount: {
+    fontSize: 32,
+    lineHeight: 38,
     marginTop: Spacing.xs,
   },
-  accountsInfo: {
+  progressRow: {
     flexDirection: 'row',
     alignItems: 'center',
     marginTop: Spacing.sm,
   },
-  accountsText: {
-    marginLeft: Spacing.xs,
-    color: '#22c55e',
+  progressBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 12,
+  },
+  statsColumn: {
+    alignItems: 'center',
+    paddingLeft: Spacing.md,
+  },
+  statItem: {
+    alignItems: 'center',
   },
   goalCard: {
     marginBottom: Spacing.sm,
@@ -297,14 +360,5 @@ const styles = StyleSheet.create({
   },
   accountIcon: {
     marginRight: Spacing.md,
-  },
-  notice: {
-    marginTop: Spacing.xl,
-    padding: Spacing.md,
-    backgroundColor: 'rgba(99, 102, 241, 0.05)',
-    borderRadius: 12,
-  },
-  noticeText: {
-    textAlign: 'center',
   },
 });

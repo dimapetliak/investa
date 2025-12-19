@@ -6,6 +6,7 @@ export type ListItemProps = Omit<PressableProps, 'style'> & {
   leftIcon?: React.ReactNode;
   rightIcon?: React.ReactNode;
   showChevron?: boolean;
-  widthBorder?: boolean;
+  /** Show bottom border separator */
+  withBorder?: boolean;
 };
 
