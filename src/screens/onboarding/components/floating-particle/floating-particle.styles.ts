@@ -10,3 +10,4 @@ export const createParticleStyle = (size: number, startX: number, startY: number
   backgroundColor: 'rgba(255, 255, 255, 0.3)',
 });
 
+

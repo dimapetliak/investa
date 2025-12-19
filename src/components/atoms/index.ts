@@ -1,6 +1,9 @@
 export { AssetBadge, AssetBadge as AssetTag } from "./asset-badge";
 export type { AssetBadgeProps, AssetBadgeProps as AssetTagProps, AssetType } from "./asset-badge";
 
+export { Badge } from "./badge";
+export type { BadgeProps, BadgeSize, BadgeVariant } from "./badge";
+
 export { Button } from "./button";
 export type { ButtonProps, ButtonSize, ButtonVariant } from "./button";
 
@@ -15,6 +18,9 @@ export type { DividerProps } from "./divider";
 
 export { FloatingActionButton } from "./floating-action-button";
 export type { FloatingActionButtonProps } from "./floating-action-button";
+
+export { IconBadge } from "./icon-badge";
+export type { IconBadgeProps, IconBadgeSize, IconBadgeVariant } from "./icon-badge";
 
 export { IconButton } from "./icon-button";
 export type { IconButtonProps } from "./icon-button";

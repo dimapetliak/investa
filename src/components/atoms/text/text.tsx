@@ -58,6 +58,7 @@ export const Text: React.FC<TextProps> = ({
     success: colors.success,
     error: colors.error,
     warning: colors.warning,
+    white: colors.white,
   };
 
   const weightOverride = weight
@@ -78,5 +79,6 @@ export const Text: React.FC<TextProps> = ({
     </RNText>
   );
 };
+
 
 

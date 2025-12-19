@@ -5,3 +5,4 @@ export type BottomNavigationProps = {
   onNext: () => void;
 };
 
+

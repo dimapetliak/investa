@@ -6,3 +6,4 @@ export type OnboardingProgressBarProps = {
   totalSteps: number;
 };
 
+

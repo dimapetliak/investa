@@ -1,19 +1,25 @@
 import { PortfolioScreen } from '@/screens/portfolio';
-import { usePortfolioStore, useTradesStore } from '@/store';
+import { usePortfolioStore, useTradesStore, useUserName } from '@/store';
 import { router } from 'expo-router';
 import React, { useMemo } from 'react';
+import { Alert } from 'react-native';
+
+// Dummy savings value for now (will be replaced with real data later)
+const DUMMY_SAVINGS_VALUE = 21500;
 
 export default function HomeScreen() {
   const positions = usePortfolioStore((state) => state.positions);
   const summary = usePortfolioStore((state) => state.summary);
   const allTrades = useTradesStore((state) => state.trades);
+  const userName = useUserName();
 
-  // Format portfolio summary for screen
-  const portfolioSummary = useMemo(() => ({
-    totalValue: `$${summary.totalValue.toFixed(2)}`,
-    totalPnL: summary.totalPnL,
-    totalPnLPercent: summary.totalPnLPercent,
-    totalCost: summary.totalCost,
+  // Format net worth summary
+  const netWorthSummary = useMemo(() => ({
+    totalNetWorth: summary.totalValue + DUMMY_SAVINGS_VALUE,
+    investmentsValue: summary.totalValue,
+    savingsValue: DUMMY_SAVINGS_VALUE,
+    investmentsPnL: summary.totalPnL,
+    investmentsPnLPercent: summary.totalPnLPercent,
   }), [summary]);
 
   // Map positions to screen format (top 3)
@@ -33,12 +39,17 @@ export default function HomeScreen() {
   }, [positions]);
 
   // Get recent trades (last 5, sorted by date)
+  // Note: Using a separate memo for position lookup to avoid recalc when positions change
+  const positionMap = useMemo(() => {
+    return new Map(positions.map((p) => [p.asset.id, p]));
+  }, [positions]);
+
   const recentTrades = useMemo(() => {
     return [...allTrades]
       .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
       .slice(0, 5)
       .map((trade) => {
-        const position = positions.find((p) => p.asset.id === trade.assetId);
+        const position = positionMap.get(trade.assetId);
         return {
           id: trade.id,
           type: trade.type,
@@ -50,7 +61,7 @@ export default function HomeScreen() {
           notes: trade.comment,
         };
       });
-  }, [allTrades, positions]);
+  }, [allTrades, positionMap]);
 
   const handleAddAsset = () => {
     router.push('/add-asset');
@@ -81,9 +92,16 @@ export default function HomeScreen() {
     router.push('/assets');
   };
 
+  const handleNotificationPress = () => {
+    Alert.alert('Notifications', 'Notifications feature coming soon!');
+  };
+
   return (
     <PortfolioScreen
-      portfolioSummary={portfolioSummary}
+      userName={userName}
+      notificationCount={0}
+      onNotificationPress={handleNotificationPress}
+      netWorthSummary={netWorthSummary}
       recentPositions={recentPositions}
       recentTrades={recentTrades}
       onAddAsset={handleAddAsset}

@@ -8,6 +8,14 @@ export type PortfolioSummary = {
   totalCost: number;
 };
 
+export type NetWorthSummary = {
+  totalNetWorth: number;
+  investmentsValue: number;
+  savingsValue: number;
+  investmentsPnL: number;
+  investmentsPnLPercent: number;
+};
+
 export type Trade = {
   id: string;
   type: TradeType;
@@ -31,9 +39,20 @@ export type Position = {
 };
 
 export type PortfolioScreenProps = {
+  // User
+  userName?: string;
+  notificationCount?: number;
+  onNotificationPress?: () => void;
+  
+  // Net worth summary
+  netWorthSummary?: NetWorthSummary;
+  
+  // Legacy portfolio summary (for backward compatibility)
   portfolioSummary?: PortfolioSummary;
   recentPositions?: Position[];
   recentTrades?: Trade[];
+  
+  // Actions
   onAddAsset?: () => void;
   onAddTrade: () => void;
   onViewAsset?: (ticker: string) => void;

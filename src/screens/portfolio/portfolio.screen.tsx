@@ -3,15 +3,19 @@ import { Spacing } from '@/theme/spacing';
 import React from 'react';
 import { ScrollView } from 'react-native';
 import {
+  NetWorthCard,
+  PortfolioHeader,
   PortfolioSearchFilter,
-  PortfolioSummarySection
 } from './components';
 import { TradesSection } from './components/trades-section';
 import { usePortfolioFilters } from './hooks/use-portfolio-filters';
 import { PortfolioScreenProps } from './portfolio.types';
 
 export const PortfolioScreen = ({
-  portfolioSummary,
+  userName,
+  notificationCount,
+  onNotificationPress,
+  netWorthSummary,
   recentTrades,
   onAddTrade,
   onViewTrade,
@@ -30,10 +34,25 @@ export const PortfolioScreen = ({
 
   return (
     <ScreenLayout containerProps={{ noPadding: true }}>
-      <PortfolioSummarySection
-        portfolioSummary={portfolioSummary}
-        onViewAllAssets={onViewAllAssets}
+      {/* Header with greeting and notifications */}
+      <PortfolioHeader
+        userName={userName}
+        notificationCount={notificationCount}
+        onNotificationPress={onNotificationPress}
       />
+
+      {/* Net Worth Card */}
+      {netWorthSummary && (
+        <NetWorthCard
+          totalNetWorth={netWorthSummary.totalNetWorth}
+          investmentsValue={netWorthSummary.investmentsValue}
+          savingsValue={netWorthSummary.savingsValue}
+          investmentsPnL={netWorthSummary.investmentsPnL}
+          investmentsPnLPercent={netWorthSummary.investmentsPnLPercent}
+          onPress={onViewAllAssets}
+        />
+      )}
+
       <ScrollView
         contentContainerStyle={{ padding: Spacing.md, paddingTop: Spacing.sm }}
         showsVerticalScrollIndicator={false}
@@ -60,4 +79,3 @@ export const PortfolioScreen = ({
     </ScreenLayout>
   );
 };
-

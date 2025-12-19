@@ -1,3 +1,9 @@
+export { NetWorthCard } from './net-worth-card';
+export type { NetWorthCardProps } from './net-worth-card';
+
+export { PortfolioHeader } from './portfolio-header';
+export type { PortfolioHeaderProps } from './portfolio-header';
+
 export { PortfolioSearchFilter } from './portfolio-search-filter';
 export type { PortfolioSearchFilterProps } from './portfolio-search-filter';
 

@@ -7,3 +7,4 @@ export type AnimatedIconProps = {
   size?: number;
 };
 
+

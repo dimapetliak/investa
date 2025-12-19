@@ -5,3 +5,4 @@ export type OnboardingHeaderProps = {
   onSkip: () => void;
 };
 
+

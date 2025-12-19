@@ -7,11 +7,16 @@ import {
   ScreenLayout,
   Select,
 } from '@/components';
-import type { TradeType } from '@/types';
 import { Spacing } from '@/theme/spacing';
+import type { TradeType } from '@/types';
 import React from 'react';
-import { ScrollView, View } from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
 import type { EditTradeScreenProps } from './edit-trade.types';
+
+const TRADE_TYPE_OPTIONS = [
+  { label: 'Buy', value: 'buy' },
+  { label: 'Sell', value: 'sell' },
+];
 
 export const EditTradeScreen = ({
   formData,
@@ -30,20 +35,17 @@ export const EditTradeScreen = ({
       onBackPress={onCancel}
     >
       <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={{ marginBottom: Spacing.md }}>
+        <View style={styles.field}>
           <Label text="Trade Type" required />
           <Select
-            options={[
-              { label: 'Buy', value: 'buy' },
-              { label: 'Sell', value: 'sell' },
-            ]}
+            options={TRADE_TYPE_OPTIONS}
             value={formData.type}
             onChangeValue={(value: string | number) => onFieldChange('type', value as TradeType)}
             error={errors.type}
           />
         </View>
 
-        <View style={{ marginBottom: Spacing.md }}>
+        <View style={styles.field}>
           <Label text="Quantity" required />
           <NumberInput
             value={formData.quantity}
@@ -54,7 +56,7 @@ export const EditTradeScreen = ({
           />
         </View>
 
-        <View style={{ marginBottom: Spacing.md }}>
+        <View style={styles.field}>
           <Label text="Price per Unit" required />
           <NumberInput
             value={formData.price}
@@ -65,7 +67,7 @@ export const EditTradeScreen = ({
           />
         </View>
 
-        <View style={{ marginBottom: Spacing.md }}>
+        <View style={styles.field}>
           <Label text="Fee (Optional)" />
           <NumberInput
             value={formData.fee}
@@ -76,7 +78,7 @@ export const EditTradeScreen = ({
           />
         </View>
 
-        <View style={{ marginBottom: Spacing.md }}>
+        <View style={styles.field}>
           <Label text="Trade Date & Time" required />
           <DateTimePicker
             value={formData.timestamp}
@@ -86,7 +88,7 @@ export const EditTradeScreen = ({
           />
         </View>
 
-        <View style={{ marginBottom: Spacing.lg }}>
+        <View style={styles.lastField}>
           <Label text="Comment (Optional)" />
           <Input
             value={formData.comment}
@@ -98,12 +100,12 @@ export const EditTradeScreen = ({
           />
         </View>
 
-        <View style={{ gap: Spacing.md, marginTop: Spacing.md }}>
-          <View style={{ flexDirection: 'row', gap: Spacing.md }}>
+        <View style={styles.actions}>
+          <View style={styles.buttonRow}>
             <Button
               variant="outline"
               onPress={onCancel}
-              style={{ flex: 1 }}
+              style={styles.button}
               disabled={isLoading}
             >
               Cancel
@@ -111,7 +113,7 @@ export const EditTradeScreen = ({
             <Button
               variant="primary"
               onPress={onSave}
-              style={{ flex: 1 }}
+              style={styles.button}
               loading={isLoading}
               disabled={isLoading}
             >
@@ -130,3 +132,23 @@ export const EditTradeScreen = ({
     </ScreenLayout>
   );
 };
+
+const styles = StyleSheet.create({
+  field: {
+    marginBottom: Spacing.md,
+  },
+  lastField: {
+    marginBottom: Spacing.lg,
+  },
+  actions: {
+    gap: Spacing.md,
+    marginTop: Spacing.md,
+  },
+  buttonRow: {
+    flexDirection: 'row',
+    gap: Spacing.md,
+  },
+  button: {
+    flex: 1,
+  },
+});

@@ -1,18 +1,26 @@
 import {
     Button,
-    IconButton,
     Input,
     Label,
+    ScreenHeader,
     ScreenLayout,
     Select,
-    Text,
 } from '@/components';
-import type { AssetType, CurrencyCode } from '@/types';
 import { Spacing } from '@/theme/spacing';
-import { Ionicons } from '@expo/vector-icons';
+import type { AssetType, CurrencyCode } from '@/types';
 import React from 'react';
-import { ScrollView, View } from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
 import type { AddAssetScreenProps } from './add-asset.types';
+
+const ASSET_TYPE_OPTIONS = [
+  { label: 'Stock', value: 'stock' },
+  { label: 'Crypto', value: 'crypto' },
+];
+
+const CURRENCY_OPTIONS = [
+  { label: 'USD', value: 'USD' },
+  { label: 'EUR', value: 'EUR' },
+];
 
 export const AddAssetScreen = ({
   formData,
@@ -24,32 +32,20 @@ export const AddAssetScreen = ({
 }: AddAssetScreenProps) => {
   return (
     <ScreenLayout containerProps={{ padding: 'md' }}>
-      <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: Spacing.lg }}>
-        <IconButton
-          icon={<Ionicons name="arrow-back" size={24} />}
-          onPress={onCancel}
-          variant="ghost"
-        />
-        <Text variant="h2" style={{ marginLeft: Spacing.sm, flex: 1 }}>
-          Add Asset
-        </Text>
-      </View>
+      <ScreenHeader title="Add Asset" onBack={onCancel} />
 
       <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={{ marginBottom: Spacing.md }}>
+        <View style={styles.field}>
           <Label text="Asset Type" required />
           <Select
-            options={[
-              { label: 'Stock', value: 'stock' },
-              { label: 'Crypto', value: 'crypto' },
-            ]}
+            options={ASSET_TYPE_OPTIONS}
             value={formData.type}
             onChangeValue={(value: string | number) => onFieldChange('type', value as AssetType)}
             error={errors.type}
           />
         </View>
 
-        <View style={{ marginBottom: Spacing.md }}>
+        <View style={styles.field}>
           <Label text="Ticker Symbol" required />
           <Input
             value={formData.ticker}
@@ -60,7 +56,7 @@ export const AddAssetScreen = ({
           />
         </View>
 
-        <View style={{ marginBottom: Spacing.md }}>
+        <View style={styles.field}>
           <Label text="Name" required />
           <Input
             value={formData.name}
@@ -71,24 +67,21 @@ export const AddAssetScreen = ({
           />
         </View>
 
-        <View style={{ marginBottom: Spacing.lg }}>
+        <View style={styles.lastField}>
           <Label text="Currency" required />
           <Select
-            options={[
-              { label: 'USD', value: 'USD' },
-              { label: 'EUR', value: 'EUR' },
-            ]}
+            options={CURRENCY_OPTIONS}
             value={formData.currency}
             onChangeValue={(value: string | number) => onFieldChange('currency', value as CurrencyCode)}
             error={errors.currency}
           />
         </View>
 
-        <View style={{ flexDirection: 'row', gap: Spacing.md, marginTop: Spacing.md }}>
+        <View style={styles.buttonRow}>
           <Button
             variant="outline"
             onPress={onCancel}
-            style={{ flex: 1 }}
+            style={styles.button}
             disabled={isLoading}
           >
             Cancel
@@ -96,7 +89,7 @@ export const AddAssetScreen = ({
           <Button
             variant="primary"
             onPress={onSave}
-            style={{ flex: 1 }}
+            style={styles.button}
             loading={isLoading}
             disabled={isLoading}
           >
@@ -108,3 +101,19 @@ export const AddAssetScreen = ({
   );
 };
 
+const styles = StyleSheet.create({
+  field: {
+    marginBottom: Spacing.md,
+  },
+  lastField: {
+    marginBottom: Spacing.lg,
+  },
+  buttonRow: {
+    flexDirection: 'row',
+    gap: Spacing.md,
+    marginTop: Spacing.md,
+  },
+  button: {
+    flex: 1,
+  },
+});

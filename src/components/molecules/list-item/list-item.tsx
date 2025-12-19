@@ -1,4 +1,5 @@
 import { useTheme } from '@/contexts/theme-context';
+import { BorderWidth } from '@/theme';
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import { Pressable, View } from 'react-native';
@@ -13,6 +14,7 @@ export const ListItem: React.FC<ListItemProps> = ({
   rightIcon,
   showChevron = true,
   onPress,
+  widthBorder = true,
   ...props
 }) => {
   const { colors } = useTheme();
@@ -25,6 +27,7 @@ export const ListItem: React.FC<ListItemProps> = ({
         {
           backgroundColor: pressed ? colors.backgroundMuted : 'transparent',
           borderBottomColor: colors.border,
+          borderBottomWidth: widthBorder ? BorderWidth.thin : 0,
         },
       ]}
       {...props}

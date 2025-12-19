@@ -40,7 +40,7 @@ export const PortfolioSummaryCard: React.FC<PortfolioSummaryCardProps> = ({
       ]}
     >
       <View style={styles.header}>
-        <Text variant="caption" color="muted">
+        <Text variant="caption">
           Total Portfolio Value
         </Text>
         {onPress && (

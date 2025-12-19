@@ -14,6 +14,12 @@ export const TAB_CONFIGS: TabConfig[] = [
     iconNameOutline: "trending-up-outline",
   },
   {
+    name: "savings",
+    title: "Savings",
+    iconName: "wallet",
+    iconNameOutline: "wallet-outline",
+  },
+  {
     name: "components",
     title: "Components",
     iconName: "document-text",

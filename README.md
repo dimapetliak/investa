@@ -191,10 +191,12 @@ Typography: {
 ```typescript
 {
   assets: Asset[]
-  addAsset: (asset: Asset) => void
-  updateAsset: (id: string, updates: Partial<Asset>) => void
-  removeAsset: (id: string) => void
-  getAssetById: (id: string) => Asset | undefined
+  isHydrated: boolean              // Track hydration state
+  addAsset: (input) => Asset       // With validation
+  updateAsset: (id, input) => void // With validation
+  deleteAsset: (id) => void
+  getAssetById: (id) => Asset | undefined
+  getAssetByTicker: (ticker) => Asset | undefined
 }
 ```
 
@@ -202,10 +204,33 @@ Typography: {
 ```typescript
 {
   trades: Trade[]
-  addTrade: (trade: Trade) => void
-  updateTrade: (id: string, updates: Partial<Trade>) => void
-  removeTrade: (id: string) => void
-  getTradesByAsset: (assetId: string) => Trade[]
+  isHydrated: boolean
+  addTrade: (input) => Trade          // With validation
+  updateTrade: (id, input) => void    // With validation
+  deleteTrade: (id) => void
+  deleteTradesByAssetId: (id) => number  // Cascade delete support
+  getTradesByAssetId: (assetId) => Trade[]
+}
+```
+
+**User Store:**
+```typescript
+{
+  profile: { name: string, avatarUrl?: string }
+  isHydrated: boolean
+  setName: (name) => void
+  setProfile: (updates) => void
+}
+```
+
+**Settings Store:**
+```typescript
+{
+  baseCurrency: CurrencyCode  // USD, EUR, GBP, JPY, CAD, AUD, CHF
+  priceRefreshInterval: PriceRefreshInterval
+  stockPriceSource: StockPriceSource
+  cryptoPriceSource: CryptoPriceSource
+  security: SecuritySettings
 }
 ```
 
@@ -217,25 +242,49 @@ Typography: {
 }
 ```
 
+### Data Validation
+
+All store actions validate input data before persisting:
+
+```typescript
+// Assets: ticker uniqueness, required fields
+// Trades: positive quantity, valid asset ID, valid timestamp
+// Throws descriptive errors on validation failure
+```
+
 ### Data Persistence
 
 All stores automatically persist to MMKV storage using custom middleware:
 
 ```typescript
-// Automatic sync to storage
+// Automatic sync to storage with hydration tracking
 persist(store, {
-  name: 'assets-storage',
-  storage: createMMKVStorage(),
+  name: 'investa:assets',
+  partialize: (state) => ({ assets: state.assets }),
+  onRehydrateStorage: () => (state) => {
+    state?.setHydrated();
+  },
 })
+```
+
+### Hydration State
+
+Each persisted store tracks hydration status:
+
+```typescript
+// Check if stores are ready before rendering
+const assetsReady = useAssetsHydrated();
+const tradesReady = useTradesHydrated();
+const userReady = useUserHydrated();
 ```
 
 ### Data Flow
 
 ```
-User Action → Store Action → State Update → MMKV Sync → UI Re-render
-                                              ↓
-                                         Portfolio
-                                      Re-calculation
+User Action → Validation → Store Action → State Update → MMKV Sync → UI Re-render
+                  ↓                            ↓
+             Error thrown              Portfolio Re-calculation
+             if invalid
 ```
 
 ## 🔧 Development
@@ -324,6 +373,22 @@ Theme is persisted to MMKV and applied globally:
 ```
 
 ## 🧪 Code Patterns
+
+### ID Generation
+
+All entities use a centralized ID generator (`src/lib/id.ts`):
+
+```typescript
+import { generateId, isValidId } from '@/lib/id';
+
+// Generate unique IDs
+const id = generateId(); // "m1abc-001-xyz789f"
+
+// Validate ID format
+isValidId(id); // true
+```
+
+Format: `{timestamp_base36}-{counter}-{random}`
 
 ### Component Structure
 

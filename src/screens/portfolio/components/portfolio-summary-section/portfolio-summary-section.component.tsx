@@ -1,4 +1,4 @@
-import { Container, LinearBackground, PortfolioSummaryCard } from '@/components';
+import { Container, PortfolioSummaryCard } from '@/components';
 import React from 'react';
 import { PortfolioSummarySectionProps } from './index';
 
@@ -11,17 +11,15 @@ export const PortfolioSummarySection = ({
   }
 
   return (
-    <LinearBackground>
     <Container padding="md">
       <PortfolioSummaryCard
-      totalValue={portfolioSummary.totalValue as number}
-      totalPnL={portfolioSummary.totalPnL}
-      totalPnLPercent={portfolioSummary.totalPnLPercent}
-      totalCost={portfolioSummary.totalCost}
-      onPress={onViewAllAssets}
-    />  
+        totalValue={portfolioSummary.totalValue as number}
+        totalPnL={portfolioSummary.totalPnL}
+        totalPnLPercent={portfolioSummary.totalPnLPercent}
+        totalCost={portfolioSummary.totalCost}
+        onPress={onViewAllAssets}
+      />  
     </Container>
-    </LinearBackground>
   );
 };
 

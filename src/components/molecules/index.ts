@@ -8,6 +8,9 @@ export type { EmptyStateProps } from './empty-state';
 export { ErrorState } from './error-state';
 export type { ErrorStateProps } from './error-state';
 
+export { GradientCard } from './gradient-card';
+export type { GradientCardProps, GradientPreset } from './gradient-card';
+
 export { KeyValueRow } from './key-value-row';
 export type { KeyValueRowColor, KeyValueRowProps } from './key-value-row';
 
@@ -28,6 +31,9 @@ export type { PositionCardAssetType, PositionCardProps } from './position-card';
 
 export { ProgressBar } from './progress-bar';
 export type { ProgressBarProps } from './progress-bar';
+
+export { ScreenHeader } from './screen-header';
+export type { ScreenHeaderProps } from './screen-header';
 
 export { TradeRow } from './trade-row';
 export type { TradeRowAssetType, TradeRowProps, TradeRowType } from './trade-row';

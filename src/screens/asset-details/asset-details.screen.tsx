@@ -3,6 +3,7 @@ import {
   Button,
   Card,
   EmptyState,
+  IconButton,
   KeyValueRow,
   ScreenLayout,
   SectionHeader,
@@ -10,11 +11,10 @@ import {
   TradeRow,
   ValueWithChange,
 } from '@/components';
-import { useTheme } from '@/contexts/theme-context';
 import { Spacing } from '@/theme/spacing';
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
-import { ScrollView, View } from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
 import type { AssetDetailsScreenProps } from './asset-details.types';
 
 export const AssetDetailsScreen = ({
@@ -27,38 +27,48 @@ export const AssetDetailsScreen = ({
   onDeleteTrade,
   onBack,
 }: AssetDetailsScreenProps) => {
-  const { colors } = useTheme();
   const sortedTrades = [...trades].sort(
     (a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
   );
 
   return (
     <ScreenLayout>
-      <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: Spacing.md, paddingHorizontal: Spacing.md, paddingTop: Spacing.md }}>
-        <Button variant="secondary" onPress={onBack} style={{ marginRight: Spacing.sm }}>
-          <Ionicons name="arrow-back" size={24} color={colors.primary} />
-        </Button>
-        <Text variant="h2" style={{ flex: 1 }}>Asset Details</Text>
-        <Button variant="secondary" onPress={onEditAsset}>
-          <Ionicons name="pencil" size={20} color={colors.primary} />
-        </Button>
+      {/* Header */}
+      <View style={styles.header}>
+        <IconButton
+          icon={<Ionicons name="arrow-back" size={24} />}
+          onPress={onBack}
+          variant="ghost"
+        />
+        <Text variant="h2" style={styles.headerTitle}>
+          Asset Details
+        </Text>
+        <IconButton
+          icon={<Ionicons name="pencil" size={20} />}
+          onPress={onEditAsset}
+          variant="ghost"
+        />
       </View>
-      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: Spacing.md }}>
-        {/* Asset Header */}
-        <Card style={{ marginBottom: Spacing.md }}>
-          <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: Spacing.sm }}>
-            <Text variant="h2" style={{ flex: 1 }}>
+
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.scrollContent}
+      >
+        {/* Asset Header Card */}
+        <Card style={styles.assetCard}>
+          <View style={styles.assetHeader}>
+            <Text variant="h2" style={styles.flex1}>
               {asset.ticker}
             </Text>
             <AssetTag type={asset.type} />
           </View>
-          <Text variant="body" color="muted" style={{ marginBottom: Spacing.md }}>
+          <Text variant="body" color="muted" style={styles.assetName}>
             {asset.name}
           </Text>
 
           {/* Position Value */}
-          <View style={{ marginBottom: Spacing.sm }}>
-            <Text variant="caption" color="muted" style={{ marginBottom: 4 }}>
+          <View style={styles.valueSection}>
+            <Text variant="caption" color="muted" style={styles.valueLabel}>
               Current Value
             </Text>
             <ValueWithChange
@@ -71,7 +81,7 @@ export const AssetDetailsScreen = ({
         </Card>
 
         {/* Position Summary */}
-        <Card style={{ marginBottom: Spacing.md }}>
+        <Card style={styles.summaryCard}>
           <SectionHeader title="Position Summary" />
           <KeyValueRow label="Quantity" value={position.quantity.toFixed(8)} />
           <KeyValueRow
@@ -90,7 +100,7 @@ export const AssetDetailsScreen = ({
         </Card>
 
         {/* Trade History */}
-        <View style={{ marginBottom: Spacing.lg }}>
+        <View style={styles.tradesSection}>
           <SectionHeader
             title="Trade History"
             subtitle={`${trades.length} ${trades.length === 1 ? 'trade' : 'trades'}`}
@@ -129,3 +139,46 @@ export const AssetDetailsScreen = ({
     </ScreenLayout>
   );
 };
+
+const styles = StyleSheet.create({
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: Spacing.md,
+    paddingTop: Spacing.md,
+    marginBottom: Spacing.md,
+  },
+  headerTitle: {
+    flex: 1,
+    marginLeft: Spacing.sm,
+  },
+  scrollContent: {
+    paddingHorizontal: Spacing.md,
+  },
+  assetCard: {
+    marginBottom: Spacing.md,
+  },
+  assetHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: Spacing.sm,
+  },
+  flex1: {
+    flex: 1,
+  },
+  assetName: {
+    marginBottom: Spacing.md,
+  },
+  valueSection: {
+    marginBottom: Spacing.sm,
+  },
+  valueLabel: {
+    marginBottom: 4,
+  },
+  summaryCard: {
+    marginBottom: Spacing.md,
+  },
+  tradesSection: {
+    marginBottom: Spacing.lg,
+  },
+});

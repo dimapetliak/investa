@@ -10,3 +10,4 @@ export type NumberInputProps = Omit<TextInputProps, 'value' | 'onChangeText'> & 
   suffix?: string;
 };
 
+
