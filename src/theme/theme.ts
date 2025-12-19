@@ -25,13 +25,13 @@ export const Theme = {
   brand: {
     primary: Colors.primary,
     primaryLight: Colors.primaryLight,
-    gradient: [Colors.primaryGradientStart, Colors.primaryGradientEnd],
+    gradient: [Colors.primary, Colors.primaryHover],
   },
 
   status: {
     success: Colors.success,
     error: Colors.error,
-    danger: Colors.danger,
+    danger: Colors.error,
     warning: Colors.warning,
   },
   

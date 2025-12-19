@@ -11,7 +11,7 @@ export const TradesSection = memo(({
 }: TradesSectionProps) => {
   const renderItem: ListRenderItem<Trade> = useCallback(({ item }) => {
     return (
-      <Card shadow>
+      <Card elevated>
         <TradeRow
           key={item.id}
           ticker={item.ticker}

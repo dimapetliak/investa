@@ -4,14 +4,14 @@ import {
   ListItem,
   ScreenLayout,
   SectionHeader,
-  Text,
   Select,
+  Text,
 } from "@/components";
 import { useTheme } from "@/contexts/theme-context";
 import { Spacing } from "@/theme/spacing";
 import { Ionicons } from "@expo/vector-icons";
 import React from "react";
-import { View, Switch } from "react-native";
+import { Switch, View } from "react-native";
 import type { SettingsScreenProps } from "./settings.types";
 
 const THEME_OPTIONS = [
@@ -35,6 +35,7 @@ export const SettingsScreen = ({
   onCurrencyChange,
   onExportData,
   onImportData,
+  onLoadSampleData,
   onClearAllData,
 }: SettingsScreenProps) => {
   const { theme, setTheme, colors, colorScheme } = useTheme();
@@ -141,6 +142,12 @@ export const SettingsScreen = ({
               subtitle="Import trades from IBKR or other brokers"
               leftIcon={<Ionicons name="cloud-upload-outline" size={24} />}
               onPress={onImportData}
+            />
+            <ListItem
+              title="Load Sample Data"
+              subtitle="Load sample IBKR portfolio (8 stocks)"
+              leftIcon={<Ionicons name="flask-outline" size={24} />}
+              onPress={onLoadSampleData}
             />
             <ListItem
               title="Export Data"

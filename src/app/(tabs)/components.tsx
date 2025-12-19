@@ -6,26 +6,19 @@ import {
   Divider,
   EmptyState,
   ErrorState,
-  FormError,
-  HelperText,
   IconButton,
   Input,
   KeyValueRow,
   Label,
   ListItem,
-  LoadingSpinner,
+  LoadingState,
   NumberInput,
   PortfolioSummaryCard,
   PositionCard,
-  PriceChip,
   ScreenLayout,
-  SearchInput,
   SectionHeader,
-  SegmentedControl,
   Select,
-  Skeleton,
   Text,
-  TickerBadge,
   TradeRow,
   ValueWithChange
 } from '@/components';
@@ -36,10 +29,9 @@ import { ScrollView, View } from 'react-native';
 
 export default function ComponentsDocumentation() {
   const [selectValue, setSelectValue] = useState<string | number>('option1');
-  const [segmentedValue, setSegmentedValue] = useState<string | number>('all');
   const [inputValue, setInputValue] = useState('');
   const [numberValue, setNumberValue] = useState('');
-  const [dateValue, setDateValue] = useState<Date | undefined>(new Date());
+  const [dateValue, setDateValue] = useState<Date>(new Date());
 
   return (
     <ScreenLayout containerProps={{ noPadding: true }}>
@@ -64,7 +56,7 @@ export default function ComponentsDocumentation() {
           <SectionHeader
             title="Section Title"
             subtitle="Optional subtitle text"
-            rightAction={
+            action={
               <Button variant="outline" size="sm">
                 Action
               </Button>
@@ -151,8 +143,8 @@ export default function ComponentsDocumentation() {
             KeyValueRow
           </Text>
           <KeyValueRow label="Label" value="Value" />
-          <KeyValueRow label="Price" value="$150.00" valueColor="primary" />
-          <KeyValueRow label="Loss" value="-$50.00" valueColor="error" />
+          <KeyValueRow label="Price" value="$150.00" valueColor="positive" />
+          <KeyValueRow label="Loss" value="-$50.00" valueColor="negative" />
         </Card>
 
         {/* Buttons & Interactions */}
@@ -169,7 +161,9 @@ export default function ComponentsDocumentation() {
             <Button variant="primary">Primary Button</Button>
             <Button variant="secondary">Secondary Button</Button>
             <Button variant="outline">Outline Button</Button>
+            <Button variant="ghost">Ghost Button</Button>
             <Button variant="text">Text Button</Button>
+            <Button variant="destructive">Destructive Button</Button>
             <Button variant="primary" size="sm">Small</Button>
             <Button variant="primary" size="md">Medium</Button>
             <Button variant="primary" size="lg">Large</Button>
@@ -205,21 +199,6 @@ export default function ComponentsDocumentation() {
               onPress={() => {}}
             />
           </View>
-        </Card>
-
-        <Card style={{ marginBottom: Spacing.md }}>
-          <Text variant="h3" style={{ marginBottom: Spacing.sm }}>
-            SegmentedControl
-          </Text>
-          <SegmentedControl
-            options={[
-              { label: 'All', value: 'all' },
-              { label: 'Stocks', value: 'stocks' },
-              { label: 'Crypto', value: 'crypto' },
-            ]}
-            selectedValue={segmentedValue}
-            onValueChange={setSegmentedValue}
-          />
         </Card>
 
         {/* Inputs / Forms */}
@@ -279,18 +258,6 @@ export default function ComponentsDocumentation() {
 
         <Card style={{ marginBottom: Spacing.md }}>
           <Text variant="h3" style={{ marginBottom: Spacing.sm }}>
-            SearchInput
-          </Text>
-          <SearchInput
-            value={inputValue}
-            onChangeText={setInputValue}
-            onClear={() => setInputValue('')}
-            placeholder="Search..."
-          />
-        </Card>
-
-        <Card style={{ marginBottom: Spacing.md }}>
-          <Text variant="h3" style={{ marginBottom: Spacing.sm }}>
             Select
           </Text>
           <Select
@@ -306,31 +273,11 @@ export default function ComponentsDocumentation() {
           />
         </Card>
 
-        <Card style={{ marginBottom: Spacing.md }}>
-          <Text variant="h3" style={{ marginBottom: Spacing.sm }}>
-            FormError & HelperText
-          </Text>
-          <FormError message="This is an error message" />
-          <HelperText text="This is a helper text" />
-          <HelperText text="This is an error helper text" type="error" />
-        </Card>
-
         {/* Financial / Asset Components */}
         <SectionHeader
           title="Financial / Asset Components"
           subtitle="Investment-specific components"
         />
-
-        <Card style={{ marginBottom: Spacing.md }}>
-          <Text variant="h3" style={{ marginBottom: Spacing.sm }}>
-            TickerBadge
-          </Text>
-          <View style={{ flexDirection: 'row', gap: Spacing.sm, flexWrap: 'wrap' }}>
-            <TickerBadge ticker="AAPL" size="sm" />
-            <TickerBadge ticker="BTC" size="md" />
-            <TickerBadge ticker="TSLA" size="lg" />
-          </View>
-        </Card>
 
         <Card style={{ marginBottom: Spacing.md }}>
           <Text variant="h3" style={{ marginBottom: Spacing.sm }}>
@@ -344,18 +291,6 @@ export default function ComponentsDocumentation() {
 
         <Card style={{ marginBottom: Spacing.md }}>
           <Text variant="h3" style={{ marginBottom: Spacing.sm }}>
-            PriceChip
-          </Text>
-          <PriceChip
-            price={150.25}
-            change={5.50}
-            changePercent={3.8}
-            timestamp="2h ago"
-          />
-        </Card>
-
-        <Card style={{ marginBottom: Spacing.md }}>
-          <Text variant="h3" style={{ marginBottom: Spacing.sm }}>
             PositionCard
           </Text>
           <PositionCard
@@ -364,7 +299,7 @@ export default function ComponentsDocumentation() {
             quantity={10}
             avgPrice={150.00}
             currentPrice={155.50}
-            currentValue="$1,555.00"
+            currentValue={1555.00}
             pnl={55.00}
             pnlPercent={3.67}
           />
@@ -397,7 +332,7 @@ export default function ComponentsDocumentation() {
             PortfolioSummaryCard
           </Text>
           <PortfolioSummaryCard
-            totalValue="$10,000.00"
+            totalValue={10000.00}
             totalPnL={500.00}
             totalPnLPercent={5.0}
             totalCost={9500.00}
@@ -437,20 +372,9 @@ export default function ComponentsDocumentation() {
 
         <Card style={{ marginBottom: Spacing.md }}>
           <Text variant="h3" style={{ marginBottom: Spacing.sm }}>
-            LoadingSpinner
+            LoadingState
           </Text>
-          <LoadingSpinner message="Loading data..." />
-        </Card>
-
-        <Card style={{ marginBottom: Spacing.md }}>
-          <Text variant="h3" style={{ marginBottom: Spacing.sm }}>
-            Skeleton
-          </Text>
-          <View style={{ gap: Spacing.sm }}>
-            <Skeleton width="100%" height={20} />
-            <Skeleton width="80%" height={20} />
-            <Skeleton width="60%" height={20} />
-          </View>
+          <LoadingState message="Loading data..." />
         </Card>
 
         {/* Cards */}
@@ -471,8 +395,8 @@ export default function ComponentsDocumentation() {
           <Text variant="body">Card with large padding</Text>
         </Card>
 
-        <Card shadow style={{ marginBottom: Spacing.md }}>
-          <Text variant="body">Card with shadow</Text>
+        <Card elevated style={{ marginBottom: Spacing.md }}>
+          <Text variant="body">Elevated card</Text>
         </Card>
 
         <Card backgroundVariant="info" style={{ marginBottom: Spacing.md }}>
@@ -488,4 +412,3 @@ export default function ComponentsDocumentation() {
     </ScreenLayout>
   );
 }
-

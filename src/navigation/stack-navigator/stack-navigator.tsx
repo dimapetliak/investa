@@ -9,14 +9,14 @@ export const StackNavigator = () => {
 				name="add-asset"
 				options={{
 					presentation: 'modal',
-					title: 'Add Asset',
+					headerShown: false
 				}}
 			/>
 			<Stack.Screen
 				name="edit-asset"
 				options={{
 					presentation: 'modal',
-					title: 'Edit Asset',
+					headerShown: false
 				}}
 			/>
 			<Stack.Screen

@@ -1,13 +1,14 @@
-import { create } from 'zustand';
-import type { Trade, CreateTradeInput, UpdateTradeInput } from '@/types';
 import { persist } from '@/lib/persistence';
 import { STORAGE_KEYS } from '@/lib/storage';
+import type { CreateTradeInput, Trade, UpdateTradeInput } from '@/types';
+import { create } from 'zustand';
 
 interface TradesState {
   trades: Trade[];
 
   // Actions
   addTrade: (input: CreateTradeInput) => Trade;
+  addTrades: (inputs: CreateTradeInput[]) => Trade[];
   updateTrade: (id: string, input: UpdateTradeInput) => void;
   deleteTrade: (id: string) => void;
   getTradeById: (id: string) => Trade | undefined;
@@ -35,6 +36,19 @@ export const useTradesStore = create<TradesState>()(
     }));
 
     return newTrade;
+  },
+
+  addTrades: (inputs: CreateTradeInput[]) => {
+    const newTrades: Trade[] = inputs.map((input) => ({
+      id: generateId(),
+      ...input,
+    }));
+
+    set((state) => ({
+      trades: [...state.trades, ...newTrades],
+    }));
+
+    return newTrades;
   },
 
   updateTrade: (id: string, input: UpdateTradeInput) => {

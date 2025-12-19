@@ -1,4 +1,4 @@
-import { AssetType } from '@/components/_shared/asset-tag/asset-tag.types';
+import { AssetType } from '@/components/atoms/asset-badge/asset-badge.types';
 
 export type Position = {
   ticker: string;
@@ -6,7 +6,7 @@ export type Position = {
   quantity: number;
   avgPrice: number;
   currentPrice: number;
-  currentValue: string | number;
+  currentValue: number;
   pnl: number;
   pnlPercent: number;
 };

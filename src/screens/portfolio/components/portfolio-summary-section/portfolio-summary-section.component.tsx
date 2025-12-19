@@ -14,7 +14,7 @@ export const PortfolioSummarySection = ({
     <LinearBackground>
     <Container padding="md">
       <PortfolioSummaryCard
-      totalValue={portfolioSummary.totalValue}
+      totalValue={portfolioSummary.totalValue as number}
       totalPnL={portfolioSummary.totalPnL}
       totalPnLPercent={portfolioSummary.totalPnLPercent}
       totalCost={portfolioSummary.totalCost}

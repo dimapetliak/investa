@@ -1,9 +1,11 @@
 import { useTheme } from '@/contexts/theme-context';
 import { Spacing } from '@/theme';
+import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import {
   KeyboardAvoidingView,
   Platform,
+  Pressable,
   SafeAreaView,
   ScrollView,
   ScrollViewProps,
@@ -11,6 +13,7 @@ import {
   View,
   ViewProps,
 } from 'react-native';
+import { Text } from '../atoms/text';
 
 interface ContainerProps extends ViewProps {
   noPadding?: boolean;
@@ -24,6 +27,10 @@ export interface ScreenLayoutProps {
   showsVerticalScrollIndicator?: boolean;
   scrollable?: boolean;
   scrollViewProps?: ScrollViewProps;
+  title?: string;
+  showBackButton?: boolean;
+  onBackPress?: () => void;
+  headerRight?: React.ReactNode;
 }
 
 export const ScreenLayout: React.FC<ScreenLayoutProps> = ({
@@ -32,6 +39,10 @@ export const ScreenLayout: React.FC<ScreenLayoutProps> = ({
   showsVerticalScrollIndicator = true,
   scrollable = true,
   scrollViewProps = {},
+  title,
+  showBackButton,
+  onBackPress,
+  headerRight,
 }) => {
   const { colors } = useTheme();
   const { noPadding, paddingTop, padding, style, ...restContainerProps } = containerProps;
@@ -45,6 +56,8 @@ export const ScreenLayout: React.FC<ScreenLayoutProps> = ({
     },
     style,
   ];
+
+  const hasHeader = title || showBackButton || headerRight;
 
   const content = scrollable ? (
     <ScrollView
@@ -66,6 +79,25 @@ export const ScreenLayout: React.FC<ScreenLayoutProps> = ({
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={styles.keyboardAvoidingView}
       >
+        {hasHeader && (
+          <View style={[styles.header, { borderBottomColor: colors.border }]}>
+            <View style={styles.headerLeft}>
+              {showBackButton && (
+                <Pressable onPress={onBackPress} style={styles.backButton}>
+                  <Ionicons name="arrow-back" size={24} color={colors.foreground} />
+                </Pressable>
+              )}
+            </View>
+            {title && (
+              <Text variant="h3" style={styles.headerTitle}>
+                {title}
+              </Text>
+            )}
+            <View style={styles.headerRight}>
+              {headerRight}
+            </View>
+          </View>
+        )}
         {content}
       </KeyboardAvoidingView>
     </SafeAreaView>
@@ -81,5 +113,28 @@ const styles = StyleSheet.create({
   },
   container: {
     flexGrow: 1,
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.sm,
+    borderBottomWidth: 1,
+  },
+  headerLeft: {
+    width: 48,
+    alignItems: 'flex-start',
+  },
+  headerTitle: {
+    flex: 1,
+    textAlign: 'center',
+  },
+  headerRight: {
+    width: 48,
+    alignItems: 'flex-end',
+  },
+  backButton: {
+    padding: Spacing.xs,
   },
 });

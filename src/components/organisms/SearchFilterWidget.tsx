@@ -3,8 +3,8 @@ import { Radius, Spacing } from '@/theme';
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
-import { Input } from '../atoms/Input';
-import { Text } from '../atoms/Text';
+import { Input, Text } from '../atoms';
+
 
 export interface FilterOption {
   label: string;

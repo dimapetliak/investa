@@ -119,11 +119,9 @@ export const EditTradeScreen = ({
             </Button>
           </View>
           <Button
-            variant="outline"
+            variant="destructive"
             onPress={onDelete}
             disabled={isLoading}
-            style={{ borderColor: '#EF4444' }}
-            textStyle={{ color: '#EF4444' }}
           >
             Delete Trade
           </Button>

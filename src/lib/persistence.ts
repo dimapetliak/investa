@@ -32,18 +32,17 @@ const persistImpl: PersistImpl = (config, options) => (set, get, api) => {
   // Hydrate state from storage on init
   const persistedState = storageHelpers.getItem<Partial<ReturnType<typeof get>>>(name);
 
+  // Create a wrapper for set that persists state changes
+  const persistingSet = ((args: unknown) => {
+    (set as (args: unknown) => void)(args);
+    // After each state change, persist to storage
+    const state = get();
+    const stateToPersist = partialize ? partialize(state) : state;
+    storageHelpers.setItem(name, stateToPersist);
+  }) as typeof set;
+
   // Initialize store with persisted state
-  const initialState = config(
-    (args) => {
-      set(args);
-      // After each state change, persist to storage
-      const state = get();
-      const stateToPersist = partialize ? partialize(state) : state;
-      storageHelpers.setItem(name, stateToPersist);
-    },
-    get,
-    api
-  );
+  const initialState = config(persistingSet, get, api);
 
   // Merge persisted state with initial state
   if (persistedState) {

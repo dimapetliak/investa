@@ -3,6 +3,7 @@ export interface SettingsScreenProps {
   onCurrencyChange: (currency: string) => void;
   onExportData: () => void;
   onImportData: () => void;
+  onLoadSampleData: () => void;
   onClearAllData: () => void;
   stats: {
     assetsCount: number;

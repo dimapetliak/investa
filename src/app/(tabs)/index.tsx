@@ -26,7 +26,7 @@ export default function HomeScreen() {
         quantity: position.quantity,
         avgPrice: position.avgBuyPrice,
         currentPrice: position.avgBuyPrice, // TODO: Replace with real price
-        currentValue: `$${position.currentValue.toFixed(2)}`,
+        currentValue: position.currentValue,
         pnl: position.pnl,
         pnlPercent: position.pnlPercent,
       }));

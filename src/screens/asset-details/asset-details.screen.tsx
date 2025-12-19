@@ -10,7 +10,7 @@ import {
   TradeRow,
   ValueWithChange,
 } from '@/components';
-import { Colors } from '@/theme/colors';
+import { useTheme } from '@/contexts/theme-context';
 import { Spacing } from '@/theme/spacing';
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
@@ -27,6 +27,7 @@ export const AssetDetailsScreen = ({
   onDeleteTrade,
   onBack,
 }: AssetDetailsScreenProps) => {
+  const { colors } = useTheme();
   const sortedTrades = [...trades].sort(
     (a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
   );
@@ -34,12 +35,12 @@ export const AssetDetailsScreen = ({
   return (
     <ScreenLayout>
       <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: Spacing.md, paddingHorizontal: Spacing.md, paddingTop: Spacing.md }}>
-        <Button variant="text" onPress={onBack} style={{ marginRight: Spacing.sm }}>
-          <Ionicons name="arrow-back" size={24} color={Colors.primary} />
+        <Button variant="secondary" onPress={onBack} style={{ marginRight: Spacing.sm }}>
+          <Ionicons name="arrow-back" size={24} color={colors.primary} />
         </Button>
         <Text variant="h2" style={{ flex: 1 }}>Asset Details</Text>
-        <Button variant="text" onPress={onEditAsset}>
-          <Ionicons name="pencil" size={20} color={Colors.primary} />
+        <Button variant="secondary" onPress={onEditAsset}>
+          <Ionicons name="pencil" size={20} color={colors.primary} />
         </Button>
       </View>
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: Spacing.md }}>
@@ -51,20 +52,20 @@ export const AssetDetailsScreen = ({
             </Text>
             <AssetTag type={asset.type} />
           </View>
-          <Text variant="body" color="secondary" style={{ marginBottom: Spacing.md }}>
+          <Text variant="body" color="muted" style={{ marginBottom: Spacing.md }}>
             {asset.name}
           </Text>
 
           {/* Position Value */}
           <View style={{ marginBottom: Spacing.sm }}>
-            <Text variant="caption" color="secondary" style={{ marginBottom: 4 }}>
+            <Text variant="caption" color="muted" style={{ marginBottom: 4 }}>
               Current Value
             </Text>
             <ValueWithChange
-              value={position.currentValue}
+              value={`${asset.currency} ${position.currentValue.toFixed(2)}`}
               change={position.pnl}
               changePercent={position.pnlPercent}
-              size="large"
+              size="lg"
             />
           </View>
         </Card>
@@ -84,7 +85,7 @@ export const AssetDetailsScreen = ({
           <KeyValueRow
             label="P&L"
             value={`${asset.currency} ${position.pnl.toFixed(2)} (${position.pnlPercent.toFixed(2)}%)`}
-            valueColor={position.pnl >= 0 ? Colors.status.success : Colors.status.error}
+            valueColor={position.pnl >= 0 ? 'positive' : 'negative'}
           />
         </Card>
 

@@ -1,121 +1,140 @@
 /**
  * Color Palette
- * shadcn/ui-inspired neutral colors with semantic variants
+ * Personal Finance & Investment Tracker Design System
  * Supports light and dark themes
  */
 
+// Asset Type Colors - consistent across themes
+export const AssetColors = {
+  cash: '#10b981',
+  bank: '#3b82f6',
+  card: '#ec4899',
+  savings: '#14b8a6',
+  stock: '#8b5cf6',
+  crypto: '#f59e0b',
+} as const;
+
 export const LightColors = {
   // Base colors
-  white: "#FFFFFF",
-  black: "#09090B",
+  white: '#ffffff',
+  black: '#1f2937',
 
   // Background colors
-  background: "#FFFFFF",
-  backgroundSecondary: "#F9FAFB",
+  background: '#f8f9fa',
+  backgroundSecondary: '#ffffff', // Surface/Card backgrounds
+  backgroundMuted: '#f3f4f6',
 
   // Foreground colors
-  foreground: "#09090B",
-  foregroundMuted: "#71717A",
+  foreground: '#1f2937',
+  foregroundMuted: '#6b7280',
+  foregroundTertiary: '#9ca3af',
 
   // Border colors
-  border: "#E4E4E7",
-  borderStrong: "#D4D4D8",
+  border: '#e5e7eb',
+  borderStrong: '#d1d5db',
 
-  // Neutral scale (shadcn/ui zinc palette)
-  neutral50: "#FAFAFA",
-  neutral100: "#F4F4F5",
-  neutral200: "#E4E4E7",
-  neutral300: "#D4D4D8",
-  neutral400: "#A1A1AA",
-  neutral500: "#71717A",
-  neutral600: "#52525B",
-  neutral700: "#3F3F46",
-  neutral800: "#27272A",
-  neutral900: "#18181B",
+  // Neutral scale
+  neutral50: '#f9fafb',
+  neutral100: '#f3f4f6',
+  neutral200: '#e5e7eb',
+  neutral300: '#d1d5db',
+  neutral400: '#9ca3af',
+  neutral500: '#6b7280',
+  neutral600: '#4b5563',
+  neutral700: '#374151',
+  neutral800: '#1f2937',
+  neutral900: '#111827',
 
   // Primary colors
-  primary: "#155DFC",
-  primaryHover: "#1249D6",
-  primaryLight: "#DBEAFE",
-  primaryForeground: "#FFFFFF",
+  primary: '#3b82f6',
+  primaryHover: '#2563eb',
+  primaryLight: '#dbeafe',
+  primaryForeground: '#ffffff',
 
   // Semantic colors
-  success: "#22C55E",
-  successLight: "#DCFCE7",
-  successForeground: "#14532D",
+  success: '#10b981',
+  successLight: '#d1fae5',
+  successForeground: '#065f46',
 
-  error: "#EF4444",
-  errorLight: "#FEE2E2",
-  errorForeground: "#7F1D1D",
+  error: '#ef4444',
+  errorLight: '#fee2e2',
+  errorForeground: '#991b1b',
 
-  warning: "#F59E0B",
-  warningLight: "#FEF3C7",
-  warningForeground: "#78350F",
+  warning: '#f59e0b',
+  warningLight: '#fef3c7',
+  warningForeground: '#92400e',
 
-  info: "#3B82F6",
-  infoLight: "#DBEAFE",
-  infoForeground: "#1E3A8A",
+  info: '#3b82f6',
+  infoLight: '#dbeafe',
+  infoForeground: '#1e40af',
 
-  // Accent colors (keep for gradients)
-  accentPurple: "#9810FA",
+  // Accent colors
+  accentPurple: '#8b5cf6',
+
+  // Asset colors
+  ...AssetColors,
 };
 
 export const DarkColors = {
   // Base colors
-  white: "#FFFFFF",
-  black: "#09090B",
+  white: '#ffffff',
+  black: '#111827',
 
   // Background colors
-  background: "#09090B",
-  backgroundSecondary: "#18181B",
+  background: '#111827',
+  backgroundSecondary: '#1f2937', // Surface/Card backgrounds
+  backgroundMuted: '#374151',
 
   // Foreground colors
-  foreground: "#FAFAFA",
-  foregroundMuted: "#A1A1AA",
+  foreground: '#f9fafb',
+  foregroundMuted: '#9ca3af',
+  foregroundTertiary: '#6b7280',
 
   // Border colors
-  border: "#27272A",
-  borderStrong: "#3F3F46",
+  border: '#374151',
+  borderStrong: '#4b5563',
 
   // Neutral scale (inverted for dark mode)
-  neutral50: "#18181B",
-  neutral100: "#27272A",
-  neutral200: "#3F3F46",
-  neutral300: "#52525B",
-  neutral400: "#71717A",
-  neutral500: "#A1A1AA",
-  neutral600: "#D4D4D8",
-  neutral700: "#E4E4E7",
-  neutral800: "#F4F4F5",
-  neutral900: "#FAFAFA",
+  neutral50: '#111827',
+  neutral100: '#1f2937',
+  neutral200: '#374151',
+  neutral300: '#4b5563',
+  neutral400: '#6b7280',
+  neutral500: '#9ca3af',
+  neutral600: '#d1d5db',
+  neutral700: '#e5e7eb',
+  neutral800: '#f3f4f6',
+  neutral900: '#f9fafb',
 
   // Primary colors
-  primary: "#3B82F6",
-  primaryHover: "#2563EB",
-  primaryLight: "#1E3A8A",
-  primaryForeground: "#FFFFFF",
+  primary: '#3b82f6',
+  primaryHover: '#60a5fa',
+  primaryLight: '#1e3a8a',
+  primaryForeground: '#ffffff',
 
   // Semantic colors
-  success: "#22C55E",
-  successLight: "#14532D",
-  successForeground: "#DCFCE7",
+  success: '#10b981',
+  successLight: '#065f46',
+  successForeground: '#d1fae5',
 
-  error: "#EF4444",
-  errorLight: "#7F1D1D",
-  errorForeground: "#FEE2E2",
+  error: '#ef4444',
+  errorLight: '#991b1b',
+  errorForeground: '#fee2e2',
 
-  warning: "#F59E0B",
-  warningLight: "#78350F",
-  warningForeground: "#FEF3C7",
+  warning: '#f59e0b',
+  warningLight: '#92400e',
+  warningForeground: '#fef3c7',
 
-  info: "#3B82F6",
-  infoLight: "#1E3A8A",
-  infoForeground: "#DBEAFE",
+  info: '#3b82f6',
+  infoLight: '#1e40af',
+  infoForeground: '#dbeafe',
 
   // Accent colors
-  accentPurple: "#A855F7",
+  accentPurple: '#a78bfa',
+
+  // Asset colors
+  ...AssetColors,
 };
 
 // Default export for backwards compatibility
 export const Colors = LightColors;
-  

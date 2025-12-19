@@ -29,7 +29,7 @@ export const PortfolioScreen = ({
   } = usePortfolioFilters(recentTrades, onSearch, onFilterToggle);
 
   return (
-    <ScreenLayout containerProps={{ paddingTop: Spacing.xxl }}>
+    <ScreenLayout containerProps={{ noPadding: true }}>
       <PortfolioSummarySection
         portfolioSummary={portfolioSummary}
         onViewAllAssets={onViewAllAssets}

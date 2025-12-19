@@ -6,9 +6,11 @@ import { create } from 'zustand';
 interface AssetsState {
   assets: Asset[];
   addAsset: (input: CreateAssetInput) => Asset;
+  addAssets: (inputs: CreateAssetInput[]) => Asset[];
   updateAsset: (id: string, input: UpdateAssetInput) => void;
   deleteAsset: (id: string) => void;
   getAssetById: (id: string) => Asset | undefined;
+  getAssetByTicker: (ticker: string) => Asset | undefined;
   clearAssets: () => void;
 }
 
@@ -34,6 +36,19 @@ export const useAssetsStore = create<AssetsState>()(
     return newAsset;
   },
 
+  addAssets: (inputs: CreateAssetInput[]) => {
+    const newAssets: Asset[] = inputs.map((input) => ({
+      id: generateId(),
+      ...input,
+    }));
+
+    set((state) => ({
+      assets: [...state.assets, ...newAssets],
+    }));
+
+    return newAssets;
+  },
+
   updateAsset: (id: string, input: UpdateAssetInput) => {
     set((state) => ({
       assets: state.assets.map((asset) =>
@@ -50,6 +65,12 @@ export const useAssetsStore = create<AssetsState>()(
 
   getAssetById: (id: string) => {
     return get().assets.find((asset) => asset.id === id);
+  },
+
+  getAssetByTicker: (ticker: string) => {
+    return get().assets.find(
+      (asset) => asset.ticker.toUpperCase() === ticker.toUpperCase()
+    );
   },
 
   clearAssets: () => {
